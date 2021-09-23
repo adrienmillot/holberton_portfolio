@@ -1,34 +1,22 @@
-# `<PROJECT NAME>`
-
-<!--
-SurveyStorm - surveystorm.io
-MassSurvey - MassSurvey.io
-SurveyLab - SurveyLab.io
-SurveyHack - SurveyHack.io
-SurveyPool - SurveyPool.io
-SurveyTrack - SurveyTrack.io
-SurveyMind - SurveyMind.io
-Surveyocity - Surveyocity.io
-DesignSurvey - DesignSurvey.io 
--->
+# SurveyStorm
 
 ## Introduction
 
-### `<PROJECT NAME>` provide an API that manages survey creation, edition and statistics, and allows users to answers an enabled survey.
+### SurveyStorm provide an API that manages survey creation, edition and statistics, and allows users to answers an enabled survey.
 
 ## Team
 
 ### [Nathan LAPEYRE](https://github.com/Sarolus) (API Development)
 
-He likes back & worships tests.
+> He likes back & worships tests.
 
 ### [Simon BRARD](https://github.com/SimonBr017) (Web back & front development)
 
-He only swears by HTML/CSS.
+> He only swears by HTML/CSS.
 
 ### [Adrien MILLOT](https://github.com/adrienmillot) (Mobile back & front development)
 
-If you're not mobile you're stuck.
+> If you're not mobile you're stuck.
 
 ## Technologies
 
@@ -52,7 +40,7 @@ If you're not mobile you're stuck.
 
 ## Challenge
 
-The goal of this project is to provide a tool that will help people working in the scientific and in the survey fields by letting them build custom surveys. Using database storage for the survey data and statistics that will be calculated by `<PROJECT NAME>`. This tool will be accessible to everyone, and the intent is to be able to use it everywhere, from web or mobile.
+The goal of this project is to provide a tool that will help people working in the scientific and in the survey fields by letting them build custom surveys. Using database storage for the survey data and statistics that will be calculated by SurveyStorm. This tool will be accessible to everyone, and the intent is to be able to use it everywhere, from web or mobile.
 
 ## Risks
 
@@ -69,6 +57,28 @@ The goal of this project is to provide a tool that will help people working in t
 |   ![](https://img.shields.io/badge/16-informational?style=flat&logoColor=white&color=ff0000)  |Underestimating the competence of a colleague | |
 |   ![](https://img.shields.io/badge/15-informational?style=flat&logoColor=white&color=ff4603)   | Underestimating the difficulty of a task | Set up a `Planning poker`(Scrum method) |
 |   ![](https://img.shields.io/badge/10-informational?style=flat&logoColor=white&color=ff8103)   | Abandon a colleague | Set up a `Daily`(Scrum method) |
+
+## Deployment strategy
+
+## Branching workflow
+
+We count to use [![](https://img.shields.io/badge/gitflow-informational?style=flat&logo=gitflow&logoColor=white&color=2bbc8a)](https://danielkummer.github.io/git-flow-cheatsheet/) process, then:
+
+- **main branch**: to production features
+- **develop branch**: to test features
+- **feature branch**: to development features
+
+Each pull-request on main and develop branch have to be review by two other developers.
+
+## Continuous integration
+
+To ensure a certain parity of our code, we intend to use unit tests with ![unittest](https://img.shields.io/badge/unittest-informational?style=flat&logo=unittest&logoColor=white&color=2bbc8a).
+
+To continue with that precision, we count implement ![unittest](https://img.shields.io/badge/github_actions-informational?style=flat&logo=github_actions&logoColor=white&color=2bbc8a) to ensure us each pull-request will respect this tests.
+
+## Evolutions workflow
+
+![Workflow](./docs/images/workflow.png)
 
 ## Infrastructure
 
@@ -100,13 +110,18 @@ In the long term potantially four servers could be used, two for the Web app and
 
 ## Existing Solutions
 
-| Order | Name |
-| - | - |
-| ![](https://img.shields.io/badge/1-informational?style=flat) | [Survey Monkey](https://www.surveymonkey.com/)
-| ![](https://img.shields.io/badge/2-informational?style=flat) | [SoGoSurvey](https://www.sogosurvey.com/) |
-|   | [Typeform](https://www.typeform.com/surveys/) |
-|   | [Google Forms](https://docs.google.com/forms/u/0/) |
-|   | [Client Heartbeat](https://www.clientheartbeat.com/) |
-|   | [Zoho Survey](https://www.zoho.com/fr/survey/) |
-|   | [Survey Gizmo](https://www.alchemer.com/) |
-|   | [Survey Planet](https://surveyplanet.com/) |
+| Order | Name | Similarities | Differences |
+| - | - | - | - |
+| ![](https://img.shields.io/badge/1-informational?style=flat) | [Survey Monkey](https://www.surveymonkey.com/) | Unlimited surveys & questions, export data (ex. .csv), Mobile App | Statistics, Branch questions
+| ![](https://img.shields.io/badge/2-informational?style=flat) | [SoGoSurvey](https://www.sogosurvey.com/) | Unlimited surveys & questions, export data (ex. .csv), Mobile App | Statistics, Branch questions
+| ![](https://img.shields.io/badge/3-informational?style=flat) | [Typeform](https://www.typeform.com/surveys/) | Unlimited surveys & questions, export data (ex. .csv), Branch questions | Statistics, Mobile App
+| ![](https://img.shields.io/badge/4-informational?style=flat)  | [Survey Planet](https://surveyplanet.com/) | Unlimited surveys & questions, export data (ex. .csv), Branch questions, Mobile App | Statistics
+| ![](https://img.shields.io/badge/5-informational?style=flat) | [Google Forms](https://docs.google.com/forms/u/0/) | Unlimited surveys & questions, export data (ex. .csv), Branch questions | Statistics, Mobile App
+| ![](https://img.shields.io/badge/6-informational?style=flat) | [Survey Gizmo](https://www.alchemer.com/) | Unlimited surveys & questions, export data (ex. .csv) | Statistics, Branch questions, Mobile App
+
+### Other similar solutions
+
+- Qualaroo
+- Client Heartbeat
+- Zoho Survey
+- ProProfs Survey Maker
