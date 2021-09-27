@@ -24,7 +24,7 @@
 
 **option** : Ruby
 
-> Ruby concerns a smaller population of developper than python and has a lesser range of libraries. Python supporting multiple inheritance is one of the main characteristics we are searching for, and the use of dictionnary type in python is quite a bonus for JSON data format.
+> Ruby concerns a smaller population of developer than python and has a lesser range of libraries. Python supporting multiple inheritance is one of the main characteristics we are searching for, and the use of dictionnary type in python is quite a bonus for JSON data format.
 
 ### [![](https://img.shields.io/badge/flask-informational?style=flat&logo=flask&logoColor=white)](https://flask.palletsprojects.com/en/2.0.x/)
 
@@ -40,7 +40,7 @@
 
 ## Challenge
 
-The goal of this project is to provide a tool that will help people working in the scientific and in the survey fields by letting them build custom surveys. Using database storage for the survey data and statistics that will be calculated by SurveyStorm. This tool will be accessible to everyone, and the intent is to be able to use it everywhere, from web or mobile.
+The goal of this project is to provide a tool that will help people working in the scientific and in the survey fields by letting them build custom surveys. Using database storage for the survey's data and statistics that will be calculated by SurveyStorm. This tool will be accessible to everyone, and the intent is to be able to use it everywhere, from web or mobile.
 
 ## Risks
 
@@ -54,7 +54,7 @@ The goal of this project is to provide a tool that will help people working in t
 
 | Level | Risk | safeguards or alternatives |
 | ----- | ---- | -------------------------- |
-|   ![](https://img.shields.io/badge/16-informational?style=flat&logoColor=white&color=ff0000)  |Underestimating the competence of a colleague | |
+|   ![](https://img.shields.io/badge/16-informational?style=flat&logoColor=white&color=ff0000)  |Underestimating the colleague's skills | |
 |   ![](https://img.shields.io/badge/15-informational?style=flat&logoColor=white&color=ff4603)   | Underestimating the difficulty of a task | Set up a `Planning poker`(Scrum method) |
 |   ![](https://img.shields.io/badge/10-informational?style=flat&logoColor=white&color=ff8103)   | Abandon a colleague | Set up a `Daily`(Scrum method) |
 
@@ -68,13 +68,13 @@ We count to use [![](https://img.shields.io/badge/gitflow-informational?style=fl
 - **develop branch**: to test features
 - **feature branch**: to development features
 
-Each pull-request on main and develop branch have to be review by two other developers.
+Each pull-request on main and develop branch have to be reviewed by two other developers.
 
 ## Continuous integration
 
 To ensure a certain parity of our code, we intend to use unit tests with ![unittest](https://img.shields.io/badge/unittest-informational?style=flat&logo=unittest&logoColor=white&color=2bbc8a).
 
-To continue with that precision, we count implement ![unittest](https://img.shields.io/badge/github_actions-informational?style=flat&logo=github_actions&logoColor=white&color=2bbc8a) to ensure us each pull-request will respect this tests.
+To continue with that precision, we intend to implement ![unittest](https://img.shields.io/badge/github_actions-informational?style=flat&logo=github_actions&logoColor=white&color=2bbc8a) to ensure us each pull-request will respect this tests.
 
 ## Evolutions workflow
 
@@ -100,13 +100,13 @@ One server to persist data. We can duplicate it and use another one to secure th
 
 We need two application server (python is interpreted language). One for the API, and another one for the web.
 
-We use this configuration to be as closer as possible t productivity.
+We use this configuration to be as close as possible to productivity.
 
 ### Web server
 
 We use two Web servers, one server for the mobile application and one server for the web application. 
 
-In the long term potantially four servers could be used, two for the Web app and two for the mobile app, moderate by two loads balancers.
+In the long term potentially four servers could be used, two for the Web app and two for the mobile app, moderate by two loads balancers.
 
 ## Existing Solutions
 
