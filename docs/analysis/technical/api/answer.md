@@ -23,13 +23,15 @@
 | 401 | Unauthorized |
 | 498 | Token expired/invalid |
 
-![](https://img.shields.io/badge/PUT-informational?style=flat&color=fc9003) /api/v1/question/{question_id}/proposal/{proposal_id} *Updates the category info based on the id provided*
+![](https://img.shields.io/badge/PUT-informational?style=flat&color=fc9003) /api/v1/question/{question_id}/proposal/{proposal_id} *Updates the anser info based on the id provided*
 
 #### Parameters
 
 | Name | Description |
 | - | - |
-| **category_id** *required ||
+| **question_id** *required ||
+| **proposal_id** *required ||
+| **user_id** *required ||
 
 #### Responses
 

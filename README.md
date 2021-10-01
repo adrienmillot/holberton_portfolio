@@ -38,7 +38,7 @@ SurveyStorm provide an API that manages survey creation, edition and statistics,
 
 ### [2. Architecture](docs/analysis/technical/architecture.md)
 
-### [3. API documentation](docs/analysis/technical/api.md)
+### [3. API documentation](docs/analysis/technical/api/README.md)
 
 ### [4. Data modeling](docs/analysis/technical/data_modeling.md)
 
