@@ -6,7 +6,7 @@
 
 ## [II. Architecture](architecture.md)
 
-## [III. API documentation](api.md)
+## [III. API documentation](api/README.md)
 
 ## [IV. Data modeling](data_modeling.md)
 
