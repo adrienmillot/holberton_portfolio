@@ -2,6 +2,8 @@
 
 # Use cases
 
+## [Answer use cases](answer.md)
+
 ## [Category use cases](category.md)
 
 ## [Proposal use cases](proposal.md)
