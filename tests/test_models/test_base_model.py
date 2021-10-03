@@ -73,6 +73,44 @@ class TestBaseModel(TestCommon):
                 self.assertNotEqual(prev.id, obj.id)
             prev = obj
 
+    def test_created_at_init(self):
+        """
+            Test created_at init.
+        """
+        tic = datetime.utcnow()
+        strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        with self.assertRaises(Exception) as context:
+            obj = self.className(created_at=tic)
+        obj = self.className(created_at=strtic)
+        self.assertNotEqual(obj.created_at, strtic)
+        self.assertEqual(obj.created_at, tic)
+
+    def test_updated_at_init(self):
+        """
+            Test updated_at init.
+        """
+        tic = datetime.utcnow()
+        strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
+        with self.assertRaises(Exception) as context:
+            obj = self.className(updated_at=tic)
+        obj = self.className(updated_at=strtic)
+        self.assertNotEqual(obj.updated_at, strtic)
+        self.assertEqual(obj.updated_at, tic)
+
+    def test_class_attribute_erase(self):
+        """
+            Test __class__ attribute passed is not considered.
+        """
+        obj = self.className(__class__='toto')
+        dict = obj.to_dict()
+        self.assertNotEqual(dict['__class__'], 'toto')
+
+    def test_str(self):
+        obj = self.className()
+        string = "[{}] ({}) {}".format(
+            obj.__class__.__name__, obj.id, obj.__dict__)
+        self.assertEqual(string, str(obj))
+
     def test_to_dict(self):
         """
             Test to_dict() method.
