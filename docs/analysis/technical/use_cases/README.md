@@ -2,6 +2,8 @@
 
 # Use cases
 
+![schema](../../../images/use_case.png)
+
 ## [Answer use cases](answer.md)
 
 ## [Category use cases](category.md)
