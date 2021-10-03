@@ -25,14 +25,14 @@ class TestBaseModel(TestCommon):
         super().files.append('tests/test_models/test_base_model.py')
         super().setUpClass(className)
 
-    def test_constructor(self):
+    def test_constructor(self, kwargs={}):
         """
             Test base model initialization.
         """
-        obj = self.className()
+        obj = self.className(**kwargs)
         self.assertIs(type(obj), self.className)
 
-    def test_datetime_init(self):
+    def test_datetime_init(self, kwargs={}):
         """
             Test datetime attribute initialization.
         """
@@ -41,7 +41,7 @@ class TestBaseModel(TestCommon):
 
         for index in range(2):
             tic = datetime.utcnow()
-            obj = self.className()
+            obj = self.className(**kwargs)
             toc = datetime.utcnow()
 
             self.assertTrue(tic <= obj.created_at)
@@ -54,7 +54,7 @@ class TestBaseModel(TestCommon):
                 self.assertLess(prev.updated_at, obj.updated_at)
             prev = obj
 
-    def test_id(self):
+    def test_id(self, kwargs={}):
         """
             Test id initialization.
         """
@@ -63,7 +63,7 @@ class TestBaseModel(TestCommon):
         prev = None
 
         for index in range(2):
-            obj = self.className()
+            obj = self.className(**kwargs)
             self.assertEqual(type(obj.id), str)
             self.assertRegex(obj.id,
                              '^[0-9a-f]{8}-[0-9a-f]{4}'
@@ -73,50 +73,68 @@ class TestBaseModel(TestCommon):
                 self.assertNotEqual(prev.id, obj.id)
             prev = obj
 
-    def test_created_at_init(self):
+    def test_created_at_init(self, kwargs={}):
         """
             Test created_at init.
         """
+
+        kwargs = {} if kwargs is None else kwargs
         tic = datetime.utcnow()
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
         with self.assertRaises(Exception) as context:
-            obj = self.className(created_at=tic)
-        obj = self.className(created_at=strtic)
+            kwargs['created_at'] = tic
+            obj = self.className(**kwargs)
+        kwargs['created_at'] = strtic
+        obj = self.className(**kwargs)
         self.assertNotEqual(obj.created_at, strtic)
         self.assertEqual(obj.created_at, tic)
 
-    def test_updated_at_init(self):
+    def test_updated_at_init(self, kwargs={}):
         """
             Test updated_at init.
         """
+
+        kwargs = {} if kwargs is None else kwargs
         tic = datetime.utcnow()
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
         with self.assertRaises(Exception) as context:
-            obj = self.className(updated_at=tic)
-        obj = self.className(updated_at=strtic)
+            kwargs['updated_at'] = tic
+            obj = self.className(**kwargs)
+        kwargs['updated_at'] = strtic
+        obj = self.className(**kwargs)
         self.assertNotEqual(obj.updated_at, strtic)
         self.assertEqual(obj.updated_at, tic)
 
-    def test_class_attribute_erase(self):
+    def test_class_attribute_erase(self, kwargs={}):
         """
             Test __class__ attribute passed is not considered.
         """
-        obj = self.className(__class__='toto')
+
+        kwargs = {} if kwargs is None else kwargs
+        kwargs['__class__'] = None
+        obj = self.className(**kwargs)
         dict = obj.to_dict()
         self.assertNotEqual(dict['__class__'], 'toto')
 
-    def test_str(self):
-        obj = self.className()
+    def test_str(self, kwargs={}):
+        """
+            Test that the str method has the correct output.
+        """
+
+        kwargs = {} if kwargs is None else kwargs
+        obj = self.className(**kwargs)
         string = "[{}] ({}) {}".format(
             obj.__class__.__name__, obj.id, obj.__dict__)
         self.assertEqual(string, str(obj))
 
-    def test_to_dict(self):
+    def test_to_dict(self, kwargs={}):
         """
             Test to_dict() method.
         """
 
-        obj = self.className(name=None)
+        kwargs = {} if kwargs is None else kwargs
+        kwargs['name'] = None
+        obj = self.className(**kwargs)
         expected_attrs = {
             "id": str,
             "created_at": datetime,

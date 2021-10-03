@@ -67,9 +67,11 @@ class TestCommon(unittest.TestCase):
                 self.assertIsNot(
                     func[1].__doc__,
                     None,
-                    "{:s} method needs a docstring".format(func[0])
+                    "{}.{:s} method needs a docstring".format(
+                        self.__class__.__name__, func[0])
                 )
                 self.assertTrue(
                     len(func[1].__doc__) > 1,
-                    "{:s} method needs a docstring".format(func[0])
+                    "{}.{:s} method needs a docstring".format(
+                        self.__class__.__name__, func[0])
                 )
