@@ -2,5 +2,7 @@
 
 # Architecture
 
+![Architecture](../../images/architecture.png)
+
 ---
 ###### 2021 - SurveyStorm
