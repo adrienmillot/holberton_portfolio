@@ -44,7 +44,7 @@ SurveyStorm provide an API that manages survey creation, edition and statistics,
 
 ### [5. Use cases](docs/analysis/technical/use_cases/README.md)
 
-### [6. Mockups](docs/analysis/technical/mockups.md)
+### [6. Mockups](docs/analysis/technical/mockup/README.md)
 
 ---
 ###### 2021 - SurveyStorm

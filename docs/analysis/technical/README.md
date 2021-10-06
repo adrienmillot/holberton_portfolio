@@ -12,7 +12,7 @@
 
 ## [V. Use cases](use_cases/README.md)
 
-## [VI. Mockups](mockups.md)
+## [VI. Mockups](mockup/README.md)
 
 ---
 ###### 2021 - SurveyStorm
