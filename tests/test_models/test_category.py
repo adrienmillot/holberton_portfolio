@@ -24,15 +24,17 @@ class TestCategory(TestBaseModel):
         """
             Test wrong name type insertion.
         """
+
         with self.assertRaises(Exception) as context:
-            obj = self.className()
+            obj = self.class_name()
             obj.name = 12
 
     def test_name_setter(self):
         """
             Test name setter method.
         """
-        obj = self.className()
+
+        obj = self.class_name()
         obj.name = "toto"
 
         self.assertEqual("toto", obj.name)
@@ -41,6 +43,8 @@ class TestCategory(TestBaseModel):
         """
             Test to_dict() method.
         """
-        obj = self.className(name="toto")
+
+        obj = self.class_name(name="toto")
         super().test_to_dict()
         self.assertIn('name', obj.to_dict().keys())
+        self.assertIn('toto', obj.to_dict().values())

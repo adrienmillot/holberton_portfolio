@@ -17,6 +17,7 @@ class TestUser(TestBaseModel):
         """
             Set up for docstring tests
         """
+
         super().files.append('models/user.py')
         super().files.append('tests/test_models/test_user.py')
         super().setUpClass(User)
@@ -28,70 +29,91 @@ class TestUser(TestBaseModel):
         }
 
     def test_constructor(self):
+        """
+            Test base model initialization.
+        """
+
         return super().test_constructor(kwargs=self.kwargs)
 
     def test_datetime_init(self):
+        """
+            Test datetime attribute initialization.
+        """
+
         return super().test_datetime_init(kwargs=self.kwargs)
 
     def test_id(self):
+        """
+            Test id initialization.
+        """
+
         return super().test_id(kwargs=self.kwargs)
 
     def test_any_username(self):
         """
             Test wrong name type insertion.
         """
-        with self.assertRaises(ValueError) as context:
-            obj = self.className()
 
-    def test_wrong_username(self):
-        """
-            Test wrong name type insertion.
-        """
-        with self.assertRaises(Exception) as context:
-            obj = self.className(**self.kwargs)
-            obj.username = 12
+        with self.assertRaises(ValueError) as context:
+            obj = self.class_name()
 
     def test_username_setter(self):
         """
             Test username setter method.
         """
-        obj = self.className(**self.kwargs)
+
+        obj = self.class_name(**self.kwargs)
         obj.username = "toto"
 
         self.assertEqual("toto", obj.username)
 
-    def test_password_setter(self):
+    def test_wrong_username(self):
         """
-            Test password setter method.
+            Test wrong name type insertion.
         """
-        obj = self.className(**self.kwargs)
-        obj.password = "toto"
 
-        self.assertEqual("toto", obj.password)
+        with self.assertRaises(Exception) as context:
+            obj = self.class_name(**self.kwargs)
+            obj.username = 12
 
     def test_any_password(self):
         """
             Test wrong name type insertion.
         """
+
         with self.assertRaises(ValueError) as context:
-            obj = self.className(username="toto")
+            obj = self.class_name(username="toto")
+
+    def test_password_setter(self):
+        """
+            Test password setter method.
+        """
+
+        obj = self.class_name(**self.kwargs)
+        obj.password = "toto"
+
+        self.assertEqual("toto", obj.password)
 
     def test_wrong_password(self):
         """
             Test wrong name type insertion.
         """
+
         with self.assertRaises(Exception) as context:
-            obj = self.className(**self.kwargs)
+            obj = self.class_name(**self.kwargs)
             obj.password = 12
 
     def test_to_dict(self):
         """
             Test to_dict() method.
         """
-        obj = self.className(**self.kwargs)
+
+        obj = self.class_name(**self.kwargs)
         super().test_to_dict(kwargs=self.kwargs)
         self.assertIn('username', obj.to_dict().keys())
+        self.assertIn('toto', obj.to_dict().values())
         self.assertIn('password', obj.to_dict().keys())
+        self.assertIn('password', obj.to_dict().values())
 
     def test_class_attribute_erase(self):
         """

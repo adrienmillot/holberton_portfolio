@@ -21,6 +21,7 @@ class TestBaseModel(TestCommon):
         """
             Prepare base model tests.
         """
+
         super().files.append('models/base_model.py')
         super().files.append('tests/test_models/test_base_model.py')
         super().setUpClass(className)
@@ -29,19 +30,20 @@ class TestBaseModel(TestCommon):
         """
             Test base model initialization.
         """
-        obj = self.className(**kwargs)
-        self.assertIs(type(obj), self.className)
+
+        obj = self.class_name(**kwargs)
+        self.assertIs(type(obj), self.class_name)
 
     def test_datetime_init(self, kwargs={}):
         """
             Test datetime attribute initialization.
         """
-        obj_list = []
+
         prev = None
 
         for index in range(2):
             tic = datetime.utcnow()
-            obj = self.className(**kwargs)
+            obj = self.class_name(**kwargs)
             toc = datetime.utcnow()
 
             self.assertTrue(tic <= obj.created_at)
@@ -59,11 +61,10 @@ class TestBaseModel(TestCommon):
             Test id initialization.
         """
 
-        obj_list = []
         prev = None
 
         for index in range(2):
-            obj = self.className(**kwargs)
+            obj = self.class_name(**kwargs)
             self.assertEqual(type(obj.id), str)
             self.assertRegex(obj.id,
                              '^[0-9a-f]{8}-[0-9a-f]{4}'
@@ -83,9 +84,9 @@ class TestBaseModel(TestCommon):
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
         with self.assertRaises(Exception) as context:
             kwargs['created_at'] = tic
-            obj = self.className(**kwargs)
+            obj = self.class_name(**kwargs)
         kwargs['created_at'] = strtic
-        obj = self.className(**kwargs)
+        obj = self.class_name(**kwargs)
         self.assertNotEqual(obj.created_at, strtic)
         self.assertEqual(obj.created_at, tic)
 
@@ -99,9 +100,9 @@ class TestBaseModel(TestCommon):
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
         with self.assertRaises(Exception) as context:
             kwargs['updated_at'] = tic
-            obj = self.className(**kwargs)
+            obj = self.class_name(**kwargs)
         kwargs['updated_at'] = strtic
-        obj = self.className(**kwargs)
+        obj = self.class_name(**kwargs)
         self.assertNotEqual(obj.updated_at, strtic)
         self.assertEqual(obj.updated_at, tic)
 
@@ -112,7 +113,7 @@ class TestBaseModel(TestCommon):
 
         kwargs = {} if kwargs is None else kwargs
         kwargs['__class__'] = None
-        obj = self.className(**kwargs)
+        obj = self.class_name(**kwargs)
         dict = obj.to_dict()
         self.assertNotEqual(dict['__class__'], 'toto')
 
@@ -122,7 +123,7 @@ class TestBaseModel(TestCommon):
         """
 
         kwargs = {} if kwargs is None else kwargs
-        obj = self.className(**kwargs)
+        obj = self.class_name(**kwargs)
         string = "[{}] ({}) {}".format(
             obj.__class__.__name__, obj.id, obj.__dict__)
         self.assertEqual(string, str(obj))
@@ -134,7 +135,7 @@ class TestBaseModel(TestCommon):
 
         kwargs = {} if kwargs is None else kwargs
         kwargs['name'] = None
-        obj = self.className(**kwargs)
+        obj = self.class_name(**kwargs)
         expected_attrs = {
             "id": str,
             "created_at": datetime,

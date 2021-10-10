@@ -14,7 +14,7 @@ class User(BaseModel):
 
     def __init__(self, *args, **kwargs):
         """
-            Constructor
+            Constructor.
         """
         if 'username' not in kwargs:
             raise ValueError('Missing username')
@@ -24,10 +24,17 @@ class User(BaseModel):
 
     @property
     def password(self) -> str:
+        """
+            Password setter method.
+        """
         return self.__password
 
     @password.setter
     def password(self, value: str):
+        """
+            Password getter method.
+        """
+
         if type(value) is not str:
             raise TypeError()
 
@@ -35,10 +42,18 @@ class User(BaseModel):
 
     @property
     def username(self) -> str:
+        """
+            Username setter method.
+        """
+
         return self.__username
 
     @username.setter
     def username(self, value: str):
+        """
+            Username getter method.
+        """
+
         if type(value) is not str:
             raise TypeError()
 

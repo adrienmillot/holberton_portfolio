@@ -13,10 +13,18 @@ class Survey(BaseModel):
 
     @property
     def name(self) -> str:
+        """
+            Name setter method.
+        """
+
         return self.__name
 
     @name.setter
     def name(self, value: str):
+        """
+            Name getter method.
+        """
+
         if type(value) is not str:
             raise TypeError()
 

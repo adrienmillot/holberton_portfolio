@@ -11,24 +11,27 @@ class TestCommon(unittest.TestCase):
     """
         Tests to check the documentation and style class.
     """
+
     base_funcs = []
     files = [
-        'tests/test_models/test_common.py'
+        # 'tests/test_models/test_common.py'
     ]
-    className = None
+    class_name = None
 
     @classmethod
-    def setUpClass(self, className=None):
+    def setUpClass(self, class_name=None):
         """
             Set up for docstring tests
         """
-        self.className = className
-        self.base_funcs = inspect.getmembers(className, inspect.isfunction)
+
+        self.class_name = class_name
+        self.base_funcs = inspect.getmembers(class_name, inspect.isfunction)
 
     def test_pep8_compliant(self):
         """
             Test for file compliancy with pep8.
         """
+
         for path in self.files:
             with self.subTest(path=path):
                 errors = pycodestyle.Checker(path).check_all()
@@ -38,40 +41,34 @@ class TestCommon(unittest.TestCase):
 
     def test_class_docstring(self):
         """
-            Test for the BaseModel class docstring.
+            Test for the class docstring.
         """
-        self.assertIsNot(
-            self.__doc__, None,
-            "{} class needs a docstring".format(self.__class__.__name__)
-        )
-        self.assertTrue(
-            len(self.__doc__) >= 1,
-            "{} class needs a docstring".format(self.__class__.__name__)
-        )
-        if self.className is not None:
+
+        if self.class_name is not None:
             self.assertIsNot(
-                self.className.__doc__, None,
-                "{} class needs a docstring".format(self.className.__name__)
+                self.class_name.__doc__, None,
+                "{} class needs a docstring".format(self.class_name.__name__)
             )
             self.assertTrue(
-                len(self.className.__doc__) >= 1,
-                "{} class needs a docstring".format(self.className.__name__)
+                len(self.class_name.__doc__) >= 1,
+                "{} class needs a docstring".format(self.class_name.__name__)
             )
 
     def test_func_docstrings(self):
         """
-            Test for the presence of docstrings in BaseModel methods.
+            Test for the presence of docstrings in class methods.
         """
+
         for func in self.base_funcs:
             with self.subTest(function=func):
                 self.assertIsNot(
                     func[1].__doc__,
                     None,
                     "{}.{:s} method needs a docstring".format(
-                        self.__class__.__name__, func[0])
+                        self.class_name.__name__, func[0])
                 )
                 self.assertTrue(
                     len(func[1].__doc__) > 1,
                     "{}.{:s} method needs a docstring".format(
-                        self.__class__.__name__, func[0])
+                        self.class_name.__name__, func[0])
                 )

@@ -16,6 +16,7 @@ class TestProposal(TestBaseModel):
         """
             Set up for docstring tests
         """
+
         super().files.append('models/proposal.py')
         super().files.append('tests/test_models/test_proposal.py')
         super().setUpClass(Proposal)
@@ -24,15 +25,17 @@ class TestProposal(TestBaseModel):
         """
             Test wrong label type insertion.
         """
+
         with self.assertRaises(Exception) as context:
-            obj = self.className()
+            obj = self.class_name()
             obj.label = 12
 
     def test_label_setter(self):
         """
             Test label setter method.
         """
-        obj = self.className()
+
+        obj = self.class_name()
         obj.label = "toto"
 
         self.assertEqual("toto", obj.label)
@@ -41,6 +44,8 @@ class TestProposal(TestBaseModel):
         """
             Test to_dict() method.
         """
-        obj = self.className(label="toto")
+
+        obj = self.class_name(label="toto")
         super().test_to_dict()
         self.assertIn('label', obj.to_dict().keys())
+        self.assertIn('toto', obj.to_dict().values())
