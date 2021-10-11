@@ -111,3 +111,6 @@ No parameters
 | 400 | Missing username |
 | 400 | Missing password |
 | 404 | User not found |
+
+---
+###### 2021 - SurveyStorm
