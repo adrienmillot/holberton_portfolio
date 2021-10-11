@@ -2,6 +2,8 @@
 """
     module category.
 """
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.schema import ForeignKey
 from models.base_model import Base, BaseModel
 from os import getenv
 from sqlalchemy import Column, String
@@ -14,6 +16,8 @@ class Category(BaseModel, Base):
     if getenv('SS_SERVER_MODE') == "API":
         __tablename__ = 'categories'
         name = Column(String(128), nullable=False, unique=True)
+        questions = relationship('Question',
+                                 cascade='all, delete', backref='categories')
     else:
         __name = ''
 

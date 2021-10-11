@@ -5,7 +5,6 @@
 
 
 from models.base_model import Base
-from models.engine.common_storage import CommonStorage
 from models.category import Category
 from models.profile import Profile
 from models.proposal import Proposal
@@ -17,8 +16,7 @@ from sqlalchemy.orm import session, sessionmaker, scoped_session
 import os
 
 
-@CommonStorage.register
-class DBStorage(CommonStorage):
+class DBStorage:
     """
         Class that manages Database Storage.
     """

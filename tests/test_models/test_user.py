@@ -3,6 +3,7 @@
     Test User Module.
 """
 from datetime import datetime
+from uuid import uuid4
 from models.user import User
 from tests.test_models.test_base_model import TestBaseModel
 
@@ -25,7 +26,8 @@ class TestUser(TestBaseModel):
     def setUp(self) -> None:
         self.kwargs = {
             'username': 'toto',
-            'password': 'password'
+            'password': 'password',
+            'profile_id': uuid4
         }
 
     def test_constructor(self):

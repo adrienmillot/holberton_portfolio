@@ -4,6 +4,8 @@
 """
 from datetime import datetime
 from os import getenv
+
+from sqlalchemy.orm import relationship
 from models.base_model import Base, BaseModel
 from sqlalchemy import Column, String, DateTime
 
@@ -19,6 +21,7 @@ class Profile(BaseModel, Base):
         first_name = Column(String(128), nullable=True)
         gender = Column(String(6), nullable=True)
         born_at = Column(DateTime, nullable=True)
+        user = relationship('User', cascade='all, delete', backref='profiles')
     else:
         __last_name = ''
         __first_name = ''

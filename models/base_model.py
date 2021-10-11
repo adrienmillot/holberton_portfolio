@@ -5,6 +5,7 @@
 
 
 from datetime import datetime
+import json
 from os import getenv
 from sqlalchemy import Column, String, DateTime
 from sqlalchemy.ext.declarative import declarative_base
@@ -69,6 +70,8 @@ class BaseModel:
                 continue
             if key == "created_at" or key == "updated_at":
                 new_dict[key] = value.strftime("%Y-%m-%dT%H:%M:%S.%f")
+            elif "_sa_instance_state" == key:
+                continue
             else:
                 new_dict[key] = value
         return new_dict

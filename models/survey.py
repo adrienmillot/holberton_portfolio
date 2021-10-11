@@ -2,6 +2,7 @@
 """
     module survey.
 """
+from sqlalchemy.orm import relationship
 from models.base_model import Base, BaseModel
 from os import getenv
 from sqlalchemy import Column, String
@@ -14,6 +15,8 @@ class Survey(BaseModel, Base):
     if getenv('SS_SERVER_MODE') == "API":
         __tablename__ = 'surveys'
         name = Column(String(128), nullable=False, unique=True)
+        questions = relationship('Question',
+                                 cascade='all, delete', backref='surveys')
     else:
         __name = ''
 

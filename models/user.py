@@ -2,9 +2,34 @@
 """
     module user.
 """
+from datetime import datetime
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.schema import ForeignKey, Table
 from models.base_model import Base, BaseModel
 from os import getenv
-from sqlalchemy import Column, String
+from sqlalchemy import Column, String, DateTime
+
+from models.profile import Profile
+
+
+answer = Table('answers', Base.metadata,
+               Column('proposal_id',
+                      String(60),
+                      ForeignKey('proposals.id',
+                                 onupdate='CASCADE',
+                                 ondelete='CASCADE'),
+                      primary_key=True),
+               Column('user_id', String(60),
+                      ForeignKey('users.id',
+                                 onupdate='CASCADE',
+                                 ondelete='CASCADE'),
+                      primary_key=True),
+               Column('created_at',
+                      DateTime,
+                      default=datetime.utcnow),
+               Column('updated_at',
+                      DateTime,
+                      default=datetime.utcnow))
 
 
 class User(BaseModel, Base):
@@ -15,6 +40,12 @@ class User(BaseModel, Base):
         __tablename__ = 'users'
         username = Column(String(128), nullable=False, unique=True)
         password = Column(String(128), nullable=False)
+        profile_id = Column(String(60),
+                            ForeignKey('profiles.id'), nullable=False)
+        answers = relationship("Proposal",
+                               secondary=answer,
+                               backref="users",
+                               viewonly=False)
     else:
         __password = ''
         __username = ''
@@ -27,6 +58,8 @@ class User(BaseModel, Base):
             raise ValueError('Missing username')
         if 'password' not in kwargs:
             raise ValueError('Missing password')
+        if 'profile_id' not in kwargs:
+            raise ValueError('Missing profile_id')
         super().__init__(*args, **kwargs)
 
     @property
