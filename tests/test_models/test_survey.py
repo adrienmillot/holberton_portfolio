@@ -26,8 +26,8 @@ class TestSurvey(TestBaseModel):
             Test wrong name type insertion.
         """
 
-        with self.assertRaises(Exception) as context:
-            obj = self.className()
+        with self.assertRaises(TypeError) as context:
+            obj = self.class_name()
             obj.name = 12
 
     def test_name_setter(self):
