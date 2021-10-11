@@ -3,6 +3,7 @@
     Test BaseModel module.
 """
 
+import os
 from models.base_model import BaseModel
 from datetime import datetime
 import time
