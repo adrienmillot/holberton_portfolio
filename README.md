@@ -1,5 +1,8 @@
 # SurveyStorm
 
+![Coverage](coverage-badge.svg)
+![Tests](tests-badge.svg)
+
 ## Introduction
 
 SurveyStorm provide an API that manages survey creation, edition and statistics, and allows users to answers an enabled survey.
