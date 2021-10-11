@@ -3,18 +3,27 @@
     module profile.
 """
 from datetime import datetime
-from models.base_model import BaseModel
+from os import getenv
+from models.base_model import Base, BaseModel
+from sqlalchemy import Column, String, DateTime
 
 
-class Profile(BaseModel):
+class Profile(BaseModel, Base):
     """
         Profile Model Class.
     """
 
-    __last_name = ''
-    __first_name = ''
-    __gender = ''
-    __born_at = None
+    if getenv('SS_SERVER_MODE') == "API":
+        __tablename__ = 'profiles'
+        last_name = Column(String(128), nullable=True)
+        first_name = Column(String(128), nullable=True)
+        gender = Column(String(6), nullable=True)
+        born_at = Column(DateTime, nullable=True)
+    else:
+        __last_name = ''
+        __first_name = ''
+        __gender = ''
+        __born_at = None
 
     def __init__(self, *args, **kwargs):
         """

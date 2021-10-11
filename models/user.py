@@ -2,15 +2,22 @@
 """
     module user.
 """
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
+from os import getenv
+from sqlalchemy import Column, String
 
 
-class User(BaseModel):
+class User(BaseModel, Base):
     """
         User Model Class.
     """
-    __password = ''
-    __username = ''
+    if getenv('SS_SERVER_MODE') == "API":
+        __tablename__ = 'users'
+        username = Column(String(128), nullable=False, unique=True)
+        password = Column(String(128), nullable=False)
+    else:
+        __password = ''
+        __username = ''
 
     def __init__(self, *args, **kwargs):
         """

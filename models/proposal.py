@@ -2,14 +2,27 @@
 """
     module proposal.
 """
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
+from sqlalchemy import Column, String
+from os import getenv
 
 
-class Proposal(BaseModel):
+class Proposal(BaseModel, Base):
     """
         Proposal Model Class.
     """
-    __label = ''
+    if getenv('SS_SERVER_MODE') == "API":
+        __tablename__ = 'proposals'
+        label = Column(String(256), nullable=False)
+    else:
+        __label = ''
+
+    def __init__(self, *args, **kwargs):
+        """
+            Constructor
+        """
+
+        super().__init__(*args, **kwargs)
 
     @property
     def label(self) -> str:

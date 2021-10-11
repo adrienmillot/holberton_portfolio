@@ -5,16 +5,30 @@
 
 
 from datetime import datetime
+from os import getenv
+from sqlalchemy import Column, String, DateTime
+from sqlalchemy.ext.declarative import declarative_base
 import uuid
+
+if getenv('SS_SERVER_MODE') == "API":
+    Base = declarative_base()
+else:
+    Base = object
 
 
 class BaseModel:
     """
         Base model class.
     """
-    id = None
-    created_at = None
-    updated_at = None
+
+    if getenv('SS_SERVER_MODE') == "API":
+        id = Column(String(60), primary_key=True)
+        created_at = Column(DateTime, default=datetime.utcnow)
+        updated_at = Column(DateTime, default=datetime.utcnow)
+    else:
+        id = None
+        created_at = None
+        updated_at = None
 
     def __init__(self, *args, **kwargs):
         """

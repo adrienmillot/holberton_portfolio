@@ -2,14 +2,27 @@
 """
     module survey.
 """
-from models.base_model import BaseModel
+from models.base_model import Base, BaseModel
+from os import getenv
+from sqlalchemy import Column, String
 
 
-class Survey(BaseModel):
+class Survey(BaseModel, Base):
     """
         Survey Model Class.
     """
-    __name = ''
+    if getenv('SS_SERVER_MODE') == "API":
+        __tablename__ = 'surveys'
+        name = Column(String(128), nullable=False, unique=True)
+    else:
+        __name = ''
+
+    def __init__(self, *args, **kwargs):
+        """
+            Constructor
+        """
+
+        super().__init__(*args, **kwargs)
 
     @property
     def name(self) -> str:
