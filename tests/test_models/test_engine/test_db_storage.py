@@ -131,4 +131,7 @@ class TestDBStorage(TestCommonStorage):
         self.storage.save()
 
     def test_close_method(self):
+        """
+            Test the close() method of DB Storage.
+        """
         pass
