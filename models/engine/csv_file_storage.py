@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-bla
+    module CSV file storage.
 """
 
 import csv
@@ -10,20 +10,21 @@ from models.engine.file_storage import FileStorage
 
 class CSVFileStorage(FileStorage):
     """
-    bla
+        CSV file storage class.
     """
 
     def __init__(self, obj_dict=...):
         """
-           Bla
+           Constructor
         """
+
         file_path = "{}.csv".format(datetime.strftime(datetime.utcnow(),
                                                       '%Y%m%d%H%M%S'))
         super().__init__(obj_dict=obj_dict, file_path=file_path)
 
     def save(self, delimiter=";", file_path=None):
         """
-        bla
+           Save method.
         """
 
         file_path = self.file_path if file_path is None else file_path
