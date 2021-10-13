@@ -28,21 +28,10 @@ class Category(BaseModel, Base):
 
         super().__init__(*args, **kwargs)
 
-    @property
-    def name(self) -> str:
+    def __setattr__(self, name, value):
         """
-            Name setter method.
+            Check attributes.
         """
-
-        return self.__name
-
-    @name.setter
-    def name(self, value: str):
-        """
-            Name getter method.
-        """
-
-        if type(value) is not str:
-            raise TypeError()
-
-        self.__name = value
+        if name == 'name' and not isinstance(value, str):
+                raise TypeError
+        super().__setattr__(name, value)

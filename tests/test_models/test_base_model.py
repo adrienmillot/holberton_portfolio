@@ -49,7 +49,10 @@ class TestBaseModel(TestCommon):
 
             self.assertTrue(tic <= obj.created_at)
             self.assertTrue(obj.created_at <= toc)
-            self.assertEqual(obj.created_at, obj.updated_at)
+            self.assertEqual(
+                obj.created_at.strftime('%Y-%m-%d %H:%M:%S'),
+                obj.updated_at.strftime('%Y-%m-%d %H:%M:%S')
+            )
             if prev is not None:
                 self.assertNotEqual(prev.created_at, obj.created_at)
                 self.assertLess(prev.created_at, obj.created_at)
@@ -75,7 +78,7 @@ class TestBaseModel(TestCommon):
                 self.assertNotEqual(prev.id, obj.id)
             prev = obj
 
-    def test_created_at_init(self, kwargs={}):
+    def test_created_at_init(self, kwargs=None):
         """
             Test created_at init.
         """
@@ -83,7 +86,7 @@ class TestBaseModel(TestCommon):
         kwargs = {} if kwargs is None else kwargs
         tic = datetime.utcnow()
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(TypeError) as context:
             kwargs['created_at'] = tic
             obj = self.class_name(**kwargs)
         kwargs['created_at'] = strtic
@@ -91,7 +94,7 @@ class TestBaseModel(TestCommon):
         self.assertNotEqual(obj.created_at, strtic)
         self.assertEqual(obj.created_at, tic)
 
-    def test_updated_at_init(self, kwargs={}):
+    def test_updated_at_init(self, kwargs=None):
         """
             Test updated_at init.
         """
@@ -99,7 +102,7 @@ class TestBaseModel(TestCommon):
         kwargs = {} if kwargs is None else kwargs
         tic = datetime.utcnow()
         strtic = tic.strftime('%Y-%m-%dT%H:%M:%S.%f')
-        with self.assertRaises(Exception) as context:
+        with self.assertRaises(TypeError) as context:
             kwargs['updated_at'] = tic
             obj = self.class_name(**kwargs)
         kwargs['updated_at'] = strtic

@@ -6,6 +6,7 @@
 
 from os import getenv
 import unittest
+from models.base_model import Base
 from models.category import Category
 from models.engine.db_storage import DBStorage
 from models.profile import Profile
@@ -66,11 +67,11 @@ class TestDBStorage(TestCommon):
         self.storage.delete(obj_category)
         self.storage.save()
 
-    def test_close_method(self):
-        """
-            Test the close() method of Storage.
-        """
-        pass
+    # def test_close_method(self):
+    #     """
+    #         Test the close() method of Storage.
+    #     """
+    #     pass
 
     def test_count_method(self):
         """
@@ -122,6 +123,7 @@ class TestDBStorage(TestCommon):
         self.storage.new(obj_user)
         self.storage.save()
         obj_user_from_db = self.storage.get(User, obj_user.id)
+        self.assertIsInstance(obj_user_from_db, User)
         self.assertEqual(obj_user, obj_user_from_db)
         self.storage.delete(obj_user)
         self.storage.delete(obj_profile)
@@ -147,8 +149,8 @@ class TestDBStorage(TestCommon):
         self.storage.delete(obj_profile)
         self.storage.save()
 
-    def test_reload(self):
-        pass
+    # def test_reload(self):
+    #     pass
 
     def test_save_method(self):
         """

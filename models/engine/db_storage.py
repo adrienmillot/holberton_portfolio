@@ -4,6 +4,10 @@
 """
 
 
+from datetime import datetime
+from sqlalchemy.sql.elements import and_
+
+from sqlalchemy.sql.expression import null
 from models.base_model import Base
 from models.category import Category
 from models.profile import Profile
@@ -62,8 +66,12 @@ class DBStorage:
             if cls is None or cls is class_value or cls is class_name:
                 objs = self.__session.query(class_value).all()
                 for obj in objs:
-                    key = obj.__class__.__name__ + '.' + obj.id
-                    new_dict[key] = obj
+                    if (
+                        hasattr(obj, 'deleted_at') and
+                        type(obj.deleted_at) is not datetime
+                    ):
+                        key = obj.__class__.__name__ + '.' + obj.id
+                        new_dict[key] = obj
         return (new_dict)
 
     def close(self):
@@ -80,12 +88,27 @@ class DBStorage:
 
         return len(self.all(cls))
 
+    def disable(self, obj=None):
+        """
+            Disable obj from __objects if it’s inside.
+        """
+
+        if obj is not None:
+            obj.deleted_at = datetime.utcnow()
+            self.save()
+
     def delete(self, obj=None):
         """
             Delete obj from __objects if it’s inside.
         """
 
-        if obj is not None:
+        env = os.environ.get('SS_SERVER_ENVIRONMENT')
+        db = os.environ.get('SS_MYSQL_DB')
+
+        if (
+            env == 'test' and db == 'ss_test_db' and
+            obj is not None
+        ):
             self.__session.delete(obj)
 
     def get(self, cls, id):
@@ -94,10 +117,23 @@ class DBStorage:
             None if not found.
         """
 
-        query = self.__session.query(cls)
         if id is None:
             return None
-        return query.get(id)
+
+        query = self.__session.query(cls).filter_by(deleted_at=None)
+
+        if query.count() == 0:
+            return None
+
+        return query.first()
+
+    def get_from_attributes(self, cls, **kwargs):
+        """
+        """
+
+        query = self.__session.query(cls).filter_by(**kwargs)
+
+        return query.first()
 
     def new(self, obj):
         """

@@ -4,6 +4,8 @@
 """
 from datetime import datetime
 from uuid import uuid4
+
+import bcrypt
 from models.user import User
 from tests.test_models.test_base_model import TestBaseModel
 
@@ -92,9 +94,9 @@ class TestUser(TestBaseModel):
         """
 
         obj = self.class_name(**self.kwargs)
-        obj.password = "toto"
+        obj.password = 'toto'
 
-        self.assertEqual("toto", obj.password)
+        self.assertTrue(bcrypt.checkpw('toto'.encode('utf-8'), obj.password))
 
     def test_wrong_password(self):
         """
@@ -114,8 +116,6 @@ class TestUser(TestBaseModel):
         super().test_to_dict(kwargs=self.kwargs)
         self.assertIn('username', obj.to_dict().keys())
         self.assertIn('toto', obj.to_dict().values())
-        self.assertIn('password', obj.to_dict().keys())
-        self.assertIn('password', obj.to_dict().values())
 
     def test_class_attribute_erase(self):
         """

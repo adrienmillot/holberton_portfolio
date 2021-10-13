@@ -116,14 +116,14 @@ class TestProfile(TestBaseModel):
         """
 
         obj = self.class_name(
-            last_name="toto", first_name="titi", gender="tata")
+            last_name="toto", first_name="titi", gender="Male")
         super().test_to_dict()
         self.assertIn('last_name', obj.to_dict().keys())
         self.assertIn('toto', obj.to_dict().values())
         self.assertIn('first_name', obj.to_dict().keys())
         self.assertIn('titi', obj.to_dict().values())
         self.assertIn('gender', obj.to_dict().keys())
-        self.assertIn('tata', obj.to_dict().values())
+        self.assertIn('Male', obj.to_dict().values())
 
     def test_born_at_init(self):
         """

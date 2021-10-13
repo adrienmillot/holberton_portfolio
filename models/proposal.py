@@ -21,7 +21,7 @@ class Proposal(BaseModel, Base):
                              ForeignKey('questions.id'), nullable=False)
         is_valid = Column(Boolean, nullable=True, default=False)
     else:
-        __label = ''
+        label = ''
 
     def __init__(self, *args, **kwargs):
         """
@@ -30,21 +30,10 @@ class Proposal(BaseModel, Base):
 
         super().__init__(*args, **kwargs)
 
-    @property
-    def label(self) -> str:
+    def __setattr__(self, name, value):
         """
-            Label setter method.
+            Check attributes.
         """
-
-        return self.__label
-
-    @label.setter
-    def label(self, value: str):
-        """
-            Label getter method.
-        """
-
-        if type(value) is not str:
-            raise TypeError()
-
-        self.__label = value
+        if name == 'label' and not isinstance(value, str):
+                raise TypeError
+        super().__setattr__(name, value)

@@ -19,9 +19,9 @@ class FileStorage:
         self.objects = obj_dict
         self.file_path = file_path
 
-    def save(self, file_path:str):
+    def save(self, file_path: str):
         """
-           Save method.
+            Save method.
         """
 
         raise NotImplemented('Save() method is not implemented.')

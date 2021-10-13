@@ -23,10 +23,10 @@ class Profile(BaseModel, Base):
         born_at = Column(DateTime, nullable=True)
         user = relationship('User', cascade='all, delete', backref='profiles')
     else:
-        __last_name = ''
-        __first_name = ''
-        __gender = ''
-        __born_at = None
+        last_name = ''
+        first_name = ''
+        gender = ''
+        born_at = None
 
     def __init__(self, *args, **kwargs):
         """
@@ -39,85 +39,34 @@ class Profile(BaseModel, Base):
             self.born_at = kwargs['born_at']
         super().__init__(*args, **kwargs)
 
-    @property
-    def last_name(self) -> str:
+    def __setattr__(self, name, value):
         """
-            Last name setter method.
+            Check attributes.
         """
+        if name == 'last_name' and not isinstance(value, str):
+                raise TypeError
 
-        return self.__last_name
+        if name == 'first_name' and not isinstance(value, str):
+                raise TypeError
 
-    @last_name.setter
-    def last_name(self, value: str):
-        """
-            Last name getter method.
-        """
+        if name == "born_at":
 
-        if type(value) is not str:
-            raise TypeError()
+            if type(value) is not datetime:
+                raise TypeError()
 
-        self.__last_name = value
+            now = datetime.utcnow()
 
-    @property
-    def first_name(self) -> str:
-        """
-            First name setter method.
-        """
-        return self.__first_name
+            if now.year - value.year < 18:
+                raise ValueError('Not major')
 
-    @first_name.setter
-    def first_name(self, value: str):
-        """
-            First name getter method.
-        """
+        if name == 'gender':
 
-        if type(value) is not str:
-            raise TypeError()
+            if type(value) is not str:
+                raise TypeError()
 
-        self.__first_name = value
+            if value.capitalize() not in ['Male', 'Female', 'Trans', 'Queer']:
+                raise ValueError('Invalid gender')
 
-    @property
-    def gender(self) -> str:
-        """
-            Gender setter method.
-        """
+            value = value.capitalize()
 
-        return self.__gender
-
-    @gender.setter
-    def gender(self, value: str):
-        """
-            Gender getter method.
-        """
-
-        if type(value) is not str:
-            raise TypeError()
-
-        if value.capitalize() not in ['Male', 'Female', 'Trans', 'Queer']:
-            raise ValueError('Invalid gender')
-
-        self.__gender = value.capitalize()
-
-    @property
-    def born_at(self) -> datetime:
-        """
-            Born at setter method.
-        """
-
-        return self.__born_at
-
-    @born_at.setter
-    def born_at(self, value: datetime):
-        """
-            Born at getter method.
-        """
-
-        if type(value) is not datetime:
-            raise TypeError()
-
-        now = datetime.utcnow()
-
-        if now.year - value.year < 18:
-            raise ValueError('Not major')
-
-        self.__born_at = value
+        super().__setattr__(name, value)

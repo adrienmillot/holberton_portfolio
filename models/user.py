@@ -2,34 +2,39 @@
 """
     module user.
 """
-from datetime import datetime
-from sqlalchemy.orm import relationship
-from sqlalchemy.sql.schema import ForeignKey, Table
-from models.base_model import Base, BaseModel
+from datetime import datetime, timedelta
+from hashlib import md5
+import hashlib
+from typing import Any
+import bcrypt
+import jwt
+from models.base_model import BaseModel, Base
 from os import getenv
 from sqlalchemy import Column, String, DateTime
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.schema import ForeignKey, Table
 
 from models.profile import Profile
 
-
-answer = Table('answers', Base.metadata,
-               Column('proposal_id',
-                      String(60),
-                      ForeignKey('proposals.id',
-                                 onupdate='CASCADE',
-                                 ondelete='CASCADE'),
-                      primary_key=True),
-               Column('user_id', String(60),
-                      ForeignKey('users.id',
-                                 onupdate='CASCADE',
-                                 ondelete='CASCADE'),
-                      primary_key=True),
-               Column('created_at',
-                      DateTime,
-                      default=datetime.utcnow),
-               Column('updated_at',
-                      DateTime,
-                      default=datetime.utcnow))
+if getenv('SS_SERVER_MODE') == 'API':
+    answer = Table('answers', Base.metadata,
+                   Column('proposal_id',
+                          String(60),
+                          ForeignKey('proposals.id',
+                                     onupdate='CASCADE',
+                                     ondelete='CASCADE'),
+                          primary_key=True),
+                   Column('user_id', String(60),
+                          ForeignKey('users.id',
+                                     onupdate='CASCADE',
+                                     ondelete='CASCADE'),
+                          primary_key=True),
+                   Column('created_at',
+                          DateTime,
+                          default=datetime.utcnow),
+                   Column('updated_at',
+                          DateTime,
+                          default=datetime.utcnow))
 
 
 class User(BaseModel, Base):
@@ -47,8 +52,8 @@ class User(BaseModel, Base):
                                backref="users",
                                viewonly=False)
     else:
-        __password = ''
-        __username = ''
+        password = ''
+        username = ''
 
     def __init__(self, *args, **kwargs):
         """
@@ -56,45 +61,77 @@ class User(BaseModel, Base):
         """
         if 'username' not in kwargs:
             raise ValueError('Missing username')
+
         if 'password' not in kwargs:
             raise ValueError('Missing password')
+
         if 'profile_id' not in kwargs:
             raise ValueError('Missing profile_id')
+
         super().__init__(*args, **kwargs)
 
-    @property
-    def password(self) -> str:
+    def encode_auth_token(self, user_id):
         """
-            Password setter method.
+            Generates the Auth Token
+            :return: string
         """
-        return self.__password
+        try:
+            payload = {
+                'exp': datetime.utcnow() + timedelta(days=0, seconds=43200),
+                'iat': datetime.utcnow(),
+                'sub': user_id
+            }
+            return jwt.encode(
+                payload,
+                getenv('SECRET_KEY'),
+                algorithm='HS256'
+            )
+        except Exception as e:
+            return e
 
-    @password.setter
-    def password(self, value: str):
+    @staticmethod
+    def decode_auth_token(auth_token):
         """
-            Password getter method.
+            Decodes the auth token
+            :param auth_token:
+            :return: integer|string
+        """
+        try:
+            payload = jwt.decode(auth_token, getenv('SECRET_KEY'))
+
+            return payload['sub']
+        except jwt.ExpiredSignatureError:
+            return -2
+        except jwt.InvalidTokenError:
+            return -1
+
+    def encode_bcrypt(self, string: str) -> str:
+        """
+            Encode a string with md5
         """
 
-        if type(value) is not str:
-            raise TypeError()
+        salt = bcrypt.gensalt()
 
-        self.__password = value
+        return bcrypt.hashpw(
+            string.encode('utf-8'), salt
+        )
 
-    @property
-    def username(self) -> str:
+    def __setattr__(self, name, value):
         """
-            Username setter method.
-        """
-
-        return self.__username
-
-    @username.setter
-    def username(self, value: str):
-        """
-            Username getter method.
+            Check attributes.
         """
 
-        if type(value) is not str:
-            raise TypeError()
+        if name == 'username' and type(value) is not str:
+            raise TypeError
 
-        self.__username = value
+        if name == 'password':
+            if type(value) is not str:
+                raise TypeError
+
+            if (
+                not hasattr(self, 'password') or
+                value != getattr(self, 'password')
+            ):
+                value = self.encode_bcrypt(value)
+
+        super(User, self).__setattr__(name, value)
