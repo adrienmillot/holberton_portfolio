@@ -1,4 +1,4 @@
-[Index](../../README.md) > [Technical analysis](README.md) > Architecture
+[Index](../../../README.md) > [Technical analysis](README.md) > Architecture
 
 # Architecture
 

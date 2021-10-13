@@ -1,5 +1,8 @@
 # SurveyStorm
 
+![Coverage](coverage-badge.svg)
+![Tests](tests-badge.svg)
+
 ## Introduction
 
 SurveyStorm provide an API that manages survey creation, edition and statistics, and allows users to answers an enabled survey.
@@ -45,6 +48,8 @@ SurveyStorm provide an API that manages survey creation, edition and statistics,
 ### [5. Use cases](docs/analysis/technical/use_cases/README.md)
 
 ### [6. Mockups](docs/analysis/technical/mockup/README.md)
+
+## [III. Making progress analysis](docs/analysis/making_progress/README.md)
 
 ---
 ###### 2021 - SurveyStorm

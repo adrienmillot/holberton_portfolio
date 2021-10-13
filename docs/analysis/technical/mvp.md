@@ -1,4 +1,4 @@
-[Index](../../README.md) > [Technical analysis](README.md) > MVP
+[Index](../../../README.md) > [Technical analysis](README.md) > MVP
 
 # Minimal viable product (MVP)
 

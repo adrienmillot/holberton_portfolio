@@ -85,3 +85,6 @@ No parameters
 | 404 | Survey not found |
 | 401 | Unauthorized |
 | 498 | Token expired/invalid |
+
+---
+###### 2021 - SurveyStorm

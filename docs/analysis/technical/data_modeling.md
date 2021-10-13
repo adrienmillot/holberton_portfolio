@@ -1,4 +1,4 @@
-[Index](../../README.md) > [Technical analysis](README.md) > Data modeling
+[Index](../../../README.md) > [Technical analysis](README.md) > Data modeling
 
 # Data modeling
 
