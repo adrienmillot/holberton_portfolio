@@ -1,8 +1,8 @@
 version: "3.7"
 
 services:
-  mysql:
-    container_name: mysql
+  ss_mysql:
+    container_name: ss_mysql
     environment:
         MYSQL_ROOT_PASSWORD: root
     image: mysql:5.7
@@ -12,3 +12,19 @@ services:
       - "./:/home"
       - "./database_scripts/setup_mysql_dev.sql:/docker-entrypoint-initdb.d/setup_mysql_dev.sql"
       - "./database_scripts/setup_mysql_test.sql:/docker-entrypoint-initdb.d/setup_mysql_test.sql"
+
+  ss_api:
+    container_name: ss_api
+    command: "python3 -m api.v1.app"
+    depends_on:
+      - ss_mysql
+    entrypoint: ./.requirements.sh
+    env_file: .api_env
+    image: python:3.8
+    links:
+      - ss_mysql
+    ports:
+      - 5001:5001
+    volumes:
+      - .:/code
+    working_dir: /code
