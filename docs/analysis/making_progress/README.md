@@ -2,8 +2,11 @@
 
 # Making progress analysis
 
-## [Challenges](challenges.md)
-## [Project updates](project_updates.md)
+## [1. Challenges](challenges.md)
+
+## [3. Collaboration/Communication](collaboration_communication.md)
+
+## [4. Project updates](project_updates.md)
 
 
 ---
