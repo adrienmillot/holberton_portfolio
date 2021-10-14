@@ -51,5 +51,7 @@ SurveyStorm provide an API that manages survey creation, edition and statistics,
 
 ## [III. Making progress analysis](docs/analysis/making_progress/README.md)
 
+### [3. Project updates](docs/analysis/making_progress/project_updates.md)
+
 ---
 ###### 2021 - SurveyStorm
