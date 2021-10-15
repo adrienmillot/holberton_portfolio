@@ -1,7 +1,6 @@
 #!/usr/bin/python3
 import json
 from models import db_storage
-from models import profile
 from models.profile import Profile
 from models.user import User
 from os import getenv
