@@ -2,7 +2,9 @@
 
 # Making progress analysis
 
-## [1. Challenges](challenges.md)
+## [1. Progress](progress.md)
+
+## [2. Challenges](challenges.md)
 
 ## [3. Collaboration/Communication](collaboration_communication.md)
 
