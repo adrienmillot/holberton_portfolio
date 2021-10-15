@@ -12,7 +12,7 @@ We had discussed our vision for the project beforehand. But we must necessarily 
 
 ### Tests
 
-For this project, we chose technologies that we had already used. But we also decided to integrate new features (bcrypt, token, etc ...). For our tests, therefore, it took us longer. 
+For this project, we've chosen technologies that we had already used. But we also decided to integrate new features (bcrypt, token, etc ...). For our tests, therefore, it took us longer. 
 
 ## Success
 
