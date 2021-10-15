@@ -51,3 +51,27 @@ def get_user(user_id):
         return make_response(jsonify(responseObject), 404)
 
     return jsonify(user.to_dict())
+
+
+@app_views.route('/users/<user_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('documentation/user/delete_user.yml', methods=['DELETE'])
+def delete_user(user_id):
+    """
+        Deletes a user Object.
+    """
+
+    user = db_storage.get(User, user_id)
+
+    if not user:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    db_storage.delete(user)
+    db_storage.save()
+
+    return make_response(jsonify({}), 200)

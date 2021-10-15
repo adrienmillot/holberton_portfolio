@@ -147,3 +147,77 @@ class ShowUsersApiTest(unittest.TestCase):
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
         self.assertEqual(json_data['message'], 'User entity not found.')
+
+
+@unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
+class DeleteUsersApiTest(unittest.TestCase):
+    """
+        Tests of API delete action for User.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API delete action tests.
+        """
+
+        self.profile = Profile(name='toto')
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user_id = self.user.id
+
+        self.profile.save()
+        self.user.save()
+
+        self.url = '{}/users/{}'.format(api_url, self.user.id)
+        self.invalid_url = '{}/users/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table User of database used for tests.
+        """
+
+        user = db_storage.get_from_attributes(User, id=self.user.id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile.id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testDelete(self):
+        """
+            Test valid delete action.
+        """
+
+        self.assertTrue(self.user == db_storage.get(User, self.user_id))
+
+        response = requests.delete(url=self.url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertEqual(len(json_data), 0)
+        db_storage.reload()
+        self.assertIsNone(db_storage.get(User, self.user_id))
+
+    def testNotFound(self):
+        """
+            Test delete action when given wrong profile_id or no ID at all.
+        """
+
+        response = requests.delete(url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.user == db_storage.get(User, self.user.id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'User entity not found.')
