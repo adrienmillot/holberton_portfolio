@@ -120,7 +120,7 @@ class DBStorage:
         if id is None:
             return None
 
-        query = self.__session.query(cls).filter_by(deleted_at=None)
+        query = self.__session.query(cls).filter_by(deleted_at=None, id=id)
 
         if query.count() == 0:
             return None

@@ -31,3 +31,34 @@ def profiles_list() -> json:
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/profiles/<profile_id>', methods=['GET'])
+@swag_from('documentation/profile/get_profile.yml')
+def profile_show(profile_id) -> json:
+    """
+        Retrieves a specified Profile object.
+
+        Args:
+            profile_id : ID of the wanted Profile object.
+
+        Raises:
+            NotFound: Raises a 404 error if profile_id
+            is not linked to any Profile object.
+
+        Returns:
+            json: Wanted Profile object with status code 200.
+    """
+
+    profile = db_storage.get(Profile, profile_id)
+
+    if profile is None:
+
+        responseObject = {
+            'status': 'fail',
+            'message': 'Profile entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    return make_response(jsonify(profile.to_dict()), 200)
