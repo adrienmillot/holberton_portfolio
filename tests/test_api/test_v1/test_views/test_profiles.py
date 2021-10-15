@@ -7,6 +7,8 @@ from os import getenv
 import requests
 import unittest
 
+from tests.test_api.test_v1.test_views.authenticated import AuthenticatedRequest
+
 
 host = getenv('SS_API_HOST_API_HOST', '0.0.0.0')
 port = getenv('SS_API_PORT', '5001')
@@ -24,7 +26,7 @@ MISSING_CLASS_ATTR_MSG = 'Missing class!'
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class ListProfilesApiTest(unittest.TestCase):
+class ListProfilesApiTest(AuthenticatedRequest):
     """
         Tests of API list action for Profile.
     """
@@ -51,7 +53,7 @@ class ListProfilesApiTest(unittest.TestCase):
             Test valid list action.
         """
 
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         headers = response.headers
 
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
@@ -64,7 +66,7 @@ class ListProfilesApiTest(unittest.TestCase):
         """
 
         initial_count = len(db_storage.all(Profile))
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         json_data = response.json()
 
         self.assertEqual(initial_count, len(json_data['results']))
@@ -74,7 +76,7 @@ class ListProfilesApiTest(unittest.TestCase):
             Test valid list action with Profile content only.
         """
 
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         json_data = response.json()
 
         for element in json_data['results']:

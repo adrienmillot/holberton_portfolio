@@ -3,6 +3,7 @@
     objects that handle all default RestFul API actions for Users.
 """
 
+import bcrypt
 from os import getenv
 from api.v1.views import app_views
 from models.profile import Profile
@@ -169,3 +170,48 @@ def update_user(user_id):
     db_storage.save()
 
     return make_response(jsonify(user.to_dict()), 200)
+
+
+@app_views.route('/auth/login', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/user/login.yml', methods=['POST'])
+def login():
+    try:
+        post_data = request.get_json()
+
+        if not post_data:
+            responseObject = {
+                'status': 'fail',
+                'message': 'Not a JSON.'
+            }
+
+            return make_response(jsonify(responseObject), 400)
+
+        user = db_storage.get_from_attributes(User, username=post_data.get('username'))
+
+        if user is None:
+            responseObject = {
+                'status': 'fail',
+                'message': 'User does not exist.'
+            }
+
+            return make_response(jsonify(responseObject), 404)
+
+        if not bcrypt.checkpw(post_data.get('password').encode(), user.password.encode()):
+            responseObject = {
+                'status': 'fail',
+                'message': 'Invalid username/password combination.'
+            }
+
+            return make_response(jsonify(responseObject), 400)
+
+        auth_token = user.encode_auth_token(user.id)
+
+        if auth_token:
+            responseObject = {
+                'status': 'success',
+                'message': 'Successfully logged in.',
+                'auth_token': auth_token.decode()
+            }
+            return make_response(jsonify(responseObject), 200)
+    except Exception as exception:
+        return make_response(jsonify(exception.args[0]), 500)

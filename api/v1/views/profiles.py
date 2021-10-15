@@ -6,10 +6,12 @@
 import json
 
 from api.v1.views import app_views
-from models.profile import Profile
 from models import db_storage
+from models.profile import Profile
+from models.user import User
 from flask import request, jsonify, make_response
 from flasgger.utils import swag_from
+
 
 
 @app_views.route('/profiles', methods=['GET'], strict_slashes=False)

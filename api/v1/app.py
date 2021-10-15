@@ -16,6 +16,57 @@ app.register_blueprint(app_views)
 cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 
 
+@app.before_request
+def before_request():
+    from flask import request
+
+    if request.endpoint in (
+        'app_views.login',
+        'app_views.profile_delete',
+        'app_views.profile_show',
+        'app_views.profile_create',
+        'app_views.profile_update',
+        'app_views.users_list',
+        'app_views.delete_user',
+        'app_views.get_user',
+        'app_views.create_user',
+        'app_views.update_user'
+    ):
+        return
+
+    auth_header = request.headers.get('Authorization')
+
+    if auth_header:
+        auth_token = auth_header.split(" ")[1]
+    else:
+        auth_token = ''
+
+    if not auth_token:
+        responseObject = {
+            'status': 'fail',
+            'message': 'You have to be logged.'
+        }
+
+        return make_response(jsonify(responseObject), 401)
+
+    resp = User.decode_auth_token(auth_token)
+
+    if resp == -1:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Invalid token.'
+        }
+
+        return make_response(jsonify(responseObject), 498)
+    elif resp == -2:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Expired token.'
+        }
+
+        return make_response(jsonify(responseObject), 498)
+
+
 @app.teardown_appcontext
 def close_db(error):
     """ Close Storage """
