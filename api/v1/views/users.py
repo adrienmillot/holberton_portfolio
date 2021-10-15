@@ -5,6 +5,7 @@
 
 from os import getenv
 from api.v1.views import app_views
+from models.profile import Profile
 from models.user import User
 from models import db_storage
 from flask import abort, jsonify, make_response, request
@@ -75,3 +76,60 @@ def delete_user(user_id):
     db_storage.save()
 
     return make_response(jsonify({}), 200)
+
+
+@app_views.route('/users', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/user/post_user.yml', methods=['POST'])
+def create_user():
+    """
+        Creates a user.
+    """
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'username' not in request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing username.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'password' not in request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing password.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'profile_id' not in request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing profile_id.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    data = request.get_json()
+    profile = db_storage.get(Profile, data['profile_id'])
+
+    if not profile:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Profile entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    data = request.get_json()
+    instance = User(**data)
+    instance.save()
+
+    return make_response(jsonify(instance.to_dict()), 201)
