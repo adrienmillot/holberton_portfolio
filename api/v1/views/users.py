@@ -31,3 +31,23 @@ def users_list():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/get_user.yml', methods=['GET'])
+def get_user(user_id):
+    """
+        Retrieves an user.
+    """
+
+    user = db_storage.get(User, user_id)
+
+    if not user:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    return jsonify(user.to_dict())

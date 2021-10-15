@@ -33,6 +33,7 @@ class ListUsersApiTest(unittest.TestCase):
         """
             Set up API list action tests.
         """
+
         self.profile = Profile()
         self.profile_id = self.profile.id
         self.user = User(username='test', password='test', profile_id=self.profile_id)
@@ -79,3 +80,70 @@ class ListUsersApiTest(unittest.TestCase):
 
         for element in json_data['results']:
             self.assertEqual(element['__class__'], 'User', WRONG_OBJ_TYPE_MSG)
+
+
+@unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
+class ShowUsersApiTest(unittest.TestCase):
+    """
+        Tests of API show action for User.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API show action tests.
+        """
+
+        self.profile = Profile(last_name='toto', first_name='titi',gender='Male')
+        self.user = User(username='test', password='test', profile_id=self.profile.id)
+
+        self.profile.save()
+        self.user.save()
+
+        self.url = '{}/users/{}'.format(api_url, self.user.id)
+        self.invalid_url = '{}/users/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table User of database used for tests.
+        """
+
+        db_storage.delete(self.user)
+        db_storage.delete(self.profile)
+        db_storage.save()
+
+    def testShow(self):
+        """
+            Test valid show action.
+        """
+
+        response = requests.get(url=self.url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertIn('username', json_data)
+        self.assertNotIn('password', json_data)
+        self.assertIn('created_at', json_data)
+        self.assertIn('updated_at', json_data)
+        self.assertIn('__class__', json_data)
+        self.assertEqual(json_data['username'], self.user.username)
+
+    def testNotFound(self):
+        """
+            Test show action when given wrong user_id or no ID at all.
+        """
+
+        response = requests.get(url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.user == db_storage.get(User, self.user.id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'User entity not found.')
