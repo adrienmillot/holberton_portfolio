@@ -161,7 +161,7 @@ class DeleteUsersApiTest(unittest.TestCase):
             Set up API delete action tests.
         """
 
-        self.profile = Profile(name='toto')
+        self.profile = Profile(last_name='toto')
         self.profile_id = self.profile.id
         self.user = User(username='test', password='test', profile_id=self.profile_id)
         self.user_id = self.user.id
@@ -297,3 +297,107 @@ class CreateUsersApiTest(unittest.TestCase):
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
         self.assertEqual(json_data['message'], 'Not a JSON.')
+
+
+@unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
+class UpdateUsersApiTest(unittest.TestCase):
+    """
+        Tests of API update action for User.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API update action tests.
+        """
+
+        self.profile = Profile(last_name='toto')
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user_id = self.user.id
+
+        self.profile.save()
+        self.user.save()
+        self.user.save()
+
+        self.url = '{}/users/{}'.format(api_url, self.user_id)
+        self.invalid_url = '{}/users/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table User of database used for tests.
+        """
+
+        user = db_storage.get_from_attributes(User, id=self.user_id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile_id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testUpdate(self):
+        """
+            Test valid update action.
+        """
+
+        self.assertTrue(self.user == db_storage.get(User, self.user_id))
+        self.assertEqual(self.user.username, 'test')
+        data = {'username': 'toto2'}
+        response = requests.put(url=self.url, json=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        db_storage.reload()
+        user = db_storage.get(User, self.user_id)
+        self.assertEqual(user.username, 'toto2')
+        self.assertIn('username', json_data, MISSING_USERNAME_ATTR_MSG)
+        self.assertNotIn('password', json_data, PASSWORD_ATTR_FOUND_MSG)
+        self.assertIn('created_at', json_data, MISSING_CREATED_AT_ATTR_MSG)
+        self.assertIn('updated_at', json_data, MISSING_UPDATED_AT_ATTR_MSG)
+        self.assertIn('__class__', json_data, MISSING_CLASS_ATTR_MSG)
+        self.assertEqual(json_data['username'], 'toto2')
+        db_storage.delete(user)
+        db_storage.save()
+
+    def testNotAJson(self):
+        """
+            Test update action when given an invalid json.
+        """
+
+        data = {'name': 'toto'}
+        response = requests.put(url=self.url, data=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json',
+            WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Not a JSON.')
+
+    def testNotFound(self):
+        """
+            Test update action when given a wrong ID.
+        """
+
+        data = {'name': 'toto'}
+        response = requests.put(url=self.invalid_url, data=json.dumps(data))
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.user == db_storage.get(User, self.user.id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'User entity not found.')
