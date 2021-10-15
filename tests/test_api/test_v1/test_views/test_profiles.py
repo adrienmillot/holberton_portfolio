@@ -18,6 +18,10 @@ api_url = 'http://{}:{}/api{}'.format(host, port, version)
 WRONG_STATUS_CODE_MSG = 'Wrong status code!'
 WRONG_TYPE_RETURN_MSG = 'Wrong return type return!'
 WRONG_OBJ_TYPE_MSG = 'Wrong object type!'
+MISSING_LAST_NAME_ATTR_MSG = 'Missing last_name!'
+MISSING_CREATED_AT_ATTR_MSG = 'Missing created_at!'
+MISSING_UPDATED_AT_ATTR_MSG = 'Missing updated_at!'
+MISSING_CLASS_ATTR_MSG = 'Missing class!'
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
@@ -206,3 +210,59 @@ class DeleteProfilesApiTest(unittest.TestCase):
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
         self.assertEqual(json_data['message'], 'Profile entity not found.')
+
+
+@unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
+class CreateProfilesApiTest(unittest.TestCase):
+    """
+        Tests of API create action for Profile.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API create action.
+        """
+
+        self.url = '{}/profiles/'.format(api_url)
+
+    def testCreate(self):
+        """
+            Test valid create action tests.
+        """
+
+        data = {'last_name': 'toto'}
+        response = requests.post(url=self.url, json=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 201, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        profile = db_storage.get(Profile, json_data['id'])
+        self.assertIsInstance(profile, Profile)
+        self.assertIn('last_name', json_data, MISSING_LAST_NAME_ATTR_MSG)
+        self.assertIn('created_at', json_data, MISSING_CREATED_AT_ATTR_MSG)
+        self.assertIn('updated_at', json_data, MISSING_UPDATED_AT_ATTR_MSG)
+        self.assertIn('__class__', json_data, MISSING_CLASS_ATTR_MSG)
+        self.assertEqual(json_data['last_name'], 'toto')
+        db_storage.delete(profile)
+        db_storage.save()
+
+    def testNotAJson(self):
+        """
+            Test create action when given wrong data format.
+        """
+
+        data = {'name': 'toto'}
+        response = requests.post(url=self.url, data=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json',
+            WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Not a JSON.')

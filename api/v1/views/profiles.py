@@ -4,10 +4,11 @@
 """
 
 import json
+
 from api.v1.views import app_views
 from models.profile import Profile
 from models import db_storage
-from flask import jsonify, make_response
+from flask import request, jsonify, make_response
 from flasgger.utils import swag_from
 
 
@@ -94,3 +95,32 @@ def profile_delete(profile_id) -> json:
     db_storage.save()
 
     return make_response(jsonify({}), 200)
+
+
+@app_views.route('/profiles/', methods=['POST'])
+@swag_from('documentation/profile/post_profile.yml')
+def profile_create() -> json:
+    """
+        Creates a new Profile object.
+
+        Error cases:
+            BadRequest: If the given data is not a
+            valid json or if the key 'name' is not
+            present sends status code 400.
+
+        Returns:
+            json: The new Profile with the status code 201.
+    """
+
+    if not request.json:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    profile = Profile(**request.get_json())
+    profile.save()
+
+    return make_response(jsonify(profile.to_dict()), 201)
