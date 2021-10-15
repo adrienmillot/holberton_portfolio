@@ -124,3 +124,43 @@ def profile_create() -> json:
     profile.save()
 
     return make_response(jsonify(profile.to_dict()), 201)
+
+
+@app_views.route('/profiles/<profile_id>', methods=['PUT'])
+@swag_from('documentation/profile/put_profile.yml')
+def profile_update(profile_id) -> json:
+    """
+        Update a specified Profile object.
+
+        Args:
+            profile_id : Id of the wanted Profile object.
+
+        Returns:
+            json: The updated Profile object with the status code 200.
+    """
+
+    profile = db_storage.get(Profile, profile_id)
+
+    if profile is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Profile entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if not request.json:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    for key, value in request.get_json().items():
+        if key not in ['id', 'created_at', 'updated_at']:
+            profile.__setattr__(key, value)
+
+    profile.save()
+
+    return make_response(jsonify(profile.to_dict()), 200)

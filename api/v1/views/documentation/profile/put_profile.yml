@@ -1,0 +1,19 @@
+    Updates profile information
+    ---
+    tags:
+      - Profiles
+    parameters:
+      - name: profile_id
+        in: path
+        type: string
+        required: true
+        description: The id of the profile to update
+      - name: update_request
+        in: body
+        required: true
+
+    responses:
+      404:
+        description: profile not found!
+      200:
+        description: request executed successfully
