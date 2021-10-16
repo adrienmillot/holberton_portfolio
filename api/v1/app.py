@@ -31,7 +31,7 @@ def before_request():
         'app_views.get_user',
         'app_views.create_user',
         'app_views.update_user'
-    ):
+    ) or request.method == 'OPTIONS':
         return
 
     auth_header = request.headers.get('Authorization')
