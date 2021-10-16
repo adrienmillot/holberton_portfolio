@@ -23,7 +23,6 @@ def before_request():
     if request.endpoint in (
         'app_views.login',
         'app_views.profile_delete',
-        'app_views.profile_show',
         'app_views.profile_create',
         'app_views.profile_update',
         'app_views.users_list',
