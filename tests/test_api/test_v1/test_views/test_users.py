@@ -226,7 +226,7 @@ class DeleteUsersApiTest(AuthenticatedRequest):
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class CreateUsersApiTest(unittest.TestCase):
+class CreateUsersApiTest(AuthenticatedRequest):
     """
         Tests of API create action for User.
     """
@@ -262,7 +262,7 @@ class CreateUsersApiTest(unittest.TestCase):
         """
 
         data = {'username': 'toto', 'password': 'titi', 'profile_id': self.profile_id}
-        response = requests.post(url=self.url, json=data)
+        response = self.get_authenticated_response(http_method='post', json=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 201, WRONG_STATUS_CODE_MSG)
@@ -286,7 +286,7 @@ class CreateUsersApiTest(unittest.TestCase):
         """
 
         data = {'username': 'toto', 'password': 'titi', 'profile_id': self.profile_id}
-        response = requests.post(url=self.url, data=data)
+        response = self.get_authenticated_response(http_method='post', data=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
