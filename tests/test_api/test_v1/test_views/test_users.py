@@ -38,7 +38,8 @@ class ListUsersApiTest(AuthenticatedRequest):
 
         self.profile = Profile()
         self.profile_id = self.profile.id
-        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
         db_storage.new(self.profile)
         db_storage.new(self.user)
         db_storage.save()
@@ -95,8 +96,10 @@ class ShowUsersApiTest(AuthenticatedRequest):
             Set up API show action tests.
         """
 
-        self.profile = Profile(last_name='toto', first_name='titi',gender='Male')
-        self.user = User(username='test', password='test', profile_id=self.profile.id)
+        self.profile = Profile(
+            last_name='toto', first_name='titi', gender='Male')
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile.id)
 
         self.profile.save()
         self.user.save()
@@ -164,7 +167,8 @@ class DeleteUsersApiTest(AuthenticatedRequest):
 
         self.profile = Profile(last_name='toto')
         self.profile_id = self.profile.id
-        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
         self.user_id = self.user.id
 
         self.profile.save()
@@ -211,7 +215,8 @@ class DeleteUsersApiTest(AuthenticatedRequest):
             Test delete action when given wrong profile_id or no ID at all.
         """
 
-        response = self.get_authenticated_response(http_method='delete', url=self.invalid_url)
+        response = self.get_authenticated_response(
+            http_method='delete', url=self.invalid_url)
         headers = response.headers
 
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
@@ -238,7 +243,8 @@ class CreateUsersApiTest(AuthenticatedRequest):
 
         self.profile = Profile(name='toto')
         self.profile_id = self.profile.id
-        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
         self.user_id = self.user.id
 
         self.profile.save()
@@ -261,8 +267,10 @@ class CreateUsersApiTest(AuthenticatedRequest):
             Test valid create action tests.
         """
 
-        data = {'username': 'toto', 'password': 'titi', 'profile_id': self.profile_id}
-        response = self.get_authenticated_response(http_method='post', json=data)
+        data = {'username': 'toto', 'password': 'titi',
+                'profile_id': self.profile_id}
+        response = self.get_authenticated_response(
+            http_method='post', json=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 201, WRONG_STATUS_CODE_MSG)
@@ -285,8 +293,10 @@ class CreateUsersApiTest(AuthenticatedRequest):
             Test create action when given wrong data format.
         """
 
-        data = {'username': 'toto', 'password': 'titi', 'profile_id': self.profile_id}
-        response = self.get_authenticated_response(http_method='post', data=data)
+        data = {'username': 'toto', 'password': 'titi',
+                'profile_id': self.profile_id}
+        response = self.get_authenticated_response(
+            http_method='post', data=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
@@ -301,7 +311,7 @@ class CreateUsersApiTest(AuthenticatedRequest):
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class UpdateUsersApiTest(unittest.TestCase):
+class UpdateUsersApiTest(AuthenticatedRequest):
     """
         Tests of API update action for User.
     """
@@ -313,7 +323,8 @@ class UpdateUsersApiTest(unittest.TestCase):
 
         self.profile = Profile(last_name='toto')
         self.profile_id = self.profile.id
-        self.user = User(username='test', password='test', profile_id=self.profile_id)
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
         self.user_id = self.user.id
 
         self.profile.save()
@@ -346,7 +357,8 @@ class UpdateUsersApiTest(unittest.TestCase):
         self.assertTrue(self.user == db_storage.get(User, self.user_id))
         self.assertEqual(self.user.username, 'test')
         data = {'username': 'toto2'}
-        response = requests.put(url=self.url, json=data)
+        response = self.get_authenticated_response(
+            http_method='put', json=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
@@ -371,7 +383,8 @@ class UpdateUsersApiTest(unittest.TestCase):
         """
 
         data = {'name': 'toto'}
-        response = requests.put(url=self.url, data=data)
+        response = self.get_authenticated_response(
+            http_method='put', data=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
@@ -390,7 +403,8 @@ class UpdateUsersApiTest(unittest.TestCase):
         """
 
         data = {'name': 'toto'}
-        response = requests.put(url=self.invalid_url, data=json.dumps(data))
+        response = self.get_authenticated_response(
+            http_method='put', url=self.invalid_url, json=data)
         headers = response.headers
 
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
