@@ -53,3 +53,27 @@ def get_survey(survey_id):
         return make_response(jsonify(responseObject), 404)
 
     return jsonify(survey.to_dict())
+
+
+@app_views.route('/surveys/<survey_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('documentation/survey/delete_survey.yml', methods=['DELETE'])
+def delete_survey(survey_id):
+    """
+        Deletes a survey Object.
+    """
+
+    survey = db_storage.get(Survey, survey_id)
+
+    if not survey:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    survey.delete()
+    db_storage.save()
+
+    return make_response(jsonify({}), 200)
