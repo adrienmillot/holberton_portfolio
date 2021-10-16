@@ -182,7 +182,7 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
         """
             Tear down table Survey of database used for tests.
         """
-        survey = db_storage.get_from_attributes(Survey, id=self.survey_id) 
+        survey = db_storage.get_from_attributes(Survey, id=self.survey_id)
         if survey is not None:
             db_storage.delete(survey)
             db_storage.save()
@@ -229,3 +229,98 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
         self.assertEqual(json_data['message'], 'Survey entity not found.')
+
+
+class CreateSurveysApiTest(AuthenticatedRequest):
+    """
+        Tests of API create action for Surveys.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API create survey action tests.
+        """
+        self.profile = Profile()
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.user_id = self.user.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.save()
+        self.url = '{}/surveys'.format(api_url)
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Survey of database used for tests.
+        """
+        user = db_storage.get_from_attributes(User, id=self.user_id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile_id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testCreate(self):
+        """
+            Test valid create survey action tests.
+        """
+        data = {'name': 'toto'}
+        response = self.get_authenticated_response(
+            http_method='post', json=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 201, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        survey = db_storage.get(Survey, json_data['id'])
+        self.assertIsInstance(survey, Survey)
+        self.assertIn('name', json_data, MISSING_NAME_ATTR_MSG)
+        self.assertIn('created_at', json_data, MISSING_CREATED_AT_ATTR_MSG)
+        self.assertIn('updated_at', json_data, MISSING_UPDATED_AT_ATTR_MSG)
+        self.assertIn('__class__', json_data, MISSING_CLASS_ATTR_MSG)
+        self.assertEqual(json_data['name'], 'toto')
+        db_storage.delete(survey)
+        db_storage.save()
+
+    def testMissingNameAttribute(self):
+        """
+            Test create survey action when given dict without name key.
+        """
+        data = {'bidule': 'toto'}
+        response = self.get_authenticated_response(
+            http_method='post', json=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json',
+            WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Missing name.')
+
+    def testNotAJson(self):
+        """
+            Test create survey action when given wrong data format.
+        """
+        data = {'name': 'toto'}
+        response = self.get_authenticated_response(
+            http_method='post', data=data)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 400, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json',
+            WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Not a JSON.')

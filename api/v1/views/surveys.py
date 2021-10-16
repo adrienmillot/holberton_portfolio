@@ -77,3 +77,33 @@ def delete_survey(survey_id):
     db_storage.save()
 
     return make_response(jsonify({}), 200)
+
+
+@app_views.route('/surveys', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/survey/post_survey.yml', methods=['POST'])
+def create_survey():
+    """
+        Creates a survey.
+    """
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'name' not in request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing name.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    data = request.get_json()
+    instance = Survey(**data)
+    instance.save()
+
+    return make_response(jsonify(instance.to_dict()), 201)
