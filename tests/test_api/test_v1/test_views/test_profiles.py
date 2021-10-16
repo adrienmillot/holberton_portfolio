@@ -5,9 +5,8 @@ from models.profile import Profile
 from models.user import User
 from os import getenv
 import requests
-import unittest
-
 from tests.test_api.test_v1.test_views.authenticated import AuthenticatedRequest
+import unittest
 
 
 host = getenv('SS_API_HOST_API_HOST', '0.0.0.0')

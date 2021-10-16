@@ -5,6 +5,7 @@ from models.profile import Profile
 from models.user import User
 from os import getenv
 import requests
+from tests.test_api.test_v1.test_views.authenticated import AuthenticatedRequest
 import unittest
 
 
@@ -25,7 +26,7 @@ MISSING_CLASS_ATTR_MSG = 'Missing class!'
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class ListUsersApiTest(unittest.TestCase):
+class ListUsersApiTest(AuthenticatedRequest):
     """
         Tests of API list action for User.
     """
@@ -53,7 +54,7 @@ class ListUsersApiTest(unittest.TestCase):
             Test valid list action.
         """
 
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         headers = response.headers
 
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
@@ -66,7 +67,7 @@ class ListUsersApiTest(unittest.TestCase):
         """
 
         initial_count = len(db_storage.all(User))
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         json_data = response.json()
 
         self.assertEqual(initial_count, len(json_data['results']))
@@ -76,7 +77,7 @@ class ListUsersApiTest(unittest.TestCase):
             Test valid list action with User content only.
         """
 
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         json_data = response.json()
 
         for element in json_data['results']:
