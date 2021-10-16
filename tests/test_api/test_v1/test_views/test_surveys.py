@@ -87,3 +87,68 @@ class ListSurveysApiTest(AuthenticatedRequest):
         for element in json_data['results']:
             self.assertEqual(element['__class__'],
                              'Survey', WRONG_OBJ_TYPE_MSG)
+
+class ShowSurveysApiTest(AuthenticatedRequest):
+    """
+        Tests of API show action for Surveys.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API show survey action tests.
+        """
+        self.profile = Profile()
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.survey = Survey(name='toto')
+        self.survey_id = self.survey.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.new(self.survey)
+        db_storage.save()
+        self.url = '{}/surveys/{}'.format(api_url, self.survey_id)
+        self.invalid_url = '{}/surveys/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Survey of database used for tests.
+        """
+        db_storage.delete(self.survey)
+        db_storage.delete(self.user)
+        db_storage.delete(self.profile)
+        db_storage.save()
+
+    def testShow(self):
+        """
+            Test valid show survey action
+        """
+        response = self.get_authenticated_response()
+        headers = response.headers
+        json_data = response.json()
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertIn('name', json_data)
+        self.assertIn('created_at', json_data)
+        self.assertIn('updated_at', json_data)
+        self.assertIn('__class__', json_data)
+        self.assertEqual(json_data['name'], self.survey.name)
+
+    def testNotFound(self):
+        """
+            Test show survey action when given wrong survey_id or no ID at all.
+        """
+        response = self.get_authenticated_response(url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Survey entity not found.')

@@ -33,3 +33,23 @@ def surveys_list():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/surveys/<survey_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/get_survey.yml', methods=['GET'])
+def get_survey(survey_id):
+    """
+        Retrieves an survey.
+    """
+
+    survey = db_storage.get(Survey, survey_id)
+
+    if not survey:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    return jsonify(survey.to_dict())
