@@ -1,0 +1,16 @@
+    Updates survey information
+    ---
+    tags:
+      - Surveys
+    parameters:
+      - name: survey_id
+        in: path
+        type: string
+        required: true
+        description: The id of the survey to update
+
+    responses:
+      404:
+        description: survey not found!
+      200:
+        description: request executed successfully

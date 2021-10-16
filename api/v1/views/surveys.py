@@ -107,3 +107,39 @@ def create_survey():
     instance.save()
 
     return make_response(jsonify(instance.to_dict()), 201)
+
+
+@app_views.route('/surveys/<survey_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/survey/put_survey.yml', methods=['PUT'])
+def update_survey(survey_id):
+    """
+        Updates a survey.
+    """
+
+    survey = db_storage.get(Survey, survey_id)
+
+    if not survey:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    ignore = ['id', 'created_at', 'updated_at']
+
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            setattr(survey, key, value)
+    db_storage.save()
+
+    return make_response(jsonify(survey.to_dict()), 200)
