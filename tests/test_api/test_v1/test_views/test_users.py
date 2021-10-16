@@ -152,7 +152,7 @@ class ShowUsersApiTest(AuthenticatedRequest):
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class DeleteUsersApiTest(unittest.TestCase):
+class DeleteUsersApiTest(AuthenticatedRequest):
     """
         Tests of API delete action for User.
     """
@@ -195,7 +195,7 @@ class DeleteUsersApiTest(unittest.TestCase):
 
         self.assertTrue(self.user == db_storage.get(User, self.user_id))
 
-        response = requests.delete(url=self.url)
+        response = self.get_authenticated_response(http_method='delete')
         headers = response.headers
 
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
@@ -211,7 +211,7 @@ class DeleteUsersApiTest(unittest.TestCase):
             Test delete action when given wrong profile_id or no ID at all.
         """
 
-        response = requests.delete(url=self.invalid_url)
+        response = self.get_authenticated_response(http_method='delete', url=self.invalid_url)
         headers = response.headers
 
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
