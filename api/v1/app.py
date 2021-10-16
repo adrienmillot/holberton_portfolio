@@ -23,7 +23,6 @@ def before_request():
     if request.endpoint in (
         'app_views.login',
         'app_views.delete_user',
-        'app_views.get_user',
         'app_views.create_user',
         'app_views.update_user'
     ) or request.method == 'OPTIONS':

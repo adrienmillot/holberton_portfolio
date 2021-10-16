@@ -85,7 +85,7 @@ class ListUsersApiTest(AuthenticatedRequest):
 
 
 @unittest.skipIf(getenv('SS_SERVER_MODE') != 'API', "only testing api server mode")
-class ShowUsersApiTest(unittest.TestCase):
+class ShowUsersApiTest(AuthenticatedRequest):
     """
         Tests of API show action for User.
     """
@@ -118,7 +118,7 @@ class ShowUsersApiTest(unittest.TestCase):
             Test valid show action.
         """
 
-        response = requests.get(url=self.url)
+        response = self.get_authenticated_response()
         headers = response.headers
 
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
@@ -137,7 +137,7 @@ class ShowUsersApiTest(unittest.TestCase):
             Test show action when given wrong user_id or no ID at all.
         """
 
-        response = requests.get(url=self.invalid_url)
+        response = self.get_authenticated_response(url=self.invalid_url)
         headers = response.headers
 
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
