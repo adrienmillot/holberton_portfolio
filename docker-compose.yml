@@ -6,25 +6,58 @@ services:
     environment:
         MYSQL_ROOT_PASSWORD: root
     image: mysql:5.7
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.2
     ports:
       - 3306:3306
     volumes:
       - "./:/home"
       - "./database_scripts/setup_mysql_dev.sql:/docker-entrypoint-initdb.d/setup_mysql_dev.sql"
       - "./database_scripts/setup_mysql_test.sql:/docker-entrypoint-initdb.d/setup_mysql_test.sql"
+      - "./database_scripts/setup_mysql_gateway.sql:/docker-entrypoint-initdb.d/setup_mysql_gateway.sql"
 
-  ss_api:
-    container_name: ss_api
+  ss_api_test:
+    container_name: ss_api_test
     command: "python3 -m api.v1.app"
     depends_on:
       - ss_mysql
     entrypoint: ./.requirements.sh
-    env_file: .api_env
+    env_file: .api_test_env
     image: python:3.8
     links:
       - ss_mysql
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.3
     ports:
       - 5001:5001
     volumes:
       - .:/code
     working_dir: /code
+
+  ss_api_dev:
+    container_name: ss_api_dev
+    command: "python3 -m api.v1.app"
+    depends_on:
+      - ss_mysql
+    entrypoint: ./.requirements.sh
+    env_file: .api_dev_env
+    image: python:3.8
+    links:
+      - ss_mysql
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.4
+    ports:
+      - 5002:5002
+    volumes:
+      - .:/code
+    working_dir: /code
+
+networks:
+  ss_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
+          gateway: 172.20.0.254
