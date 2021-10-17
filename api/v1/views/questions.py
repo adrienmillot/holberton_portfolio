@@ -3,6 +3,7 @@
     objects that handle all default RestFul API actions for Questions.
 """
 
+from math import ceil
 import bcrypt
 from os import getenv
 from api.v1.views import app_views
@@ -22,7 +23,12 @@ def questions_list():
         or a specific question.
     """
 
-    all_questions = db_storage.all(Question).values()
+    data = request.get_json()
+    count = db_storage.count(Question)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_questions = db_storage.all(Question, page=page, limit=limit).values()
     list_questions = []
 
     for question in all_questions:
@@ -30,6 +36,8 @@ def questions_list():
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_questions
     }
 

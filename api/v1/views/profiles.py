@@ -6,6 +6,7 @@
 import json
 
 from api.v1.views import app_views
+from math import ceil
 from models import db_storage
 from models.profile import Profile
 from models.user import User
@@ -22,7 +23,12 @@ def profiles_list() -> json:
         or a specific profile.
     """
 
-    all_profiles = db_storage.all(Profile).values()
+    data = request.get_json()
+    count = db_storage.count(Profile)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_profiles = db_storage.all(Profile, page=page, limit=limit).values()
     list_profiles = []
 
     for profile in all_profiles:
@@ -30,6 +36,8 @@ def profiles_list() -> json:
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_profiles
     }
 

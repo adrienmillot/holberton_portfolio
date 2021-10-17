@@ -19,7 +19,12 @@ def proposals_list():
         or a specific proposal.
     """
 
-    all_proposals = db_storage.all(Proposal).values()
+    data = request.get_json()
+    count = db_storage.count(Proposal)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_proposals = db_storage.all(Proposal, page=page, limit=limit).values()
     list_proposals = []
 
     for proposal in all_proposals:
@@ -27,6 +32,8 @@ def proposals_list():
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_proposals
     }
 

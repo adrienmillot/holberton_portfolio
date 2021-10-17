@@ -55,7 +55,7 @@ class DBStorage:
         if env == 'test' and db == 'ss_test_db':
             Base.metadata.drop_all(self.__engine)
 
-    def all(self, cls=None):
+    def all(self, cls=None, limit=None, page=None):
         """
             Return a dictionary representation of all objects
             from a class present in the database (or all class
@@ -64,7 +64,15 @@ class DBStorage:
         new_dict = {}
         for class_name, class_value in self.classes.items():
             if cls is None or cls is class_value or cls is class_name:
-                objs = self.__session.query(class_value).all()
+                query = self.__session.query(class_value)
+
+                if limit is not None:
+                    query = query.limit(limit)
+
+                if page is not None:
+                    query = query.offset(page*limit)
+
+                objs = query.all()
                 for obj in objs:
                     if (
                         hasattr(obj, 'deleted_at') and
