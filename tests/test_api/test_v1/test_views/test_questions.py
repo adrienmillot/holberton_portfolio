@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """
-    API Tests Module for Categories entrypoint.
+    API Tests Module for Questions entrypoint.
 """
 import json
 from models import db_storage
