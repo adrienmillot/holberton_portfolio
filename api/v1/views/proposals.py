@@ -124,3 +124,39 @@ def create_proposal():
     instance.save()
 
     return make_response(jsonify(instance.to_dict()), 201)
+
+
+@app_views.route('/proposals/<proposal_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/proposal/put_proposal.yml')
+def update_proposal(proposal_id):
+    """
+        Updates a proposal.
+    """
+
+    proposal = db_storage.get(Proposal, proposal_id)
+
+    if not proposal:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Proposal entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    ignore = ['id', 'created_at', 'updated_at']
+
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            setattr(proposal, key, value)
+    db_storage.save()
+
+    return make_response(jsonify(proposal.to_dict()), 200)
