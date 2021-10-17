@@ -104,3 +104,39 @@ def create_category():
     instance.save()
 
     return make_response(jsonify(instance.to_dict()), 201)
+
+
+@app_views.route('/categories/<category_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/category/put_category.yml', methods=['PUT'])
+def update_category(category_id):
+    """
+        Updates a category.
+    """
+
+    category = db_storage.get(Category, category_id)
+
+    if not category:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Category entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    ignore = ['id', 'created_at', 'updated_at']
+
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            setattr(category, key, value)
+    db_storage.save()
+
+    return make_response(jsonify(category.to_dict()), 200)
