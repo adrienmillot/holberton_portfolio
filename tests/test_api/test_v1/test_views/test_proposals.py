@@ -51,7 +51,7 @@ class ListProposalsApiTest(AuthenticatedRequest):
             label='toto', category_id=self.category_id, survey_id=self.survey_id)
         self.question_id = self.question.id
         self.proposal = Proposal(label='toto', question_id=self.question_id)
-        self.porposal_id = self.proposal.id
+        self.proposal_id = self.proposal.id
 
         self.profile.save()
         self.user.save()
@@ -133,7 +133,7 @@ class ShowProposalsApiTest(AuthenticatedRequest):
             label='toto', category_id=self.category_id, survey_id=self.survey_id)
         self.question_id = self.question.id
         self.proposal = Proposal(label='toto', question_id=self.question_id)
-        self.porposal_id = self.proposal.id
+        self.proposal_id = self.proposal.id
 
         self.profile.save()
         self.user.save()
@@ -142,7 +142,7 @@ class ShowProposalsApiTest(AuthenticatedRequest):
         self.question.save()
         self.proposal.save()
 
-        self.url = '{}/proposals/{}'.format(api_url, self.porposal_id)
+        self.url = '{}/proposals/{}'.format(api_url, self.proposal_id)
         self.invalid_url = '{}/proposals/{}'.format(api_url, 'toto')
 
     def tearDown(self) -> None:
@@ -188,7 +188,117 @@ class ShowProposalsApiTest(AuthenticatedRequest):
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
         self.assertTrue(self.proposal == db_storage.get(
-            Proposal, self.porposal_id))
+            Proposal, self.proposal_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Proposal entity not found.')
+
+
+class DeleteProposalsApiTest(AuthenticatedRequest):
+    """
+        Tests of API delete action for Proposals.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API list proposals action tests.
+        """
+
+        self.profile = Profile()
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.user_id = self.user.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
+        self.survey = Survey(name='toto')
+        self.survey_id = self.survey.id
+        self.question = Question(
+            label='toto', category_id=self.category_id, survey_id=self.survey_id)
+        self.question_id = self.question.id
+        self.proposal = Proposal(label='toto', question_id=self.question_id)
+        self.proposal_id = self.proposal.id
+
+        self.profile.save()
+        self.user.save()
+        self.category.save()
+        self.survey.save()
+        self.question.save()
+        self.proposal.save()
+
+        self.url = '{}/proposals/{}'.format(api_url, self.proposal_id)
+        self.invalid_url = '{}/proposals/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Proposal of database used for tests.
+        """
+
+        proposal = db_storage.get_from_attributes(
+            Proposal, id=self.proposal_id)
+        if proposal is not None:
+            db_storage.delete(proposal)
+            db_storage.save()
+
+        question = db_storage.get_from_attributes(
+            Question, id=self.question_id)
+        if question is not None:
+            db_storage.delete(question)
+            db_storage.save()
+
+        survey = db_storage.get_from_attributes(Survey, id=self.survey_id)
+        if survey is not None:
+            db_storage.delete(survey)
+            db_storage.save()
+
+        category = db_storage.get_from_attributes(
+            Category, id=self.category_id)
+        if category is not None:
+            db_storage.delete(category)
+            db_storage.save()
+
+        user = db_storage.get_from_attributes(User, id=self.user_id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile_id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testDelete(self):
+        """
+            Test valid delete proposal action
+        """
+
+        response = self.get_authenticated_response(http_method='delete')
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertEqual(len(json_data), 0)
+        db_storage.reload()
+        self.assertIsNone(db_storage.get(Proposal, self.proposal_id))
+
+    def testNotFound(self):
+        """
+            Test disable proposal action when given wrong proposal_id or no ID at all.
+        """
+
+        self.assertTrue(self.proposal == db_storage.get(
+            Proposal, self.proposal_id))
+        response = self.get_authenticated_response(
+            http_method='delete', url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
         json_data = response.json()
         self.assertIn('status', json_data)
         self.assertEqual(json_data['status'], 'fail')

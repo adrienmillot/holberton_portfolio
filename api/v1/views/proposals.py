@@ -50,3 +50,27 @@ def get_proposal(proposal_id):
         return make_response(jsonify(responseObject), 404)
 
     return jsonify(proposal.to_dict())
+
+
+@app_views.route('/proposals/<proposal_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('documentation/proposal/delete_proposal.yml')
+def delete_proposal(proposal_id):
+    """
+        Deletes a proposal Object.
+    """
+
+    proposal = db_storage.get(Proposal, proposal_id)
+
+    if not proposal:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Proposal entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    db_storage.delete(proposal)
+    db_storage.save()
+
+    return make_response(jsonify({}), 200)
