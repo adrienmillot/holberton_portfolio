@@ -5,6 +5,7 @@
 
 from api.v1.views import app_views
 from models.proposal import Proposal
+from models.question import Question
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
@@ -74,3 +75,52 @@ def delete_proposal(proposal_id):
     db_storage.save()
 
     return make_response(jsonify({}), 200)
+
+
+@app_views.route('/proposals', methods=['POST'], strict_slashes=False)
+@swag_from('documentation/proposal/post_proposal.yml')
+def create_proposal():
+    """
+        Creates a proposal.
+    """
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    data = request.get_json()
+
+    if 'label' not in data:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing label.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'question_id' not in data:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing question_id.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    question = db_storage.get(Question, data['question_id'])
+
+    if not question:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Question entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    instance = Proposal(**data)
+    instance.save()
+
+    return make_response(jsonify(instance.to_dict()), 201)
