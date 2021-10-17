@@ -1,0 +1,16 @@
+    Updates category information
+    ---
+    tags:
+      - Categories
+    parameters:
+      - name: category_id
+        in: path
+        type: string
+        required: true
+        description: The id of the category to update
+
+    responses:
+      404:
+        description: category not found!
+      200:
+        description: request executed successfully
