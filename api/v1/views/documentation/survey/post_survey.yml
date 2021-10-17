@@ -3,7 +3,7 @@
     tags:
       - Surveys
     parameters:
-      - name: name
+      - name: data
         in: body
         required: true
         requires:

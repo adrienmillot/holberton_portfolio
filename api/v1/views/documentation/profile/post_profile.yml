@@ -4,7 +4,7 @@ tags:
   - Profiles
 
 parameters:
-  - name: user_and_password
+  - name: data
     in: body
     properties:
       last_name:

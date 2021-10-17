@@ -3,11 +3,14 @@
     tags:
       - Users
     parameters:
-      - name: user_id
-        in: path
-        type: string
+      - name: data
+        in: body
         required: true
-        description: The id of the user to update
+        properties:
+          username:
+            type: string
+          password:
+            type: string
 
     responses:
       404:

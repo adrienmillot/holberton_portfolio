@@ -3,14 +3,18 @@
     tags:
       - Profiles
     parameters:
-      - name: profile_id
-        in: path
-        type: string
-        required: true
-        description: The id of the profile to update
-      - name: update_request
+      - name: data
         in: body
         required: true
+        properties:
+          last_name:
+            type: string
+          first_name:
+            type: string
+          gender:
+            type: string
+          born_at:
+            type: string
 
     responses:
       404:
