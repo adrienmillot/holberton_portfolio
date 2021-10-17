@@ -52,3 +52,27 @@ def get_question(question_id):
         return make_response(jsonify(responseObject), 404)
 
     return jsonify(question.to_dict())
+
+
+@app_views.route('/questions/<question_id>', methods=['DELETE'],
+                 strict_slashes=False)
+@swag_from('documentation/question/delete_question.yml')
+def delete_question(question_id):
+    """
+        Deletes a question Object.
+    """
+
+    question = db_storage.get(Question, question_id)
+
+    if not question:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Question entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    db_storage.delete(question)
+    db_storage.save()
+
+    return make_response(jsonify({}), 200)

@@ -22,7 +22,7 @@ api_url = 'http://{}:{}/api{}'.format(host, port, version)
 WRONG_STATUS_CODE_MSG = 'Wrong status code!'
 WRONG_TYPE_RETURN_MSG = 'Wrong return type return!'
 WRONG_OBJ_TYPE_MSG = 'Wrong object type!'
-MISSING_NAME_ATTR_MSG = 'Missing name!'
+MISSING_LABEL_ATTR_MSG = 'Missing label!'
 MISSING_CREATED_AT_ATTR_MSG = 'Missing created_at!'
 MISSING_UPDATED_AT_ATTR_MSG = 'Missing updated_at!'
 MISSING_CLASS_ATTR_MSG = 'Missing class!'
@@ -102,3 +102,183 @@ class ListQuestionsApiTest(AuthenticatedRequest):
         for element in json_data['results']:
             self.assertEqual(element['__class__'],
                              'Question', WRONG_OBJ_TYPE_MSG)
+
+
+class ShowQuestionsApiTest(AuthenticatedRequest):
+    """
+        Tests of API show action for Questions.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API show question action tests.
+        """
+
+        self.profile = Profile()
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
+        self.survey = Survey(name='toto')
+        self.survey_id = self.survey.id
+        self.question = Question(
+            label='toto', category_id=self.category_id, survey_id=self.survey_id)
+        self.question_id = self.question.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.new(self.category)
+        db_storage.new(self.survey)
+        db_storage.new(self.question)
+        db_storage.save()
+        self.url = '{}/questions/{}'.format(api_url, self.question_id)
+        self.invalid_url = '{}/questions/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Question of database used for tests.
+        """
+
+        db_storage.delete(self.question)
+        db_storage.delete(self.survey)
+        db_storage.delete(self.category)
+        db_storage.delete(self.user)
+        db_storage.delete(self.profile)
+        db_storage.save()
+
+    def testShow(self):
+        """
+            Test valid show question action
+        """
+
+        response = self.get_authenticated_response()
+        headers = response.headers
+        json_data = response.json()
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertIn('label', json_data)
+        self.assertIn('created_at', json_data)
+        self.assertIn('updated_at', json_data)
+        self.assertIn('__class__', json_data)
+        self.assertEqual(json_data['label'], self.question.label)
+
+    def testNotFound(self):
+        """
+            Test show question action when given wrong question_id or no ID at all.
+        """
+
+        response = self.get_authenticated_response(url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.question == db_storage.get(
+            Question, self.question_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Question entity not found.')
+
+
+class DeleteQuestionsApiTest(AuthenticatedRequest):
+    """
+        Tests of API delete action for Questions.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API delete question action tests.
+        """
+
+        self.profile = Profile(last_name='toto')
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.user_id = self.user.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
+        self.survey = Survey(name='toto')
+        self.survey_id = self.survey.id
+        self.question = Question(
+            label='toto', category_id=self.category_id, survey_id=self.survey_id)
+        self.question_id = self.question.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.new(self.category)
+        db_storage.new(self.survey)
+        db_storage.new(self.question)
+        db_storage.save()
+        self.url = '{}/questions/{}'.format(api_url, self.question_id)
+        self.invalid_url = '{}/questions/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Question of database used for tests.
+        """
+
+        question = db_storage.get_from_attributes(
+            Question, id=self.question_id)
+        if question is not None:
+            db_storage.delete(question)
+            db_storage.save()
+
+        survey = db_storage.get_from_attributes(Survey, id=self.survey_id)
+        if survey is not None:
+            db_storage.delete(survey)
+            db_storage.save()
+
+        category = db_storage.get_from_attributes(
+            Category, id=self.category_id)
+        if category is not None:
+            db_storage.delete(category)
+            db_storage.save()
+
+        user = db_storage.get_from_attributes(User, id=self.user_id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile_id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testDelete(self):
+        """
+            Test valid delete question action
+        """
+
+        response = self.get_authenticated_response(http_method='delete')
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertEqual(len(json_data), 0)
+        db_storage.reload()
+        self.assertIsNone(db_storage.get(Question, self.question_id))
+
+    def testNotFound(self):
+        """
+            Test disable question action when given wrong question_id or no ID at all.
+        """
+
+        response = self.get_authenticated_response(
+            http_method='delete', url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.question == db_storage.get(
+            Question, self.question_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Question entity not found.')
