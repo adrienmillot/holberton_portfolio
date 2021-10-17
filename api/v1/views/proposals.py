@@ -30,3 +30,23 @@ def proposals_list():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/proposals/<proposal_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/proposal/get_proposal.yml')
+def get_proposal(proposal_id):
+    """
+        Retrieves an proposal.
+    """
+
+    proposal = db_storage.get(Proposal, proposal_id)
+
+    if not proposal:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Proposal entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    return jsonify(proposal.to_dict())
