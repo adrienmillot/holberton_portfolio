@@ -6,8 +6,6 @@
 import bcrypt
 from os import getenv
 from api.v1.views import app_views
-from models.survey import Survey
-from models.category import Category
 from models.question import Question
 from models import db_storage
 from flask import abort, jsonify, make_response, request
@@ -34,3 +32,23 @@ def questions_list():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/questions/<question_id>', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/get_question.yml')
+def get_question(question_id):
+    """
+        Retrieves an question.
+    """
+
+    question = db_storage.get(Question, question_id)
+
+    if not question:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Question entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    return jsonify(question.to_dict())
