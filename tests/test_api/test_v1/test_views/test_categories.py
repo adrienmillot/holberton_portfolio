@@ -397,12 +397,12 @@ class UpdateCategoriesApiTest(AuthenticatedRequest):
         """
 
         data = {'name': 'toto2'}
+        self.assertTrue(self.category == db_storage.get(
+            Category, self.category_id))
         response = self.get_authenticated_response(
             http_method='put', json=data)
         headers = response.headers
 
-        self.assertTrue(self.category == db_storage.get(
-            Category, self.category_id))
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)

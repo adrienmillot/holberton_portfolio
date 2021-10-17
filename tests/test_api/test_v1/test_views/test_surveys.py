@@ -391,13 +391,12 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
         """
             Test valid update survey action.
         """
-
         data = {'name': 'toto2'}
+        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
         response = self.get_authenticated_response(
             http_method='put', json=data)
         headers = response.headers
 
-        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
         self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
