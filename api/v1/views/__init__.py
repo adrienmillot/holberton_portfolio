@@ -8,3 +8,4 @@ from api.v1.views.profiles import *
 from api.v1.views.status import *
 from api.v1.views.surveys import *
 from api.v1.views.users import *
+from api.v1.views.categories import *

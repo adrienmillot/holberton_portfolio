@@ -3,10 +3,7 @@
     objects that handle all default RestFul API actions for Surveys.
 """
 
-import bcrypt
-from os import getenv
 from api.v1.views import app_views
-from models.profile import Profile
 from models.survey import Survey
 from models import db_storage
 from flask import abort, jsonify, make_response, request
