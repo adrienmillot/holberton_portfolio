@@ -145,3 +145,39 @@ def create_question():
     instance.save()
 
     return make_response(jsonify(instance.to_dict()), 201)
+
+
+@app_views.route('/questions/<question_id>', methods=['PUT'], strict_slashes=False)
+@swag_from('documentation/question/put_question.yml')
+def update_question(question_id):
+    """
+        Updates a question.
+    """
+
+    question = db_storage.get(Question, question_id)
+
+    if not question:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Question entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if not request.get_json():
+        responseObject = {
+            'status': 'fail',
+            'message': 'Not a JSON.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    ignore = ['id', 'created_at', 'updated_at']
+
+    data = request.get_json()
+    for key, value in data.items():
+        if key not in ignore:
+            setattr(question, key, value)
+    db_storage.save()
+
+    return make_response(jsonify(question.to_dict()), 200)
