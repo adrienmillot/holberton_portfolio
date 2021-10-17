@@ -92,3 +92,73 @@ class ListCategoriesApiTest(AuthenticatedRequest):
             self.assertEqual(element['__class__'],
                              'Category', WRONG_OBJ_TYPE_MSG)
 
+
+class ShowCategoriesApiTest(AuthenticatedRequest):
+    """
+        Tests of API show action for Categories.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API show category action tests.
+        """
+
+        self.profile = Profile()
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.new(self.category)
+        db_storage.save()
+        self.url = '{}/categories/{}'.format(api_url, self.category_id)
+        self.invalid_url = '{}/categories/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Category of database used for tests.
+        """
+
+        db_storage.delete(self.category)
+        db_storage.delete(self.user)
+        db_storage.delete(self.profile)
+        db_storage.save()
+
+    def testShow(self):
+        """
+            Test valid show category action
+        """
+
+        response = self.get_authenticated_response()
+        headers = response.headers
+        json_data = response.json()
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertIn('name', json_data)
+        self.assertIn('created_at', json_data)
+        self.assertIn('updated_at', json_data)
+        self.assertIn('__class__', json_data)
+        self.assertEqual(json_data['name'], self.category.name)
+
+    def testNotFound(self):
+        """
+            Test show category action when given wrong category_id or no ID at all.
+        """
+
+        response = self.get_authenticated_response(url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.category == db_storage.get(Category, self.category_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Category entity not found.')
+
