@@ -162,3 +162,82 @@ class ShowCategoriesApiTest(AuthenticatedRequest):
         self.assertIn('message', json_data)
         self.assertEqual(json_data['message'], 'Category entity not found.')
 
+
+class DeleteCategoriesApiTest(AuthenticatedRequest):
+    """
+        Tests of API delete action for Categories.
+    """
+
+    def setUp(self) -> None:
+        """
+            Set up API delete category action tests.
+        """
+
+        self.profile = Profile(last_name='toto')
+        self.profile_id = self.profile.id
+        self.user = User(username='test', password='test',
+                         profile_id=self.profile_id)
+        self.user_id = self.user.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
+        db_storage.new(self.profile)
+        db_storage.new(self.user)
+        db_storage.new(self.category)
+        db_storage.save()
+        self.url = '{}/categories/{}'.format(api_url, self.category_id)
+        self.invalid_url = '{}/categories/{}'.format(api_url, 'toto')
+
+    def tearDown(self) -> None:
+        """
+            Tear down table Category of database used for tests.
+        """
+
+        category = db_storage.get_from_attributes(Category, id=self.category_id)
+        if category is not None:
+            db_storage.delete(category)
+            db_storage.save()
+
+        user = db_storage.get_from_attributes(User, id=self.user_id)
+        if user is not None:
+            db_storage.delete(user)
+            db_storage.save()
+
+        profile = db_storage.get_from_attributes(Profile, id=self.profile_id)
+        if profile is not None:
+            db_storage.delete(profile)
+            db_storage.save()
+
+    def testDelete(self):
+        """
+            Test valid delete category action
+        """
+
+        response = self.get_authenticated_response(http_method='delete')
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 200, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        json_data = response.json()
+        self.assertEqual(len(json_data), 0)
+        db_storage.reload()
+        self.assertIsNone(db_storage.get(Category, self.category_id))
+
+    def testNotFound(self):
+        """
+            Test disable category action when given wrong category_id or no ID at all.
+        """
+
+        response = self.get_authenticated_response(
+            http_method='delete', url=self.invalid_url)
+        headers = response.headers
+
+        self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
+        self.assertEqual(
+            headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
+        self.assertTrue(self.category == db_storage.get(Category, self.category_id))
+        json_data = response.json()
+        self.assertIn('status', json_data)
+        self.assertEqual(json_data['status'], 'fail')
+        self.assertIn('message', json_data)
+        self.assertEqual(json_data['message'], 'Category entity not found.')
