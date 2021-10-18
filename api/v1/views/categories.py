@@ -3,6 +3,7 @@
     objects that handle all default RestFul API actions for Categories.
 """
 
+from math import ceil
 from api.v1.views import app_views
 from models.category import Category
 from models import db_storage
@@ -18,7 +19,12 @@ def categories_list():
         or a specific category.
     """
 
-    all_categories = db_storage.all(Category).values()
+    data = request.get_json()
+    count = db_storage.count(Category)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_categories = db_storage.all(Category, page=page, limit=limit).values()
     list_categories = []
 
     for category in all_categories:
@@ -26,6 +32,8 @@ def categories_list():
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_categories
     }
 
