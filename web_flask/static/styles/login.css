@@ -1,0 +1,12 @@
+#btn_login.btn.btn-info {
+	position: absolute;
+	right: 35px;
+	top: 25px;
+	margin: 0px;
+}
+#btn_logout.btn.btn-primary.mr-2 {
+	position: absolute;
+	right: 35px;
+	top: 25px;
+	margin: 0px;
+}

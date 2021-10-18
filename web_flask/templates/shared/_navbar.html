@@ -1,0 +1,59 @@
+<div class="shadow-sm p-3 mb-5 bg-white rounded">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light">
+		<a class="navbar-brand" href="http://0.0.0.0:5000/">
+			<img src="../../static/images/SurveyStorm_logo.png" width="30" height="30" class="d-inline-block align-top"
+				alt="" loading="lazy">urvey Storm</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown"
+			aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNavDropdown">
+			<ul class="navbar-nav" id="secure_menu">
+				<ul class="navbar-nav">
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Profiles
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="http://0.0.0.0:5000/profiles_list">List Profiles</a>
+							<a class="dropdown-item" href="http://0.0.0.0:5000/profile_create">Create Profile</a>
+						</div>
+					</li>
+
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Surveys
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="http://0.0.0.0:5000/surveys_list">List Surveys</a>
+							<a class="dropdown-item" href="http://0.0.0.0:5000/survey_create">Create Survey</a>
+						</div>
+					</li>
+
+					<li class="nav-item active">
+						<a class="nav-link" href="#">Questions</a>
+					</li>
+
+					<li class="nav-item dropdown active">
+						<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+							data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+							Users
+						</a>
+						<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+							<a class="dropdown-item" href="http://0.0.0.0:5000/user_list">List Users</a>
+							<a class="dropdown-item" href="http://0.0.0.0:5000/user_create">Create User</a>
+						</div>
+					</li>
+				</ul>
+			</ul>
+		</div>
+
+
+<div class="form-group">
+	<input class="btn btn-primary mr-2" type="button" value="Logout" name="btn_logout" id="btn_logout">
+	<input class="btn btn-info" type="button" value="Login" name="btn_login" id="btn_login">
+</div>
+</nav>
+</div>

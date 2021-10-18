@@ -1,0 +1,18 @@
+footer {
+
+    background-color: #f8f9fa; 
+	
+    width: 100%;
+    border-top: 1px solid #e9ecef; 
+	position: absolute;
+	display: flex; 
+    flex-direction: column; 
+    justify-content: center; 
+    align-items: center;
+    bottom: 0;
+    
+}
+
+div.footer-copyright.text-center.py-3 {
+	border-top: 1px solid #575757;
+}
