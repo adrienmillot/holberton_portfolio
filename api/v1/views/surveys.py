@@ -3,10 +3,8 @@
     objects that handle all default RestFul API actions for Surveys.
 """
 
-import bcrypt
-from os import getenv
 from api.v1.views import app_views
-from models.profile import Profile
+from math import ceil
 from models.survey import Survey
 from models import db_storage
 from flask import abort, jsonify, make_response, request
@@ -21,7 +19,12 @@ def surveys_list():
         or a specific survey.
     """
 
-    all_surveys = db_storage.all(Survey).values()
+    data = request.get_json()
+    count = db_storage.count(Survey)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_surveys = db_storage.all(Survey, page=page, limit=limit).values()
     list_surveys = []
 
     for survey in all_surveys:
@@ -29,6 +32,8 @@ def surveys_list():
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_surveys
     }
 

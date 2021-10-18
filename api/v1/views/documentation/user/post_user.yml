@@ -3,7 +3,7 @@
     tags:
       - Users
     parameters:
-      - name: user_and_password
+      - name: data
         in: body
         required: true
         requires:

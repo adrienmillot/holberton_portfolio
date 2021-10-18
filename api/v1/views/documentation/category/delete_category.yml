@@ -1,0 +1,15 @@
+    Deletes a category 
+    ---
+    tags:
+      - Categories
+    parameters:
+      - name: category_id
+        in: path
+        type: string
+        required: false
+        description: The unique id of the category
+    responses:
+      404:
+        description: category not found!
+      200:
+        description: request executed successfully

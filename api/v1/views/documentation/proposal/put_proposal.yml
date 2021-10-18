@@ -1,19 +1,19 @@
-    Updates user information
+    Updates proposal information
     ---
     tags:
-      - Users
+      - Proposals
     parameters:
       - name: data
         in: body
         required: true
         properties:
-          username:
+          label:
             type: string
-          password:
+          question_id:
             type: string
 
     responses:
       404:
-        description: user not found!
+        description: proposal not found!
       200:
         description: request executed successfully

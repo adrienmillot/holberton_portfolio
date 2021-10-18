@@ -6,6 +6,11 @@ services:
     environment:
         MYSQL_ROOT_PASSWORD: root
     image: mysql:5.7
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_mysql.rule=Host(`mysql.localhost`)"
     networks:
       ss_network:
         ipv4_address: 172.20.0.2
@@ -25,6 +30,11 @@ services:
     entrypoint: ./.requirements.sh
     env_file: .api_test_env
     image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_api_test.rule=Host(`api_test.localhost`)"
     links:
       - ss_mysql
     networks:
@@ -44,6 +54,11 @@ services:
     entrypoint: ./.requirements.sh
     env_file: .api_dev_env
     image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_api_dev.rule=Host(`api_dev.localhost`)"
     links:
       - ss_mysql
     networks:
@@ -54,6 +69,21 @@ services:
     volumes:
       - .:/code
     working_dir: /code
+
+  ss_traefik:
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+    container_name: ss_traefik
+    image: traefik
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.5
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
 
 networks:
   ss_network:

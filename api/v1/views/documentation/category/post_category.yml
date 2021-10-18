@@ -1,7 +1,7 @@
-    Posts a new survey
+    Posts a new category
     ---
     tags:
-      - Surveys
+      - Categories
     parameters:
       - name: data
         in: body
@@ -16,4 +16,4 @@
       400:
         description: Missing name or not a JSON
       201:
-        description: successfully created survey
+        description: successfully created category

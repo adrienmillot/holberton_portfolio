@@ -1,19 +1,21 @@
-    Updates user information
+    Updates question information
     ---
     tags:
-      - Users
+      - Questions
     parameters:
       - name: data
         in: body
         required: true
         properties:
-          username:
+          label:
             type: string
-          password:
+          category_id:
+            type: string
+          survey_id:
             type: string
 
     responses:
       404:
-        description: user not found!
+        description: question not found!
       200:
         description: request executed successfully

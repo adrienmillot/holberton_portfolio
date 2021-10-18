@@ -1,12 +1,12 @@
 #!/usr/bin/python3
 """
-    API Tests Module for Surveys entrypoint.
+    API Tests Module for Categories entrypoint.
 """
 import json
 from models import db_storage
 from models.profile import Profile
 from models.user import User
-from models.survey import Survey
+from models.category import Category
 from os import getenv
 import requests
 from tests.test_api.test_v1.test_views.authenticated import AuthenticatedRequest
@@ -26,40 +26,40 @@ MISSING_UPDATED_AT_ATTR_MSG = 'Missing updated_at!'
 MISSING_CLASS_ATTR_MSG = 'Missing class!'
 
 
-class ListSurveysApiTest(AuthenticatedRequest):
+class ListCategoriesApiTest(AuthenticatedRequest):
     """
-        Tests of API list action for Surveys.
+        Tests of API list action for Categories.
     """
 
     def setUp(self) -> None:
         """
-            Set up API list surveys action tests.
+            Set up API list categories action tests.
         """
 
         self.profile = Profile()
         self.profile_id = self.profile.id
         self.user = User(username='test', password='test',
                          profile_id=self.profile_id)
-        self.survey = Survey(name='toto')
+        self.category = Category(name='toto')
         db_storage.new(self.profile)
         db_storage.new(self.user)
-        db_storage.new(self.survey)
+        db_storage.new(self.category)
         db_storage.save()
-        self.url = '{}/surveys'.format(api_url)
+        self.url = '{}/categories'.format(api_url)
 
     def tearDown(self) -> None:
         """
-            Tear down table Survey of database used for tests.
+            Tear down table Category of database used for tests.
         """
 
-        db_storage.delete(self.survey)
+        db_storage.delete(self.category)
         db_storage.delete(self.user)
         db_storage.delete(self.profile)
         db_storage.save()
 
     def testList(self):
         """
-            Test valid list surveys action.
+            Test valid list categories action.
         """
 
         response = self.get_authenticated_response()
@@ -71,18 +71,18 @@ class ListSurveysApiTest(AuthenticatedRequest):
 
     def testCount(self):
         """
-            Test list surveys length.
+            Test list categories length.
         """
 
-        initial_count = len(db_storage.all(Survey))
+        initial_count = len(db_storage.all(Category))
         response = self.get_authenticated_response()
         json_data = response.json()
 
         self.assertEqual(initial_count, len(json_data['results']))
 
-    def testOnlySurvey(self):
+    def testOnlyCategory(self):
         """
-            Test valid list surveys action with Survey content only.
+            Test valid list categories action with Category content only.
         """
 
         response = self.get_authenticated_response()
@@ -90,45 +90,45 @@ class ListSurveysApiTest(AuthenticatedRequest):
 
         for element in json_data['results']:
             self.assertEqual(element['__class__'],
-                             'Survey', WRONG_OBJ_TYPE_MSG)
+                             'Category', WRONG_OBJ_TYPE_MSG)
 
 
-class ShowSurveysApiTest(AuthenticatedRequest):
+class ShowCategoriesApiTest(AuthenticatedRequest):
     """
-        Tests of API show action for Surveys.
+        Tests of API show action for Categories.
     """
 
     def setUp(self) -> None:
         """
-            Set up API show survey action tests.
+            Set up API show category action tests.
         """
 
         self.profile = Profile()
         self.profile_id = self.profile.id
         self.user = User(username='test', password='test',
                          profile_id=self.profile_id)
-        self.survey = Survey(name='toto')
-        self.survey_id = self.survey.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
         db_storage.new(self.profile)
         db_storage.new(self.user)
-        db_storage.new(self.survey)
+        db_storage.new(self.category)
         db_storage.save()
-        self.url = '{}/surveys/{}'.format(api_url, self.survey_id)
-        self.invalid_url = '{}/surveys/{}'.format(api_url, 'toto')
+        self.url = '{}/categories/{}'.format(api_url, self.category_id)
+        self.invalid_url = '{}/categories/{}'.format(api_url, 'toto')
 
     def tearDown(self) -> None:
         """
-            Tear down table Survey of database used for tests.
+            Tear down table Category of database used for tests.
         """
 
-        db_storage.delete(self.survey)
+        db_storage.delete(self.category)
         db_storage.delete(self.user)
         db_storage.delete(self.profile)
         db_storage.save()
 
     def testShow(self):
         """
-            Test valid show survey action
+            Test valid show category action
         """
 
         response = self.get_authenticated_response()
@@ -142,11 +142,11 @@ class ShowSurveysApiTest(AuthenticatedRequest):
         self.assertIn('created_at', json_data)
         self.assertIn('updated_at', json_data)
         self.assertIn('__class__', json_data)
-        self.assertEqual(json_data['name'], self.survey.name)
+        self.assertEqual(json_data['name'], self.category.name)
 
     def testNotFound(self):
         """
-            Test show survey action when given wrong survey_id or no ID at all.
+            Test show category action when given wrong category_id or no ID at all.
         """
 
         response = self.get_authenticated_response(url=self.invalid_url)
@@ -155,22 +155,23 @@ class ShowSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
-        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
+        self.assertTrue(self.category == db_storage.get(
+            Category, self.category_id))
         json_data = response.json()
         self.assertIn('status', json_data)
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
-        self.assertEqual(json_data['message'], 'Survey entity not found.')
+        self.assertEqual(json_data['message'], 'Category entity not found.')
 
 
-class DeleteSurveysApiTest(AuthenticatedRequest):
+class DeleteCategoriesApiTest(AuthenticatedRequest):
     """
-        Tests of API delete action for Surveys.
+        Tests of API delete action for Categories.
     """
 
     def setUp(self) -> None:
         """
-            Set up API delete survey action tests.
+            Set up API delete category action tests.
         """
 
         self.profile = Profile(last_name='toto')
@@ -178,23 +179,24 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
         self.user = User(username='test', password='test',
                          profile_id=self.profile_id)
         self.user_id = self.user.id
-        self.survey = Survey(name='toto')
-        self.survey_id = self.survey.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
         db_storage.new(self.profile)
         db_storage.new(self.user)
-        db_storage.new(self.survey)
+        db_storage.new(self.category)
         db_storage.save()
-        self.url = '{}/surveys/{}'.format(api_url, self.survey_id)
-        self.invalid_url = '{}/surveys/{}'.format(api_url, 'toto')
+        self.url = '{}/categories/{}'.format(api_url, self.category_id)
+        self.invalid_url = '{}/categories/{}'.format(api_url, 'toto')
 
     def tearDown(self) -> None:
         """
-            Tear down table Survey of database used for tests.
+            Tear down table Category of database used for tests.
         """
 
-        survey = db_storage.get_from_attributes(Survey, id=self.survey_id)
-        if survey is not None:
-            db_storage.delete(survey)
+        category = db_storage.get_from_attributes(
+            Category, id=self.category_id)
+        if category is not None:
+            db_storage.delete(category)
             db_storage.save()
 
         user = db_storage.get_from_attributes(User, id=self.user_id)
@@ -209,7 +211,7 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
 
     def testDelete(self):
         """
-            Test valid delete survey action
+            Test valid delete category action
         """
 
         response = self.get_authenticated_response(http_method='delete')
@@ -221,11 +223,11 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
         json_data = response.json()
         self.assertEqual(len(json_data), 0)
         db_storage.reload()
-        self.assertIsNone(db_storage.get(Survey, self.survey_id))
+        self.assertIsNone(db_storage.get(Category, self.category_id))
 
     def testNotFound(self):
         """
-            Test disable survey action when given wrong survey_id or no ID at all.
+            Test disable category action when given wrong category_id or no ID at all.
         """
 
         response = self.get_authenticated_response(
@@ -235,22 +237,23 @@ class DeleteSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
-        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
+        self.assertTrue(self.category == db_storage.get(
+            Category, self.category_id))
         json_data = response.json()
         self.assertIn('status', json_data)
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
-        self.assertEqual(json_data['message'], 'Survey entity not found.')
+        self.assertEqual(json_data['message'], 'Category entity not found.')
 
 
-class CreateSurveysApiTest(AuthenticatedRequest):
+class CreateCategoriesApiTest(AuthenticatedRequest):
     """
-        Tests of API create action for Surveys.
+        Tests of API create action for Categories.
     """
 
     def setUp(self) -> None:
         """
-            Set up API create survey action tests.
+            Set up API create category action tests.
         """
 
         self.profile = Profile()
@@ -261,11 +264,11 @@ class CreateSurveysApiTest(AuthenticatedRequest):
         db_storage.new(self.profile)
         db_storage.new(self.user)
         db_storage.save()
-        self.url = '{}/surveys'.format(api_url)
+        self.url = '{}/categories'.format(api_url)
 
     def tearDown(self) -> None:
         """
-            Tear down table Survey of database used for tests.
+            Tear down table Category of database used for tests.
         """
 
         user = db_storage.get_from_attributes(User, id=self.user_id)
@@ -280,7 +283,7 @@ class CreateSurveysApiTest(AuthenticatedRequest):
 
     def testCreate(self):
         """
-            Test valid create survey action tests.
+            Test valid create category action tests.
         """
 
         data = {'name': 'toto'}
@@ -292,19 +295,19 @@ class CreateSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
         json_data = response.json()
-        survey = db_storage.get(Survey, json_data['id'])
-        self.assertIsInstance(survey, Survey)
+        category = db_storage.get(Category, json_data['id'])
+        self.assertIsInstance(category, Category)
         self.assertIn('name', json_data, MISSING_NAME_ATTR_MSG)
         self.assertIn('created_at', json_data, MISSING_CREATED_AT_ATTR_MSG)
         self.assertIn('updated_at', json_data, MISSING_UPDATED_AT_ATTR_MSG)
         self.assertIn('__class__', json_data, MISSING_CLASS_ATTR_MSG)
         self.assertEqual(json_data['name'], 'toto')
-        db_storage.delete(survey)
+        db_storage.delete(category)
         db_storage.save()
 
     def testMissingNameAttribute(self):
         """
-            Test create survey action when given dict without name key.
+            Test create category action when given dict without name key.
         """
 
         data = {'bidule': 'toto'}
@@ -324,7 +327,7 @@ class CreateSurveysApiTest(AuthenticatedRequest):
 
     def testNotAJson(self):
         """
-            Test create survey action when given wrong data format.
+            Test create category action when given wrong data format.
         """
 
         data = {'name': 'toto'}
@@ -343,14 +346,14 @@ class CreateSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(json_data['message'], 'Not a JSON.')
 
 
-class UpdateSurveysApiTest(AuthenticatedRequest):
+class UpdateCategoriesApiTest(AuthenticatedRequest):
     """
-        Tests of API update action for Surveys.
+        Tests of API update action for Categories.
     """
 
     def setUp(self) -> None:
         """
-            Set up API update survey action tests.
+            Set up API update category action tests.
         """
 
         self.profile = Profile(last_name='toto')
@@ -358,23 +361,24 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
         self.user = User(username='test', password='test',
                          profile_id=self.profile_id)
         self.user_id = self.user.id
-        self.survey = Survey(name='toto')
-        self.survey_id = self.survey.id
+        self.category = Category(name='toto')
+        self.category_id = self.category.id
         db_storage.new(self.profile)
         db_storage.new(self.user)
-        db_storage.new(self.survey)
+        db_storage.new(self.category)
         db_storage.save()
-        self.url = '{}/surveys/{}'.format(api_url, self.survey_id)
-        self.invalid_url = '{}/surveys/{}'.format(api_url, 'toto')
+        self.url = '{}/categories/{}'.format(api_url, self.category_id)
+        self.invalid_url = '{}/categories/{}'.format(api_url, 'toto')
 
     def tearDown(self) -> None:
         """
-            Tear down table Survey of database used for tests.
+            Tear down table Category of database used for tests.
         """
 
-        survey = db_storage.get_from_attributes(Survey, id=self.survey_id)
-        if survey is not None:
-            db_storage.delete(survey)
+        category = db_storage.get_from_attributes(
+            Category, id=self.category_id)
+        if category is not None:
+            db_storage.delete(category)
             db_storage.save()
 
         user = db_storage.get_from_attributes(User, id=self.user_id)
@@ -389,10 +393,12 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
 
     def testUpdate(self):
         """
-            Test valid update survey action.
+            Test valid update category action.
         """
+
         data = {'name': 'toto2'}
-        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
+        self.assertTrue(self.category == db_storage.get(
+            Category, self.category_id))
         response = self.get_authenticated_response(
             http_method='put', json=data)
         headers = response.headers
@@ -402,19 +408,19 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
         json_data = response.json()
         db_storage.reload()
-        survey = db_storage.get(Survey, self.survey_id)
-        self.assertEqual(survey.name, 'toto2')
+        category = db_storage.get(Category, self.category_id)
+        self.assertEqual(category.name, 'toto2')
         self.assertIn('name', json_data, MISSING_NAME_ATTR_MSG)
         self.assertIn('created_at', json_data, MISSING_CREATED_AT_ATTR_MSG)
         self.assertIn('updated_at', json_data, MISSING_UPDATED_AT_ATTR_MSG)
         self.assertIn('__class__', json_data, MISSING_CLASS_ATTR_MSG)
         self.assertEqual(json_data['name'], 'toto2')
-        db_storage.delete(survey)
+        db_storage.delete(category)
         db_storage.save()
 
     def testNotAJson(self):
         """
-            Test update survey action when given wrong data format.
+            Test update category action when given wrong data format.
         """
 
         data = {'name': 'toto'}
@@ -434,7 +440,7 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
 
     def testNotFound(self):
         """
-            Test update survey action when given wrong survey_id or no ID at all.
+            Test update category action when given wrong category_id or no ID at all.
         """
 
         data = {'name': 'toto2'}
@@ -445,9 +451,10 @@ class UpdateSurveysApiTest(AuthenticatedRequest):
         self.assertEqual(response.status_code, 404, WRONG_STATUS_CODE_MSG)
         self.assertEqual(
             headers['Content-Type'], 'application/json', WRONG_TYPE_RETURN_MSG)
-        self.assertTrue(self.survey == db_storage.get(Survey, self.survey_id))
+        self.assertTrue(self.category == db_storage.get(
+            Category, self.category_id))
         json_data = response.json()
         self.assertIn('status', json_data)
         self.assertEqual(json_data['status'], 'fail')
         self.assertIn('message', json_data)
-        self.assertEqual(json_data['message'], 'Survey entity not found.')
+        self.assertEqual(json_data['message'], 'Category entity not found.')

@@ -3,11 +3,12 @@
     tags:
       - Surveys
     parameters:
-      - name: survey_id
-        in: path
-        type: string
+      - name: data
+        in: body
         required: true
-        description: The id of the survey to update
+        properties:
+          name:
+            type: string
 
     responses:
       404:

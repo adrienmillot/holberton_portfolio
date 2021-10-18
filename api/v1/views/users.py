@@ -3,6 +3,7 @@
     objects that handle all default RestFul API actions for Users.
 """
 
+from math import ceil
 import bcrypt
 from os import getenv
 from api.v1.views import app_views
@@ -21,7 +22,12 @@ def users_list():
         or a specific user.
     """
 
-    all_users = db_storage.all(User).values()
+    data = request.get_json()
+    count = db_storage.count(User)
+    page = data['page'] if data and 'page' in data.keys() else None
+    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page_count = int(ceil(count / limit)) if limit else 1
+    all_users = db_storage.all(User, page=page, limit=limit).values()
     list_users = []
 
     for user in all_users:
@@ -29,6 +35,8 @@ def users_list():
 
     responseObject = {
         'status': 'success',
+        'count': count,
+        'page_count': page_count,
         'results': list_users
     }
 
