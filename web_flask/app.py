@@ -30,12 +30,12 @@ def login():
 @app.route('/profiles_list', methods=['GET'],strict_slashes=False)
 def profile_list():
     """return user's profile page"""
-    return render_template('profiles_list.html')
+    return render_template('/profiles/profiles_list.html')
 
 @app.route('/profile_create', methods=['GET', 'POST'],strict_slashes=False)
 def profile_create():
     """return user's profile page"""
-    return render_template('profile_create.html')
+    return render_template('/profiles/profile_create.html')
 
 
 @app.route('/surveys_list', methods=['GET'], strict_slashes=False)
@@ -55,13 +55,18 @@ def survey_show():
 
 @app.route('/survey_edit', methods=['GET', 'POST'],strict_slashes=False)
 def survey_edit():
-    """return survey create page"""
+    """return survey edit page"""
     return render_template('/surveys/survey_edit.html')
+
+@app.route('/categories', methods=['GET', 'POST'],strict_slashes=False)
+def categories_list():
+    """return categories liste page"""
+    return render_template('categories/categories_list.html')
 
 
 @app.route('/dashboard', methods=['GET'], strict_slashes=False)
 def dashboard():
-    """return list of the surveys page"""
+    """return dashboard page"""
     return render_template('dashboard.html')
 
 

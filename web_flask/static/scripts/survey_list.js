@@ -1,9 +1,18 @@
 const getSurveysList = function () {
+
+	const limit_value = 1
+	const pages = 0
+
+	let limit_obj = {limit: limit_value}
+	let json_limit = JSON.stringify(limit_obj)
+	
+
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/surveys',
-		type: 'GET',
+		type:'GET',
+		data: "{'limit':1}",
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-
+		dataType: 'json',
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -11,15 +20,20 @@ const getSurveysList = function () {
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');
-
+					localStorage.removeItem('token');	
 					// Redirect to homepage
 					window.location = "http://0.0.0.0:5000/";
 					break;
+				default:
+					console.log(dataResponse)
+   
+				
 			}
 		},
 		success: function (response) {
 			surveyList(response.results);
+			console.log(response)
+			console.log(response.page_count)
 		}
 	});
 }
@@ -81,9 +95,10 @@ function surveyRow(survey, count) {
 	var countTh = $('<th></th>').text('#' + count);
 	var nameTd = $('<td></td>').text(survey.name);
 	var idTd = $('<td></td>').text(survey.id);
+	var emptyTd = $('<td></td>')
 	var btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
 
-	return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(btnActionTd);
+	return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
 }
 
 /**
