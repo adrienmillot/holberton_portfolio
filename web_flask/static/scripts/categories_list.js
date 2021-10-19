@@ -1,11 +1,11 @@
 /**
- * get request to api to get all surveys
+ * get request to api to get all categorys
  */
 
-const getSurveysList = function () {
+ const getCategoryList = function () {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/surveys',
+		url: 'http://0.0.0.0:5002/api/v1/categories',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -22,7 +22,8 @@ const getSurveysList = function () {
 			}
 		},
 		success: function (response) {
-			surveyList(response.results);
+			console.log(response)
+			categoryList(response.results);
 		}
 	});
 }
@@ -30,8 +31,8 @@ const getSurveysList = function () {
 /**
  * Generate DOM for show button.
  */
-function surveyShowButton(survey) {
-	return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`
+function categoryShowButton(category) {
+	return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`
 	<svg xmlns="http://www.w3.org/2000/svg"
 		width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
 		<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
@@ -43,8 +44,8 @@ function surveyShowButton(survey) {
 /**
  * Generate DOM for edit button.
  */
-function surveyEditButton(survey) {
-	return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryEditButton(category) {
+	return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
 	viewBox="0 0 16 16">
 	<path
@@ -58,8 +59,8 @@ function surveyEditButton(survey) {
 /**
  * Generate DOM for delete button.
  */
-function surveyDeleteButton(survey) {
-	return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryDeleteButton(category) {
+	return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 	<path
 		d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -69,71 +70,71 @@ function surveyDeleteButton(survey) {
 /**
  * Generate DOM for action buttons.
  */
-function surveyActionsButton(survey) {
-	var showSurveyButton = surveyShowButton(survey);
-	var editSurveyButton = surveyEditButton(survey);
-	var deleteSurveyButton = surveyDeleteButton(survey);
+function categoryActionsButton(category) {
+	var showcategoryButton = categoryShowButton(category);
+	var editcategoryButton = categoryEditButton(category);
+	var deletecategoryButton = categoryDeleteButton(category);
 
-	return $('<div class="btn-group" role="group"></div>').append(showSurveyButton).append(editSurveyButton).append(deleteSurveyButton);
+	return $('<div class="btn-group" role="group"></div>').append(showcategoryButton).append(editcategoryButton).append(deletecategoryButton);
 }
 
 /**
- * Generate DOM for survey row.
+ * Generate DOM for category row.
  */
-function surveyRow(survey, count) {
+function categoryRow(category, count) {
 	var countTh = $('<th></th>').text('#' + count);
-	var nameTd = $('<td></td>').text(survey.name);
-	var idTd = $('<td></td>').text(survey.id);
+	var nameTd = $('<td></td>').text(category.name);
+	var idTd = $('<td></td>').text(category.id);
 	var emptyTd = $('<td></td>')
-	var btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
+	var btnActionTd = $('<td></td>').append(categoryActionsButton(category));
 
-	return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+	return $('<tr class="category"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
 }
 
 /**
  * 
  */
-function surveyList(surveys) {
-	$.each(surveys, function (key, survey) {
-		$('tbody.surveys_list').append(surveyRow(survey, key));
+function categoryList(categorys) {
+	$.each(categorys, function (key, category) {
+		$('tbody.categories_list').append(categoryRow(category, key));
 	});
 
-	btnSurveyShowEvent();
-	btnSurveyEditEvent();
-	btnSurveyDeleteEvent();
+	btncategoryShowEvent();
+	btncategoryEditEvent();
+	btncategoryDeleteEvent();
 }
 
-function btnSurveyShowEvent() {
+function btncategoryShowEvent() {
 	/**
 	 * Click on show button
 	 */
-	$('.survey .btn.show').click(function () {
+	$('.category .btn.show').click(function () {
 		id = $(this).attr('data-id');
-		localStorage.setItem('show_survey_id', id)
-		window.location = 'http://0.0.0.0:5000/survey_show'
+		localStorage.setItem('show_category_id', id)
+		window.location = 'http://0.0.0.0:5000/category_show'
 
 		
 	});
 
 }
 
-function btnSurveyEditEvent() {
+function btncategoryEditEvent() {
 	/**
 	 * Click on edit button
 	 */
-	$('.survey .btn.edit').click(function () {
+	$('.category .btn.edit').click(function () {
 		id = $(this).attr('data-id');
-		localStorage.setItem('edit_survey_id', id)
-		window.location = 'http://0.0.0.0:5000/survey_edit'
+		localStorage.setItem('edit_category_id', id)
+		window.location = 'http://0.0.0.0:5000/category_edit'
 	});
 
 }
 
-function btnSurveyDeleteEvent() {
+function btncategoryDeleteEvent() {
 	/**
 	 * Click on delete button
 	 */
-	$('.survey .btn.delete').click(function () {
+	$('.category .btn.delete').click(function () {
 		id = $(this).attr('data-id');
 		delet = deleteAction(id);
 		if (delet = true){
@@ -146,7 +147,7 @@ function btnSurveyDeleteEvent() {
 function deleteAction(id) {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/surveys/' + id,
+		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -161,7 +162,7 @@ function deleteAction(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
-				$('section.alert_success_delete_survey').append(MessageConfirmation())
+				$('section.alert_success_delete_category').append(MessageConfirmation())
 				return (true)
 			})
 		}
@@ -175,11 +176,11 @@ function deleteAction(id) {
 function MessageConfirmation() {
 	return (`
 	<div class="alert alert-success" role="alert">
-	  You're survey, have been succefuly deleted
+	  You're category, have been succefuly deleted
 	</div>`)
 }
 
 
 $(document).ready(function () {
-	getSurveysList();
+	getCategoryList();
 });

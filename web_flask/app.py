@@ -58,11 +58,15 @@ def survey_edit():
     """return survey edit page"""
     return render_template('/surveys/survey_edit.html')
 
-@app.route('/categories', methods=['GET', 'POST'],strict_slashes=False)
+@app.route('/categories_list', methods=['GET'],strict_slashes=False)
 def categories_list():
     """return categories liste page"""
     return render_template('categories/categories_list.html')
 
+@app.route('/category_create', methods=['GET', 'POST'],strict_slashes=False)
+def category_create():
+    """return categories create page"""
+    return render_template('categories/category_create.html')
 
 @app.route('/dashboard', methods=['GET'], strict_slashes=False)
 def dashboard():
