@@ -1,6 +1,7 @@
 
 const postProfile = function (first_name, last_name, gender) {
-	let obj = { first_name: first_name, last_name: last_name, gender: gender }
+	let born_at = "1985-10-19T10:08:27.000000"
+	let obj = { first_name: first_name, last_name: last_name, gender: gender, born_at: born_at }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/profiles',

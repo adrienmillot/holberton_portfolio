@@ -22,6 +22,7 @@ const getSurveysList = function () {
 			}
 		},
 		success: function (response) {
+			console.log(response)
 			surveyList(response.results);
 		}
 	});

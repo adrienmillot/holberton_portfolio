@@ -68,6 +68,16 @@ def category_create():
     """return categories create page"""
     return render_template('categories/category_create.html')
 
+@app.route('/questions_list', methods=['GET'],strict_slashes=False)
+def questions_list():
+    """return questions liste page"""
+    return render_template('questions/questions_list.html')
+
+@app.route('/question_create', methods=['GET', 'POST'],strict_slashes=False)
+def question_create():
+    """return question create page"""
+    return render_template('questions/question_create.html')
+
 @app.route('/dashboard', methods=['GET'], strict_slashes=False)
 def dashboard():
     """return dashboard page"""
