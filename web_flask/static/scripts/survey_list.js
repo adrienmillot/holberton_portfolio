@@ -32,7 +32,7 @@ const getSurveysList = function () {
  * Generate DOM for show button.
  */
 function surveyShowButton(survey) {
-	return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`
+  return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`
 	<svg xmlns="http://www.w3.org/2000/svg"
 		width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
 		<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
@@ -45,7 +45,7 @@ function surveyShowButton(survey) {
  * Generate DOM for edit button.
  */
 function surveyEditButton(survey) {
-	return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+  return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
 	viewBox="0 0 16 16">
 	<path
@@ -60,7 +60,7 @@ function surveyEditButton(survey) {
  * Generate DOM for delete button.
  */
 function surveyDeleteButton(survey) {
-	return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+  return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', survey.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 	<path
 		d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -71,62 +71,62 @@ function surveyDeleteButton(survey) {
  * Generate DOM for action buttons.
  */
 function surveyActionsButton(survey) {
-	var showSurveyButton = surveyShowButton(survey);
-	var editSurveyButton = surveyEditButton(survey);
-	var deleteSurveyButton = surveyDeleteButton(survey);
+  var showSurveyButton = surveyShowButton(survey);
+  var editSurveyButton = surveyEditButton(survey);
+  var deleteSurveyButton = surveyDeleteButton(survey);
 
-	return $('<div class="btn-group" role="group"></div>').append(showSurveyButton).append(editSurveyButton).append(deleteSurveyButton);
+  return $('<div class="btn-group" role="group"></div>').append(showSurveyButton).append(editSurveyButton).append(deleteSurveyButton);
 }
 
 /**
  * Generate DOM for survey row.
  */
 function surveyRow(survey, count) {
-	var countTh = $('<th></th>').text('#' + count);
-	var nameTd = $('<td></td>').text(survey.name);
-	var idTd = $('<td></td>').text(survey.id);
-	var emptyTd = $('<td></td>')
-	var btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
+  var countTh = $('<th></th>').text('#' + count);
+  var nameTd = $('<td></td>').text(survey.name);
+  var idTd = $('<td></td>').text(survey.id);
+  var emptyTd = $('<td></td>')
+  var btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
 
-	return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
 }
 
 /**
  * 
  */
 function surveyList(surveys) {
-	$.each(surveys, function (key, survey) {
-		$('tbody.surveys_list').append(surveyRow(survey, key));
-	});
+  $.each(surveys, function (key, survey) {
+    $('tbody.surveys_list').append(surveyRow(survey, key));
+  });
 
-	btnSurveyShowEvent();
-	btnSurveyEditEvent();
-	btnSurveyDeleteEvent();
+  btnSurveyShowEvent();
+  btnSurveyEditEvent();
+  btnSurveyDeleteEvent();
 }
 
 function btnSurveyShowEvent() {
-	/**
-	 * Click on show button
-	 */
-	$('.survey .btn.show').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('show_survey_id', id)
-		window.location = 'http://0.0.0.0:5000/survey_show'
+  /**
+   * Click on show button
+   */
+  $('.survey .btn.show').click(function () {
+    id = $(this).attr('data-id');
+    localStorage.setItem('show_survey_id', id)
+    window.location = 'http://0.0.0.0:5000/survey_show'
 
-		
-	});
+
+  });
 
 }
 
 function btnSurveyEditEvent() {
-	/**
-	 * Click on edit button
-	 */
-	$('.survey .btn.edit').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('edit_survey_id', id)
-		window.location = 'http://0.0.0.0:5000/survey_edit'
-	});
+  /**
+   * Click on edit button
+   */
+  $('.survey .btn.edit').click(function () {
+    id = $(this).attr('data-id');
+    localStorage.setItem('edit_survey_id', id)
+    window.location = 'http://0.0.0.0:5000/survey_edit'
+  });
 
 }
 
@@ -174,7 +174,7 @@ function deleteAction(id) {
 
 
 function MessageConfirmation() {
-	return (`
+  return (`
 	<div class="alert alert-success" role="alert">
 	  You're survey, have been succefuly deleted
 	</div>`)
@@ -182,5 +182,5 @@ function MessageConfirmation() {
 
 
 $(document).ready(function () {
-	getSurveysList();
+  getSurveysList();
 });
