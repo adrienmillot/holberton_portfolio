@@ -2,7 +2,7 @@
  * get request to api to get all users
  */
 
- const getUsersList = function () {
+ const getUsersListPage = function () {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/users',
@@ -22,7 +22,6 @@
 			}
 		},
 		success: function (response) {
-			console.log(response)
 			userList(response.results);
 		}
 	});
@@ -136,7 +135,7 @@ function btnUserDeleteEvent() {
 	 */
 	$('.user .btn.delete').click(function () {
 		id = $(this).attr('data-id');
-		delet = deleteAction(id);
+		delet = deleteActionUser(id);
 		if (delet = true){
 			$(this).parent().parent().parent().remove()
 	}
@@ -144,7 +143,7 @@ function btnUserDeleteEvent() {
 };
 
 
-function deleteAction(id) {
+function deleteActionUser(id) {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/users/' + id,
@@ -162,7 +161,7 @@ function deleteAction(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
-				$('section.alert_success_delete_user').append(MessageConfirmation())
+				$('section.alert_success_delete_user').append(MessageConfirmationDeleteUser())
 				return (true)
 			})
 		}
@@ -173,7 +172,7 @@ function deleteAction(id) {
 
 
 
-function MessageConfirmation() {
+function MessageConfirmationDeleteUser() {
 	return (`
 	<div class="alert alert-success" role="alert">
 	  You're user, have been succefuly deleted
@@ -182,5 +181,5 @@ function MessageConfirmation() {
 
 
 $(document).ready(function () {
-	getUsersList();
+	getUsersListPage();
 });

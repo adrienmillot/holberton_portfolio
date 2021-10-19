@@ -2,7 +2,7 @@
  * get request to api to get all categorys
  */
 
- const getCategoryList = function () {
+ const getCategoriesListPage = function () {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories',
@@ -22,8 +22,7 @@
 			}
 		},
 		success: function (response) {
-			console.log(response)
-			categoryList(response.results);
+			categoryListForCategory(response.results);
 		}
 	});
 }
@@ -94,7 +93,7 @@ function categoryRow(category, count) {
 /**
  * 
  */
-function categoryList(categorys) {
+function categoryListForCategory(categorys) {
 	$.each(categorys, function (key, category) {
 		$('tbody.categories_list').append(categoryRow(category, key));
 	});
@@ -134,7 +133,7 @@ function btncategoryDeleteEvent() {
 	 */
 	$('.category .btn.delete').click(function () {
 		id = $(this).attr('data-id');
-		delet = deleteAction(id);
+		delet = deleteActionCategory(id);
 		if (delet = true){
 			$(this).parent().parent().parent().remove()
 	}
@@ -142,7 +141,7 @@ function btncategoryDeleteEvent() {
 };
 
 
-function deleteAction(id) {
+function deleteActionCategory(id) {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
@@ -160,7 +159,7 @@ function deleteAction(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
-				$('section.alert_success_delete_category').append(MessageConfirmation())
+				$('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory())
 				return (true)
 			})
 		}
@@ -171,7 +170,7 @@ function deleteAction(id) {
 
 
 
-function MessageConfirmation() {
+function MessageConfirmationDeleteCategory() {
 	return (`
 	<div class="alert alert-success" role="alert">
 	  You're category, have been succefuly deleted
@@ -180,5 +179,5 @@ function MessageConfirmation() {
 
 
 $(document).ready(function () {
-	getCategoryList();
+	getCategoriesListPage();
 });

@@ -20,13 +20,13 @@ const createCategory = function (name) {
 		},
 		success: function (response) {
 			let name = response.name
-			$('section.alert_success_create_category').append(articleHtml(name))
+			$('section.alert_success_create_category').append(MessageAlertCategoryCreate(name))
 		}
 	}
 	);
 }
 
-function articleHtml(name) {
+function MessageAlertCategoryCreate(name) {
 	return (`
 <div class="alert alert-success" role="alert">
   You're category ${name}, have been succefuly created

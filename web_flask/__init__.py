@@ -11,7 +11,18 @@ app.debug = True
 assets = Environment(app)
 jinja_partials.register_extensions(app)
 
-js = Bundle('scripts/event/log_out.js', 'scripts/event/login_btn.js', 'scripts/survey_list.js', 'scripts/survey_show.js', output='gen/packed.js')
+js = Bundle('scripts/event/log_out.js',
+            'scripts/event/login_btn.js',
+            'scripts/surveys_list.js',
+            'scripts/event/survey_create.js',
+            'scripts/event/survey_show.js',
+            'scripts/questions_list.js',
+            'scripts/event/question_create.js',
+            'scripts/categories_list.js',
+            'scripts/event/category_create.js',
+            'scripts/users_list.js',
+            'scripts/event/user_create.js',
+            output='gen/packed.js')
 assets.register('js_all', js)
 
 styles = Bundle('styles/footer_relatif.css')

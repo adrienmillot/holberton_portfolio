@@ -1,29 +1,17 @@
-$(document).ready(function() {
-	id = localStorage.getItem('show_survey_id')
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/surveys/' + id,
-		type: 'GET',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
+$(document).ready(function () {
+	var url = window.location.pathname;
+	var url_splitted = url.split('/')
 
-			switch (statusCode) {
-				case 400:
-					console.error(dataResponse.message);
-					break;
-				case 498:
-					// Remove auth_token
-					localStorage.removeItem('token');
-
-					// Redirect to homepage
-					window.location = "/";
-					break;
+	if (url_splitted[1] == 'surveys' && url_splitted[3] == 'show') {
+		var survey_id = url_splitted[2];
+		$.ajaxSetup({
+			headers: {
+				'Authorization': `Bearer ${localStorage.getItem('token')}`
 			}
-		},
-		success: function (response) {
-			console.log(response.name);
-			localStorage.removeItem('show_survey_id')
-		}
-	})
-})
+		});
+
+		$.get('http://0.0.0.0:5002/api/v1/surveys/' + survey_id, function (data) {
+			$('body > .container-fluid > h1').text(data.name)
+		});
+	}
+});

@@ -41,7 +41,7 @@ function categoryOption(category) {
  * get request to api to get all surveys
  */
 
- const getSurveysList = function () {
+ const getSurveysForCreateQuestion = function () {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/surveys',
@@ -61,11 +61,11 @@ function categoryOption(category) {
 			}
 		},
 		success: function (response) {
-			surveyList(response.results);
+			surveyListForQuestion(response.results);
 		}
 	});
 }
-function surveyList(surveys) {
+function surveyListForQuestion(surveys) {
 	$.each(surveys, function (key, survey) {
 		$('#select_survey').append(surveyOption(survey));
 	});
@@ -113,7 +113,7 @@ function articleHtml(label) {
 
 $(document).ready( function () {
 	getCategoryList();
-	getSurveysList();
+	getSurveysForCreateQuestion();
 	$('#btn_create_question').on('click', () => {
 		let label = $("#txt_question_label").val().trim();
 		let category_id = $("#select_category").val()

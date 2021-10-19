@@ -17,7 +17,6 @@ const getProfilesList = function () {
 			}
 		},
 		success: function (response) {
-			console.log(response)
 			response.results.forEach(element => {
 				count = count + 1;
 				const htmlContent = articleHtml(element, count);
