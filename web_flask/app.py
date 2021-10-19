@@ -78,6 +78,17 @@ def question_create():
     """return question create page"""
     return render_template('questions/question_create.html')
 
+@app.route('/users_list', methods=['GET'],strict_slashes=False)
+def users_list():
+    """return users liste page"""
+    return render_template('users/users_list.html')
+
+@app.route('/user_create', methods=['GET', 'POST'],strict_slashes=False)
+def question_user():
+    """return question create page"""
+    return render_template('users/user_create.html')
+
+
 @app.route('/dashboard', methods=['GET'], strict_slashes=False)
 def dashboard():
     """return dashboard page"""
