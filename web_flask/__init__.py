@@ -26,6 +26,6 @@ js = Bundle('scripts/event/log_out.js',
             output='gen/packed.js')
 assets.register('js_all', js)
 
-styles = Bundle('styles/footer_relatif.css')
+styles = Bundle('styles/footer.css')
 assets.register('styles_all', styles)
 assets.init_app(app)

@@ -4,6 +4,7 @@
 """
 
 
+import os
 from flask import Flask, render_template, send_from_directory
 from web_flask import app
 
@@ -12,6 +13,12 @@ from web_flask import app
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static/images'),
                                'SurveyStorm_icon.png', mimetype='image/vnd.microsoft.icon')
+
+
+@app.route('/logo.png', strict_slashes=False)
+def logo():
+    return send_from_directory(os.path.join(app.root_path, 'static/images'),
+                               'SurveyStorm_logo.png', mimetype='image/vnd.microsoft.icon')
 
 
 @app.route('/', strict_slashes=False)

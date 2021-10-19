@@ -1,16 +1,5 @@
-footer {
-
-    background-color: #f8f9fa; 
-	
-    width: 100%;
-    border-top: 1px solid #e9ecef; 
-	position: absolute;
-	display: flex; 
-    flex-direction: column; 
-    justify-content: center; 
-    align-items: center;
-    bottom: 0;
-    
+body > footer h5 > img#logo {
+	width: 100px;
 }
 
 div.footer-copyright.text-center.py-3 {
