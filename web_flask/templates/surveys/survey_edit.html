@@ -27,11 +27,50 @@
 
   <body>
     {{ render_partial('shared/_header.html') }}
-
-    <div class="container-fluid">
-      <h1>Edit specific survey page</h1>
+    <div class='container-sm'>
+  
+      <h1>Edit Survey</h1>
+      <h1>&nbsp;</h1>
+      <h1>&nbsp;</h1>
+      <div class="wrapper fadeInDown">
+        <div id="formContent">
+          <!-- Tabs Titles -->
+  
+          <!-- Icon -->
+          <!-- Login Form -->
+          <div class="d-flex justify-content-center">
+            <!-- if (typeof survey_id !== "undefined") { -->
+            <form action="" class="form-horizontal" method="post">
+              <div class="form-group mr-3">
+                <div class="row justify-content-center">
+                  <input class="form-control" type="text" placeholder="Survey name" name="txt_survey_name"
+                    id="txt_survey_name" />
+                  <input type="hidden" name="survey_id" value="1" />
+                </div>
+              </div>
+            </form>
+            <!-- } -->
+          </div>
+  
+          <div class="container-sm">
+            <div class="form-group mr-3">
+              <div class="row 
+              justify-content-center">
+                <input class="btn btn-success btn-lg" type="button" value="Update Survey"
+                  name="btn_edit_survey" id="btn_edit_survey">
+              </div>
+            </div>
+          </div>
+  
+        </div>
+      </div>
+      <div class="form-group mr-3">
+        <div class="row justify-content-center">
+          <section class="alert_success_edit_survey"></section>
+        </div>
+      </div>
     </div>
-
+  
     {{ render_partial('shared/_footer.html') }}
   </body>
 

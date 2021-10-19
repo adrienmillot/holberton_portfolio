@@ -20,6 +20,8 @@ const createSurvey = function (name) {
 		},
 		success: function (response) {
 			let name = response.name
+			$('section.alert_success_create_survey').empty();
+
 			$('section.alert_success_create_survey').append(articleHtml(name))
 		}
 	}
