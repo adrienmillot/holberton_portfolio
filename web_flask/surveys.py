@@ -16,7 +16,7 @@ def surveys_list():
 
     return render_template('/surveys/surveys_list.html')
 
-@app.route('/surveys/new', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/surveys/create', methods=['GET', 'POST'], strict_slashes=False)
 def survey_create():
     """
         return create survey page
