@@ -30,11 +30,11 @@ function MessageWrongLogin() {
 }
 
 const redirectToDashboard = function () {
-	window.location = "http://0.0.0.0:5000/dashboard"
+	window.location = "/dashboard"
 }
 
 const redirectToSignUp = function () {
-	window.location = "http://0.0.0.0:5000/sign_up"
+	window.location = "/sign_up"
 }
 
 $(() => {

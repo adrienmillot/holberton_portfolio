@@ -17,7 +17,7 @@
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},
@@ -107,7 +107,7 @@ function GetSurveyName(id) {
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		}	
@@ -134,7 +134,7 @@ function GetCategoryName(id) {
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		}
@@ -164,9 +164,8 @@ function btnQuestionShowEvent() {
 	 * Click on show button
 	 */
 	$('.question .btn.show').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('show_question_id', id)
-		window.location = 'http://0.0.0.0:5000/question_show'
+		question_id = $(this).attr('data-id');
+		window.location = '/question/' + question_id + '/show'
 
 		
 	});
@@ -178,9 +177,8 @@ function btnQuestionEditEvent() {
 	 * Click on edit button
 	 */
 	$('.question .btn.edit').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('edit_question_id', id)
-		window.location = 'http://0.0.0.0:5000/question_edit'
+		question_id = $(this).attr('data-id');
+		window.location = '/question/' + question_id + '/edit'
 	});
 
 }
@@ -190,8 +188,8 @@ function btnQuestionDeleteEvent() {
 	 * Click on delete button
 	 */
 	$('.question .btn.delete').click(function () {
-		id = $(this).attr('data-id');
-		delet = deleteAction(id);
+		question_id = $(this).attr('data-id');
+		delet = deleteAction(question_id);
 		if (delet = true){
 			$(this).parent().parent().parent().remove()
 	}
@@ -224,17 +222,12 @@ function deleteAction(id) {
 	})
 }
 
-
-
-
-
 function MessageConfirmation() {
 	return (`
 	<div class="alert alert-success" role="alert">
 	  You're question, have been succefuly deleted
 	</div>`)
 }
-
 
 $(document).ready(function () {
 	getQuestionsList();

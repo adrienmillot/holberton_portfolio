@@ -12,7 +12,7 @@ const getProfilesList = function () {
 			switch (statusCode) {
 				case 498:
 					localStorage.removeItem('token')
-					window.location = "http://0.0.0.0:5000/"
+					window.location = "/"
 					break;
 			}
 		},

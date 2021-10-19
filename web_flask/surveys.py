@@ -8,7 +8,7 @@ from flask import Flask, render_template
 from web_flask import app
 
 
-@app.route('/survey', methods=['GET'], strict_slashes=False)
+@app.route('/surveys', methods=['GET'], strict_slashes=False)
 def surveys_list():
     """
         return list of the surveys page
@@ -33,7 +33,7 @@ def survey_show(survey_id):
     return render_template('/surveys/survey_show.html')
 
 @app.route('/surveys/<survey_id>/edit', methods=['GET', 'POST'],strict_slashes=False)
-def survey_edit():
+def survey_edit(survey_id):
     """
         return survey edit page
     """

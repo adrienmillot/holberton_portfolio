@@ -17,7 +17,7 @@ $(document).ready(function() {
 					localStorage.removeItem('token');
 
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},

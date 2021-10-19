@@ -17,7 +17,7 @@
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},
@@ -56,7 +56,7 @@ function categoryOption(category) {
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},

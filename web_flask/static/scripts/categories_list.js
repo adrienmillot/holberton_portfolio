@@ -17,7 +17,7 @@
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},
@@ -109,9 +109,8 @@ function btncategoryShowEvent() {
 	 * Click on show button
 	 */
 	$('.category .btn.show').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('show_category_id', id)
-		window.location = 'http://0.0.0.0:5000/category_show'
+		category_id = $(this).attr('data-id');
+		window.location = '/category/' + category_id + '/show'
 
 		
 	});
@@ -123,9 +122,8 @@ function btncategoryEditEvent() {
 	 * Click on edit button
 	 */
 	$('.category .btn.edit').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('edit_category_id', id)
-		window.location = 'http://0.0.0.0:5000/category_edit'
+		category_id = $(this).attr('data-id');
+		window.location = '/category/' + category_id + '/edit'
 	});
 
 }

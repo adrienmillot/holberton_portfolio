@@ -17,7 +17,7 @@ const getSurveysList = function () {
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},
@@ -109,9 +109,8 @@ function btnSurveyShowEvent() {
    * Click on show button
    */
   $('.survey .btn.show').click(function () {
-    id = $(this).attr('data-id');
-    localStorage.setItem('show_survey_id', id)
-    window.location = 'http://0.0.0.0:5000/survey_show'
+    survey_id = $(this).attr('data-id');
+    window.location = '/surveys/' + survey_id +  '/show'
 
 
   });
@@ -123,9 +122,8 @@ function btnSurveyEditEvent() {
    * Click on edit button
    */
   $('.survey .btn.edit').click(function () {
-    id = $(this).attr('data-id');
-    localStorage.setItem('edit_survey_id', id)
-    window.location = 'http://0.0.0.0:5000/survey_edit'
+    survey_id = $(this).attr('data-id');
+    window.location = '/surveys/' + survey_id + '/edit'
   });
 
 }
@@ -135,8 +133,8 @@ function btnSurveyDeleteEvent() {
 	 * Click on delete button
 	 */
 	$('.survey .btn.delete').click(function () {
-		id = $(this).attr('data-id');
-		delet = deleteAction(id);
+		survey_id = $(this).attr('data-id');
+		delet = deleteAction(survey_id);
 		if (delet = true){
 			$(this).parent().parent().parent().remove()
 	}
@@ -169,17 +167,12 @@ function deleteAction(id) {
 	})
 }
 
-
-
-
-
 function MessageConfirmation() {
   return (`
 	<div class="alert alert-success" role="alert">
 	  You're survey, have been succefuly deleted
 	</div>`)
 }
-
 
 $(document).ready(function () {
   getSurveysList();

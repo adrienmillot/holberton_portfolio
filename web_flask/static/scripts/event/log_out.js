@@ -9,7 +9,7 @@ $(document).ready(function () {
 
 const redirectToIndex = function () {
 	localStorage.removeItem('token');
-	window.location = "http://0.0.0.0:5000/"
+	window.location = "/"
 }
 
 

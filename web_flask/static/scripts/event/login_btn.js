@@ -5,13 +5,14 @@ $(document).ready(function () {
 		$("#btn_login").hide();
 	
 	}
-	if ((!token) && (window.location != "http://0.0.0.0:5000/") && (window.location != "http://0.0.0.0:5000/login")) {
-		window.location = "http://0.0.0.0:5000/"
+	if ((!token) && (window.pathname != "/") && (window.pathname != "/login")) {
+    console.log(window.pathname)
+		window.pathname = "/"
 	}
 });
 
 const redirectToLogin = function () {
-	window.location = "http://0.0.0.0:5000/login"
+	window.location = "/login"
 }
 
 

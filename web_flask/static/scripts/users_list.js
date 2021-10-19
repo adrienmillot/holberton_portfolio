@@ -17,7 +17,7 @@
 					// Remove auth_token
 					localStorage.removeItem('token');	
 					// Redirect to homepage
-					window.location = "http://0.0.0.0:5000/";
+					window.location = "/";
 					break;
 			}
 		},
@@ -111,7 +111,7 @@ function btnUserShowEvent() {
 	$('.user .btn.show').click(function () {
 		id = $(this).attr('data-id');
 		localStorage.setItem('show_user_id', id)
-		window.location = 'http://0.0.0.0:5000/user_show'
+		window.location = '/user_show'
 
 		
 	});
@@ -125,7 +125,7 @@ function btnUserEditEvent() {
 	$('.user .btn.edit').click(function () {
 		id = $(this).attr('data-id');
 		localStorage.setItem('edit_user_id', id)
-		window.location = 'http://0.0.0.0:5000/user_edit'
+		window.location = '/user_edit'
 	});
 
 }
