@@ -107,7 +107,7 @@ const createQuestion = function (label, category_id, survey_id) {
 function articleHtml(label) {
 	return (`
 <div class="alert alert-success" role="alert">
-  You're question ${label}, have been succefuly created
+  Your question ${label}, have been succefuly created
 </div>`)
 }
 

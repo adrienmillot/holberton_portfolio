@@ -169,7 +169,7 @@ function deleteActionSurvey(id) {
 function MessageConfirmationDeleteSurvey() {
   return (`
 	<div class="alert alert-success" role="alert">
-	  You're survey, have been succefuly deleted
+	  Your survey, have been succefuly deleted
 	</div>`)
 }
 

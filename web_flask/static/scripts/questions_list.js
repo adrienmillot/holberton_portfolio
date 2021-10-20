@@ -225,7 +225,7 @@ function deleteActionQuestion(id) {
 function MessageConfirmationQuestion() {
 	return (`
 	<div class="alert alert-success" role="alert">
-	  You're question, have been succefuly deleted
+	  Your question, have been succefuly deleted
 	</div>`)
 }
 

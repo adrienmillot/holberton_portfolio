@@ -175,7 +175,7 @@ function deleteActionUser(id) {
 function MessageConfirmationDeleteUser() {
 	return (`
 	<div class="alert alert-success" role="alert">
-	  You're user, have been succefuly deleted
+	  Your user, have been succefuly deleted
 	</div>`)
 }
 

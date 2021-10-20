@@ -173,7 +173,7 @@ function deleteActionCategory(id) {
 function MessageConfirmationDeleteCategory() {
 	return (`
 	<div class="alert alert-success" role="alert">
-	  You're category, have been succefuly deleted
+	  Your category, have been succefuly deleted
 	</div>`)
 }
 
