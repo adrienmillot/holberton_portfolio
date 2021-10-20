@@ -28,20 +28,12 @@
 <body>
 
 	{{ render_partial('shared/_header.html') }}
-	<div class='container-sm'>
-		<H1>Users</H1>
+	<div class='container-fluid'>
+		<h1 class="mb-5">Users<input class="btn btn-success btn-lg float-right" type="button" value="Create user"
+        onclick="window.location.href = '/users/create';"></h1>
 		<div class="row justify-content-lg-start">
 			<section class="alert_success_delete_user"></section>
 		</div>
-		<div class="container-fluid">
-			<div class="btn_link_to_create_user">
-				<div class="row justify-content-lg-end">
-					<input class="btn btn-success btn-lg" type="button" value="Create user"
-						onclick="window.location.href = '/users/create';">
-				</div>
-			</div>
-		</div>
-		<h4>&nbsp;</h4>
 
 		<table class="table table-hover table-dark">
 			<thead>

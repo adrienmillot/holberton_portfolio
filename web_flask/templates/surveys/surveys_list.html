@@ -29,20 +29,11 @@
 
   {{ render_partial('shared/_header.html') }}
   <div class='container-fluid'>
-    <H1>Surveys</H1>
+    <h1 class="mb-5">Surveys<input class="btn btn-success btn-lg float-right" type="button" value="Create Survey"
+      onclick="window.location.href = '/surveys/create';"></h1>
     <div class="row justify-content-lg-start">
       <section class="alert_success_delete_survey"></section>
     </div>
-    <div class="container-fluid">
-      <div class="btn_link_to_create_survey">
-        <div class="row justify-content-lg-end">
-          <input class="btn btn-success btn-lg" type="button" value="Create Survey"
-            onclick="window.location.href = '/surveys/create';">
-        </div>
-      </div>
-    </div>
-    <h4>&nbsp;</h4>
-
     <table class="table table-hover table-dark">
       <thead>
         <tr>
@@ -56,9 +47,6 @@
       <tbody class="surveys_list">
       </tbody>
     </table>
-  </div>
-  <h4>&nbsp;</h4>
-  <div class='container-fluid'>
     <nav aria-label="Page navigation example">
       <ul class="pagination justify-content-end">
         <li class="page-item disabled">
@@ -73,7 +61,6 @@
       </ul>
     </nav>
   </div>
-  <h1>&nbsp;</h1>
   {{ render_partial('shared/_footer.html') }}
 </body>
 

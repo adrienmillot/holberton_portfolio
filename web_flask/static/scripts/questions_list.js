@@ -165,7 +165,7 @@ function btnQuestionShowEvent() {
 	 */
 	$('.question .btn.show').click(function () {
 		question_id = $(this).attr('data-id');
-		window.location = '/question/' + question_id + '/show'
+		window.location = '/questions/' + question_id + '/show'
 
 		
 	});
@@ -178,7 +178,7 @@ function btnQuestionEditEvent() {
 	 */
 	$('.question .btn.edit').click(function () {
 		question_id = $(this).attr('data-id');
-		window.location = '/question/' + question_id + '/edit'
+		window.location = '/questions/' + question_id + '/edit'
 	});
 
 }
@@ -230,5 +230,10 @@ function MessageConfirmationQuestion() {
 }
 
 $(document).ready(function () {
-	getQuestionsListPage();
+	var url = window.location.pathname;
+	var url_splitted = url.split('/');
+
+  if (url_splitted[1] == 'questions') {
+	  getQuestionsListPage();
+  }
 });

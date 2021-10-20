@@ -24,3 +24,19 @@ def proposal_create():
     """
 
     return render_template('/proposals/proposal_create.html')
+
+@app.route('/proposals/<proposal_id>/show', methods=['GET'], strict_slashes=False)
+def proposal_show(proposal_id):
+    """
+        return specific proposal page
+    """
+
+    return render_template('/proposals/proposal_show.html')
+
+@app.route('/proposals/<proposal_id>/edit', methods=['GET', 'POST'],strict_slashes=False)
+def proposal_edit(proposal_id):
+    """
+        return proposal edit page
+    """
+
+    return render_template('/proposals/proposal_edit.html')

@@ -11,7 +11,12 @@ $(document).ready(function () {
 		});
 
 		$.get('http://0.0.0.0:5002/api/v1/surveys/' + survey_id, function (data) {
-			$('body > .container-fluid > h1').text(data.name)
+      btn_delete = surveyDeleteButton(data);
+      btn_edit = surveyEditButton(data);
+      bts = $('<div class="btn-group float-right survey"></div>').append(btn_edit).append(btn_delete);
+			$('body > .container-fluid > h1').text(data.name).append(bts);
+      btnSurveyEditEvent();
+      btnSurveyDeleteEvent();
 		});
 	}
 });
