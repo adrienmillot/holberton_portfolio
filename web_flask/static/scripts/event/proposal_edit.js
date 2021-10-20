@@ -13,7 +13,7 @@ const editProposal = function (label, proposal_id) {
 	  success: function (response) {
 		$('section.alert_success_edit_proposal').empty();
   
-		$('section.alert_success_edit_proposal').append(getAlertUpdateElement('Your survey <strong>' + response.label + '</strong> has been well updated'));
+		$('section.alert_success_edit_proposal').append(getAlertUpdateElement('Your proposal <strong>' + response.label + '</strong> has been well updated'));
 	  }
 	}
 	);
