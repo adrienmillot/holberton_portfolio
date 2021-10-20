@@ -29,7 +29,7 @@
     {{ render_partial('shared/_header.html') }}
     <div class='container-fluid'>
 
-      <h1>Create User</h1>
+      <h1>Create Proposal</h1>
       <h1>&nbsp;</h1>
       <h1>&nbsp;</h1>
       <div class="wrapper fadeInDown">
@@ -42,23 +42,15 @@
             <form action="" class="form-horizontal" method="post">
               <div class="form-group mr-3">
                 <div class="row justify-content-center">
-                  <input class="form-control" type="text" placeholder="Username" name="txt_user_username"
-                    id="txt_user_username" />
+                  <input class="form-control" type="text" placeholder="Label" name="txt_proposal_label"
+                    id="txt_proposal_label" />
                 </div>
               </div>
 
-			  <div class="form-group mr-3">
-				<div class="row justify-content-center">
-					<label class="mr-3" for="txt_pwd">Password</label>
-					<input class="form-control" type="password" placeholder="Password" name="txt_user_password"
-						id="txt_user_password">
-				</div>
-			</div>
-
               <div class="form-group mr-3">
                 <div class="row justify-content-center">
-                  <select class="custom-select" name="select_profile" id="select_profile">
-                    <option selected>Profile...</option>
+                  <select class="custom-select" name="select_question_for_proposal" id="select_question_for_proposal">
+                    <option selected>Question...</option>
 
                   </select>
                 </div>
@@ -68,8 +60,8 @@
               <div class="container-sm">
                 <div class="form-group mr-3">
                   <div class="row justify-content-center">
-                    <input class="btn btn-success btn-lg" type="button" value="Create User" name="btn_create_user"
-                      id="btn_create_user">
+                    <input class="btn btn-success btn-lg" type="button" value="Create Proposal" name="btn_create_proposal"
+                      id="btn_create_proposal">
                   </div>
                 </div>
               </div>
@@ -79,7 +71,7 @@
       </div>
       <div class="form-group mr-3">
         <div class="row justify-content-center">
-          <section class="alert_success_create_user"></section>
+          <section class="alert_success_create_proposal"></section>
         </div>
       </div>
     </div>

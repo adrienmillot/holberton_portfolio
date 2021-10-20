@@ -29,7 +29,7 @@ const createCategory = function (name) {
 function MessageAlertCategoryCreate(name) {
 	return (`
 <div class="alert alert-success" role="alert">
-  You're category ${name}, have been succefuly created
+  Your category ${name}, have been succefuly created
 </div>`)
 }
 
