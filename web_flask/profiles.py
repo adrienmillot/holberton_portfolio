@@ -24,3 +24,19 @@ def profile_create():
     """
 
     return render_template('/profiles/profile_create.html')
+
+@app.route('/profiles/<profile_id>/show', methods=['GET'], strict_slashes=False)
+def profile_show(profile_id):
+    """
+        return specific profile page
+    """
+
+    return render_template('/profiles/profile_show.html')
+
+@app.route('/profiles/<profile_id>/edit', methods=['GET', 'POST'],strict_slashes=False)
+def profile_edit(profile_id):
+    """
+        return profile edit page
+    """
+
+    return render_template('/profiles/profile_edit.html')

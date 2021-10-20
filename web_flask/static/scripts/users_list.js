@@ -108,11 +108,8 @@ function btnUserShowEvent() {
 	 * Click on show button
 	 */
 	$('.user .btn.show').click(function () {
-		id = $(this).attr('data-id');
-		localStorage.setItem('show_user_id', id)
-		window.location = '/user_show'
-
-		
+		const user_id = $(this).attr('data-id');
+		window.location = '/users/' + user_id + '/show';
 	});
 
 }
