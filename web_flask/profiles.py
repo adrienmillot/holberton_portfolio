@@ -9,7 +9,7 @@ from web_flask import app
 
 
 @app.route('/profiles', methods=['GET'], strict_slashes=False)
-def profile_list():
+def profiles_list():
     """
         return user's profile page
     """
@@ -17,7 +17,7 @@ def profile_list():
     return render_template('/profiles/profiles_list.html')
 
 
-@app.route('/profile/new', methods=['GET', 'POST'], strict_slashes=False)
+@app.route('/profiles/create', methods=['GET', 'POST'], strict_slashes=False)
 def profile_create():
     """
         return user's profile page

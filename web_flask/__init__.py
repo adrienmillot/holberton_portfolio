@@ -23,6 +23,7 @@ js = Bundle('scripts/event/log_out.js',
             'scripts/event/category_create.js',
             'scripts/users_list.js',
             'scripts/event/user_create.js',
+            'scripts/profiles_list.js',
             output='gen/packed.js')
 assets.register('js_all', js)
 

@@ -23,13 +23,13 @@ const postProfile = function (first_name, last_name, gender) {
 		},
 		success: function (response) {
 			let name = response.first_name
-			$('section.alert_success_create_survey').append(articleHtml(name))
+			$('section.alert_success_create_profile').append(messageProfileCreated(name))
 		}
 	}
 	);
 }
 
-function articleHtml(name) {
+function messageProfileCreated(name) {
 	return (`
 <div class="alert alert-success" role="alert">
 	You're profile for ${name} have been succefuly created
@@ -37,7 +37,7 @@ function articleHtml(name) {
 }
 
 
-$(() => {
+$(document).ready( function() {
 	$('#btn_create_profile').on('click', () => {
 		let first_name = $("#txt_first_name").val().trim();
 		let last_name = $("#txt_last_name").val().trim();
