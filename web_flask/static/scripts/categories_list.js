@@ -109,7 +109,7 @@ function btncategoryShowEvent() {
 	 */
 	$('.category .btn.show').click(function () {
 		category_id = $(this).attr('data-id');
-		window.location = '/category/' + category_id + '/show'
+		window.location = '/categories/' + category_id + '/show'
 
 		
 	});
@@ -122,7 +122,7 @@ function btncategoryEditEvent() {
 	 */
 	$('.category .btn.edit').click(function () {
 		category_id = $(this).attr('data-id');
-		window.location = '/category/' + category_id + '/edit'
+		window.location = '/categories/' + category_id + '/edit'
 	});
 
 }
