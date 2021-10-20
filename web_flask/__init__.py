@@ -27,6 +27,7 @@ js = Bundle('scripts/event/log_out.js',
             'scripts/event/user_create.js',
             'scripts/event/proposal_show.js',
             'scripts/profiles_list.js',
+            'scripts/event/profile_create.js',
             'scripts/proposals_list.js',
             'scripts/event/proposal_create.js',
             output='gen/packed.js')
