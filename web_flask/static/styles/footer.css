@@ -1,0 +1,17 @@
+footer {
+	background-color: #f8f9fa;     
+	border-top: 1px solid #e9ecef;
+	display: flex; 
+	flex-direction: column; 
+	justify-content: center; 
+	align-items: center;
+}
+
+body > footer h5 > img#logo {
+	width: 75px;
+	height: 75px;
+}
+
+div.footer-copyright.text-center.py-3 {
+	border-top: 1px solid #575757;
+}

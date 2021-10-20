@@ -70,6 +70,25 @@ services:
       - .:/code
     working_dir: /code
 
+  ss_web_dev:
+    container_name: ss_web_dev
+    command: "python3 -m web_flask.app"
+    entrypoint: ./.requirements.sh
+    image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_web_dev.rule=Host(`survey_storm.localhost`)"
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.6
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/code
+    working_dir: /code
+
   ss_traefik:
     command:
       - "--api.insecure=true"
@@ -90,4 +109,3 @@ networks:
     ipam:
       config:
         - subnet: 172.20.0.0/16
-          gateway: 172.20.0.254

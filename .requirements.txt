@@ -5,6 +5,8 @@ setuptools
 flasgger
 mysqlclient
 bcrypt
+jinja_partials
+Flask-Assets
 
 ###### Requirements with Version Specifiers ######
 SQLAlchemy == 1.2.5

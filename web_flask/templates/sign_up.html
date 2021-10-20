@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>Log in</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+	<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+	<script type="text/javascript" src="../static/scripts/signup.js"></script>
+	<link rel="stylesheet" type="text/css" href="../static/styles/footer.css">
+
+  <link rel="icon" href="/favicon.ico" />
+</head>
+
+<body>
+	<header>
+
+		<nav class="navbar navbar-inverse">
+			<div class="container-fluid">
+				<div class="navbar-header">
+					<a class="navbar-brand" href="http://localhost:5000/">Survey Storm</a>
+				</div>
+			</div>
+		</nav>
+	</header>
+
+	<div class="container">
+		<h1>Sign Up</h1>
+		<br>
+		<form action="" method="post">
+			<input type="text" placeholder="Username" name="txt_uname" id="txt_uname">
+			<input type="password" placeholder="Password" name="txt_pwd" id="txt_pwd">
+			<input class="btn btn-default" type="button" value="Create" name="btn_submit" id="btn_submit">
+		</form>
+
+
+	</div>
+	{{ render_partial('shared/_footer.html') }}
+</BODY>
+
+</HTML>
