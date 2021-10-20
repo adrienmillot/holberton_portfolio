@@ -1,0 +1,17 @@
+    Posts a new answer
+    ---
+    tags:
+      - Answers
+    parameters:
+      - name: data
+        in: body
+        required: true
+        properties:
+          user_id:
+            type: string
+
+    responses:
+      400:
+        description: Missing user_id or not a JSON
+      201:
+        description: successfully created survey
