@@ -33,10 +33,12 @@ function articleHtml(element) {
 	  <h2>Profile</h2>
 	  <h3>Hello ${element.first_name} !</h3>	
 	  <div id='info'>
-	 <li>First name:${element.first_name}</li> 
-	 <li>Last name: ${element.last_name}</li>
-	 <li>Member since ${element.created_at}</li>
-	 </div>  
+    <ul>
+	  <li>First name:${element.first_name}</li> 
+	  <li>Last name: ${element.last_name}</li>
+	  <li>Member since ${element.created_at}</li>
+    </ul>
+	  </div>  
 	  </article>`)
 }
 
