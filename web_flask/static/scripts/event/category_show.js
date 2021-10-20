@@ -12,7 +12,12 @@ $(document).ready(function () {
 		});
 
 		$.get('http://0.0.0.0:5002/api/v1/categories/' + category_id, function (data) {
-			$('body > .container-fluid > h1').text(data.name)
+      btn_delete = categoryDeleteButton(data);
+      btn_edit = categoryEditButton(data);
+      bts = $('<div class="btn-group float-right category"></div>').append(btn_edit).append(btn_delete);
+			$('body > .container-fluid > h1').text(data.name).append(bts);
+      btncategoryEditEvent();
+      btncategoryDeleteEvent();
 		});
 	}
 });
