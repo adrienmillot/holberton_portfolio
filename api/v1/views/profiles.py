@@ -107,7 +107,7 @@ def profile_delete(profile_id) -> json:
     return make_response(jsonify({}), 200)
 
 
-@app_views.route('/profiles/', methods=['POST'])
+@app_views.route('/profiles', methods=['POST'], strict_slashes=False)
 @swag_from('documentation/profile/post_profile.yml')
 def profile_create() -> json:
     """
