@@ -18,11 +18,7 @@ const editCategory = function (name, category_id) {
     }
     );
   };
-  
-  function getAlertUpdateElement (message) {
-    return $('<div class="alert alert-success" role="alert"></div>').html(message);
-  }
-  
+
   const setCategoryName = function (category_id) {
     $.ajax({
       url: 'http://0.0.0.0:5002/api/v1/categories/' + category_id,
