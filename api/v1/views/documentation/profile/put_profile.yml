@@ -1,0 +1,23 @@
+    Updates profile information
+    ---
+    tags:
+      - Profiles
+    parameters:
+      - name: data
+        in: body
+        required: true
+        properties:
+          last_name:
+            type: string
+          first_name:
+            type: string
+          gender:
+            type: string
+          born_at:
+            type: string
+
+    responses:
+      404:
+        description: profile not found!
+      200:
+        description: request executed successfully

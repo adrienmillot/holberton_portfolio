@@ -1,0 +1,9 @@
+SS_MYSQL_USER=ss_test
+SS_MYSQL_PWD=ss_test_pwd
+SS_MYSQL_HOST=ss_mysql
+SS_MYSQL_DB=ss_test_db
+SS_SERVER_MODE=API
+SS_API_PORT=5001
+SS_SERVER_ENVIRONMENT=test
+FLASK_ENV=development
+SECRET_KEY=test

@@ -1,0 +1,19 @@
+    Posts a new category
+    ---
+    tags:
+      - Categories
+    parameters:
+      - name: data
+        in: body
+        required: true
+        requires:
+          - name:
+        properties:
+          name:
+            type: string
+
+    responses:
+      400:
+        description: Missing name or not a JSON
+      201:
+        description: successfully created category
