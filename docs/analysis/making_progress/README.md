@@ -10,6 +10,8 @@
 
 ## [4. Project updates](project_updates.md)
 
+## [5. Screenshots](screenshots.md)
+
 
 ---
 ###### 2021 - SurveyStorm
