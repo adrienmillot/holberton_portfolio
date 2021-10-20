@@ -20,6 +20,8 @@ const createCategory = function (name) {
 		},
 		success: function (response) {
 			let name = response.name
+			$('section.alert_success_create_category').empty();
+
 			$('section.alert_success_create_category').append(MessageAlertCategoryCreate(name))
 		}
 	}
