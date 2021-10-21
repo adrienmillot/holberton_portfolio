@@ -228,8 +228,9 @@ def all_category_user_score():
 
     responseObject = {
         'status': 'succes',
-        'max_score': all_max_score,
-        'user_score': all_user_score
+        'labels': list(all_max_score.keys()),
+        'max_score': list(all_max_score.values()),
+        'user_score': list(all_user_score.values())
     }
 
     return make_response(jsonify(responseObject), 200)
@@ -260,8 +261,9 @@ def survey_categories_score(survey_id):
         if key not in categories_user_score:
             categories_user_score.update({key: 0})
 
-    survey.max_score = categories_max_score
-    survey.user_score = categories_user_score
+    survey.labels = list(categories_max_score.keys())
+    survey.max_score = list(categories_max_score.values())
+    survey.user_score = list(categories_user_score.values())
 
     if user_id is None:
         responseObject = {
@@ -277,4 +279,3 @@ def survey_categories_score(survey_id):
     }
 
     return make_response(jsonify(responseObject), 200)
-
