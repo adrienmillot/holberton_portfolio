@@ -2,7 +2,7 @@ $(document).ready(function () {
 	token = localStorage.getItem('token')
 
 	if (!token) {
-		$("#btn_logout").hide();
+		$("#user_btn").hide();
 		$("#secure_menu").hide()
 	}
 });

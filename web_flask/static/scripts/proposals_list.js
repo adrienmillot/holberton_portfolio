@@ -159,6 +159,7 @@ function deleteActionProposal(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_proposal').empty();
 				$('section.alert_success_delete_proposal').append(MessageConfirmationDeleteProposal())
 				return (true)
 			})

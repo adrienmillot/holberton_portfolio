@@ -20,6 +20,7 @@ const createProfile = function (first_name, last_name, gender) {
 		},
 		success: function (response) {
 			let FirstName = response.first_name
+			$('section.alert_success_create_profile').empty();
 			$('section.alert_success_create_profile').append(MessageProfileSuccessCreate(FirstName))
 		}
 	}
@@ -29,7 +30,7 @@ const createProfile = function (first_name, last_name, gender) {
 function MessageProfileSuccessCreate(FirstName) {
 	return (`
 <div class="alert alert-success" role="alert">
-  Your profile for ${FirstName}, have been succefuly created
+  Your profile for <strong>${FirstName}</strong>, have been succefuly created
 </div>`)
 }
 

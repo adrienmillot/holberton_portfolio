@@ -84,10 +84,9 @@ function surveyRow(survey, count) {
   var countTh = $('<th></th>').text('#' + count);
   var nameTd = $('<td></td>').text(survey.name);
   var idTd = $('<td></td>').text(survey.id);
-  var emptyTd = $('<td></td>')
   var btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
 
-  return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(btnActionTd);
 }
 
 /**
@@ -159,6 +158,7 @@ function deleteActionSurvey(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_survey').empty();
 				$('section.alert_success_delete_survey').append(MessageConfirmationDeleteSurvey())
 				return (true)
 			})

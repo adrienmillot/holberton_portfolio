@@ -13,6 +13,7 @@ jinja_partials.register_extensions(app)
 
 js = Bundle('scripts/event/log_out.js',
             'scripts/event/login_btn.js',
+            'scripts/event/API_status.js',
             'scripts/surveys_list.js',
             'scripts/event/survey_create.js',
             'scripts/event/survey_show.js',

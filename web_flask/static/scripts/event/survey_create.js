@@ -31,7 +31,7 @@ const createSurvey = function (name) {
 function articleHtml(name) {
 	return (`
 <div class="alert alert-success" role="alert">
-  Your survey ${name}, have been succefuly created
+  Your survey <strong>${name}</strong>, have been succefuly created
 </div>`)
 }
 

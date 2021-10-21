@@ -159,6 +159,7 @@ function deleteActionCategory(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_category').empty();
 				$('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory())
 				return (true)
 			})

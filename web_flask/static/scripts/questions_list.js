@@ -215,6 +215,7 @@ function deleteActionQuestion(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_question').empty();
 				$('section.alert_success_delete_question').append(MessageConfirmationQuestion())
 				return (true)
 			})

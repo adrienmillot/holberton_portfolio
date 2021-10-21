@@ -39,8 +39,8 @@ function questionOption(question) {
 
 
 
-const createProposal = function (label, question_id) {
-	let obj = { label: label, question_id: question_id }
+const createProposal = function (label, question_id, is_valid) {
+	let obj = { label: label, question_id: question_id, is_valid: is_valid }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/proposals',
@@ -60,6 +60,7 @@ const createProposal = function (label, question_id) {
 		},
 		success: function (response) {
 			let label = response.label
+			$('section.alert_success_create_proposal').empty();
 			$('section.alert_success_create_proposal').append(MessageProposalSucessCreate(label))
 		}
 	}
@@ -69,15 +70,22 @@ const createProposal = function (label, question_id) {
 function MessageProposalSucessCreate(label) {
 	return (`
 <div class="alert alert-success" role="alert">
-  Your proposal ${label}, have been succefuly created
+  Your proposal <strong>${label}</strong>, have been succefuly created
 </div>`)
 }
 
 $(document).ready( function () {
 	getQuestionForCreateUser();
 	$('#btn_create_proposal').on('click', () => {
-		let username = $("#txt_proposal_label").val().trim()
+		let label = $("#txt_proposal_label").val().trim()
 		let question_id = $("#select_question_for_proposal").val()
-		createProposal(username, question_id);
+		let is_valid = ""
+		if($('input.checkbox_is_valid').is(':checked')){
+			is_valid = true
+		} else {
+			is_valid = false
+			
+		}
+		createProposal(label, question_id, is_valid);
 	});
 });

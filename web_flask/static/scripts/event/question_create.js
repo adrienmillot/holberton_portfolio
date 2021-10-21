@@ -98,16 +98,17 @@ const createQuestion = function (label, category_id, survey_id) {
 		},
 		success: function (response) {
 			let label = response.label
-			$('section.alert_success_create_question').append(articleHtml(label))
+			$('section.alert_success_create_question').empty();
+			$('section.alert_success_create_question').append(MessageQuestionSuccessCreate(label))
 		}
 	}
 	);
 }
 
-function articleHtml(label) {
+function MessageQuestionSuccessCreate(label) {
 	return (`
 <div class="alert alert-success" role="alert">
-  Your question ${label}, have been succefuly created
+  Your question <strong>${label}</strong>, have been succefuly created
 </div>`)
 }
 

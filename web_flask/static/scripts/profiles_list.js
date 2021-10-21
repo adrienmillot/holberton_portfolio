@@ -159,6 +159,7 @@ function deleteActionProfile(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_profile').empty();
 				$('section.alert_success_delete_profile').append(MessageConfirmationDeleteProfile())
 				return (true)
 			})

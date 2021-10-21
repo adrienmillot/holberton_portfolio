@@ -157,6 +157,7 @@ function deleteActionUser(id) {
 		},
 		success: function (data) {		
 			$(document).ready(function () {
+				$('section.alert_success_delete_user').empty();
 				$('section.alert_success_delete_user').append(MessageConfirmationDeleteUser())
 				return (true)
 			})
