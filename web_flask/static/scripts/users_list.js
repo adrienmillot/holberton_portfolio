@@ -5,7 +5,7 @@
  const getUsersListPage = function () {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/users',
+		url: 'http://ss-api.2835holberton.tech/api/v1/users',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -142,7 +142,7 @@ function btnUserDeleteEvent() {
 function deleteActionUser(id) {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/users/' + id,
+		url: 'http://ss-api.2835holberton.tech/api/v1/users/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

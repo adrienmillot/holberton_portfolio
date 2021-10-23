@@ -4,7 +4,7 @@ $(document).ready(function () {
 		var password = $("#txt_pwd").val().trim();
 
 		$.ajax({
-			url: 'http://0.0.0.0:5002/api/v1/auth/login',
+			url: 'http://ss-api.2835holberton.tech/api/v1/auth/login',
 			type: 'POST',
 			data: {username: username, password: password},
 			headers: {'Content-Type': 'application/json'},

@@ -3,7 +3,7 @@ const postLogin = function (username, password) {
 	let obj = { username: username, password: password }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/auth/login',
+		url: 'http://ss-api.2835holberton.tech/api/v1/auth/login',
 		type: 'POST',
 		data: json_data,
 		contentType: 'application/json',

@@ -5,7 +5,7 @@
  const getProposalsListPage = function () {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/proposals',
+		url: 'http://ss-api.2835holberton.tech/api/v1/proposals',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -144,7 +144,7 @@ function btnProposalDeleteEvent() {
 function deleteActionProposal(id) {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/proposals/' + id,
+		url: 'http://ss-api.2835holberton.tech/api/v1/proposals/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

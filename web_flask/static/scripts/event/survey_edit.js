@@ -4,7 +4,7 @@ const editSurvey = function (name, survey_id) {
   const json_data = JSON.stringify(obj);
 
   $.ajax({
-    url: 'http://0.0.0.0:5002/api/v1/surveys/' + survey_id,
+    url: 'http://ss-api.2835holberton.tech/api/v1/surveys/' + survey_id,
     type: 'PUT',
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     data: json_data,
@@ -25,7 +25,7 @@ function getAlertUpdateElement (message) {
 
 const setSurveyName = function (survey_id) {
   $.ajax({
-    url: 'http://0.0.0.0:5002/api/v1/surveys/' + survey_id,
+    url: 'http://ss-api.2835holberton.tech/api/v1/surveys/' + survey_id,
     type: 'GET',
     headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
     contentType: 'application/json',

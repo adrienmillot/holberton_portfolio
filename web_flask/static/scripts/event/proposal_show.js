@@ -11,7 +11,7 @@ $(document).ready(function () {
 			}
 		});
 
-		$.get('http://0.0.0.0:5002/api/v1/proposals/' + proposal_id, function (data) {
+		$.get('http://ss-api.2835holberton.tech/api/v1/proposals/' + proposal_id, function (data) {
       btn_delete = proposalDeleteButton(data);
       btn_edit = proposalEditButton(data);
       bts = $('<div class="btn-group float-right proposal"></div>').append(btn_edit).append(btn_delete);

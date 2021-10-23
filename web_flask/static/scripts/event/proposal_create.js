@@ -5,7 +5,7 @@
  const getQuestionForCreateUser = function () {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/questions',
+		url: 'http://ss-api.2835holberton.tech/api/v1/questions',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -43,7 +43,7 @@ const createProposal = function (label, question_id, is_valid) {
 	let obj = { label: label, question_id: question_id, is_valid: is_valid }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/proposals',
+		url: 'http://ss-api.2835holberton.tech/api/v1/proposals',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,

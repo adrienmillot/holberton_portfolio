@@ -5,7 +5,7 @@
  const getProfileForCreateUser = function () {
 
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/profiles',
+		url: 'http://ss-api.2835holberton.tech/api/v1/profiles',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -43,7 +43,7 @@ const createUser = function (username, password, profile_id) {
 	let obj = { username: username, profile_id: profile_id, password: password }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/users',
+		url: 'http://ss-api.2835holberton.tech/api/v1/users',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,

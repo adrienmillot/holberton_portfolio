@@ -1,6 +1,6 @@
 const getProfile = function () {
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/profiles',
+		url: 'http://ss-api.2835holberton.tech/api/v1/profiles',
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 

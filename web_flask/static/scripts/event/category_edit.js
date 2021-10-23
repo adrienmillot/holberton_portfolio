@@ -4,7 +4,7 @@ const editCategory = function (name, category_id) {
     const json_data = JSON.stringify(obj);
   
     $.ajax({
-      url: 'http://0.0.0.0:5002/api/v1/categories/' + category_id,
+      url: 'http://ss-api.2835holberton.tech/api/v1/categories/' + category_id,
       type: 'PUT',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       data: json_data,
@@ -21,7 +21,7 @@ const editCategory = function (name, category_id) {
 
   const setCategoryName = function (category_id) {
     $.ajax({
-      url: 'http://0.0.0.0:5002/api/v1/categories/' + category_id,
+      url: 'http://ss-api.2835holberton.tech/api/v1/categories/' + category_id,
       type: 'GET',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       contentType: 'application/json',
