@@ -10,6 +10,18 @@ from models.user import User
 @app_views.route('/proposals/<proposal_id>/answers', methods=['POST'], strict_slashes=False)
 @swag_from('documentation/answer/post_answer.yml')
 def create_answer(proposal_id):
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    user = db_storage.get(User, user_id)
+
+    if user is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
     
     # Test Proposal entity exists
     proposal = db_storage.get(Proposal, proposal_id)
@@ -18,27 +30,6 @@ def create_answer(proposal_id):
         responseObject = {
             'status': 'fail',
             'message': 'Proposal entity not found.'
-        }
-
-        return make_response(jsonify(responseObject), 404)
-
-    data = request.get_json()
-
-    if 'user_id' not in data:
-        responseObject = {
-            'status': 'fail',
-            'message': 'Missing user_id.'
-        }
-
-        return make_response(jsonify(responseObject), 404)
-
-    # Test User entity exists
-    user = db_storage.get(User, data['user_id'])
-
-    if user is None:
-        responseObject = {
-            'status': 'fail',
-            'message': 'User entity not found.'
         }
 
         return make_response(jsonify(responseObject), 404)
