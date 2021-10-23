@@ -1,0 +1,21 @@
+Check if a user can visualize a page.
+---
+tags:
+  - Users
+parameters:
+  - name: page
+    in: path
+    type: string
+    required: true
+    description: The page to check
+responses:
+  404:
+    description: user not found!
+  200:
+    description: request executed successfully
+    schema:
+      properties:
+        status:
+          type: string
+        message:
+          type: string

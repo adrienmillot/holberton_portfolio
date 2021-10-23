@@ -246,3 +246,44 @@ def me():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+@app_views.route('/auth/verify_page', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/verify_page.yml')
+def has_right_to_display_page():
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    user = db_storage.get(User, user_id)
+
+    if user is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    data = request.get_json()
+
+    if 'entrypoint' not in data:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing page entrypoint.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if 'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data['entrypoint'] not in ('app_views.dashboard', 'app_views.profile_show', 'app_views.survey_answer'):
+        responseObject = {
+            'status': 'fail',
+            'message': 'You have not right to display this page.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    responseObject = {
+        'status': 'success',
+        'message': 'You are authorized to display this page.'
+    }
+
+    return make_response(jsonify(responseObject), 200)
