@@ -8,6 +8,7 @@ import bcrypt
 from os import getenv
 from api.v1.views import app_views
 from api.v1.views.surveys import surveys_list
+import json
 from models.category import Category
 from models.proposal import Proposal
 from models.question import Question
@@ -264,8 +265,9 @@ def survey_questions_score(survey_id):
         if key not in questions_user_score:
             questions_user_score.update({key: 0})
 
-    survey.max_score = questions_max_score
-    survey.user_score = questions_user_score
+    survey.labels = list(questions_max_score.keys())
+    survey.max_scores = list(questions_max_score.values())
+    survey.user_scores = list(questions_user_score.values())
 
     if user_id is None:
         responseObject = {

@@ -259,8 +259,9 @@ def all_survey_user_score():
 
     responseObject = {
         'status': 'succes',
-        'max_score': all_max_score,
-        'user_score': all_user_score
+        'labels': list(all_max_score.keys()),
+        'max_score': list(all_max_score.values()),
+        'user_score': list(all_user_score.values())
     }
 
     return make_response(jsonify(responseObject), 200)
