@@ -5,7 +5,7 @@
  const getCategoriesListPage = function () {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/categories',
+		url: 'https://ss-api.2835holberton.tech/api/v1/categories',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -144,7 +144,7 @@ function btncategoryDeleteEvent() {
 function deleteActionCategory(id) {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/categories/' + id,
+		url: 'https://ss-api.2835holberton.tech/api/v1/categories/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

@@ -3,7 +3,7 @@ const createCategory = function (name) {
 	let obj = { name: name }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/categories',
+		url: 'https://ss-api.2835holberton.tech/api/v1/categories',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,

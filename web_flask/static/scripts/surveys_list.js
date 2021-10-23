@@ -5,7 +5,7 @@
 const getSurveysListPage = function () {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/surveys',
+		url: 'https://ss-api.2835holberton.tech/api/v1/surveys',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -143,7 +143,7 @@ function btnSurveyDeleteEvent() {
 function deleteActionSurvey(id) {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/surveys/' + id,
+		url: 'https://ss-api.2835holberton.tech/api/v1/surveys/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

@@ -3,7 +3,7 @@ const createSurvey = function (name) {
 	let obj = { name: name }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/surveys',
+		url: 'https://ss-api.2835holberton.tech/api/v1/surveys',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,

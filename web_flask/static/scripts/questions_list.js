@@ -5,7 +5,7 @@
  const getQuestionsListPage = function () {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/questions',
+		url: 'https://ss-api.2835holberton.tech/api/v1/questions',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -94,7 +94,7 @@ function GetSurveyNameForQuestion(id) {
 	let name = "";
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/surveys/' + id,
+		url: 'https://ss-api.2835holberton.tech/api/v1/surveys/' + id,
 		type:'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
@@ -121,7 +121,7 @@ function GetSurveyNameForQuestion(id) {
 function GetCategoryNameForQuestion(id) {
 	let name = ""
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/categories/' + id,
+		url: 'https://ss-api.2835holberton.tech/api/v1/categories/' + id,
 		type:'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
@@ -200,7 +200,7 @@ function btnQuestionDeleteEvent() {
 function deleteActionQuestion(id) {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/questions/' + id,
+		url: 'https://ss-api.2835holberton.tech/api/v1/questions/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

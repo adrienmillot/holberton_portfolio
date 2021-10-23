@@ -5,7 +5,7 @@
  const getCategoryList = function () {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/categories',
+		url: 'https://ss-api.2835holberton.tech/api/v1/categories',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -44,7 +44,7 @@ function categoryOption(category) {
  const getSurveysForCreateQuestion = function () {
 
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/surveys',
+		url: 'https://ss-api.2835holberton.tech/api/v1/surveys',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -81,7 +81,7 @@ const createQuestion = function (label, category_id, survey_id) {
 	let obj = { label: label, category_id: category_id, survey_id: survey_id }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'http://ss-api.2835holberton.tech/api/v1/questions',
+		url: 'https://ss-api.2835holberton.tech/api/v1/questions',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,

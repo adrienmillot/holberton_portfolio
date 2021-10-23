@@ -11,7 +11,7 @@ $(document).ready(function () {
 			}
 		});
 
-		$.get('http://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id, function (data) {
+		$.get('https://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id, function (data) {
       btn_delete = profileDeleteButton(data);
       btn_edit = profileEditButton(data);
       bts = $('<div class="btn-group float-right profile"></div>').append(btn_edit).append(btn_delete);

@@ -7,7 +7,7 @@ const editUser = function (username, password, user_id) {
     const json_data = JSON.stringify(obj);
   
     $.ajax({
-      url: 'http://ss-api.2835holberton.tech/api/v1/users/' + user_id,
+      url: 'https://ss-api.2835holberton.tech/api/v1/users/' + user_id,
       type: 'PUT',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       data: json_data,
@@ -25,7 +25,7 @@ const editUser = function (username, password, user_id) {
 
   const setUserAttributes = function (user_id) {
     $.ajax({
-      url: 'http://ss-api.2835holberton.tech/api/v1/users/' + user_id,
+      url: 'https://ss-api.2835holberton.tech/api/v1/users/' + user_id,
       type: 'GET',
       headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
       contentType: 'application/json',

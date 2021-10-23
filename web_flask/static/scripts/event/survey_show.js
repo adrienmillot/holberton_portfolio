@@ -10,7 +10,7 @@ $(document).ready(function () {
 			}
 		});
 
-		$.get('http://ss-api.2835holberton.tech/api/v1/surveys/' + survey_id, function (data) {
+		$.get('https://ss-api.2835holberton.tech/api/v1/surveys/' + survey_id, function (data) {
       btn_delete = surveyDeleteButton(data);
       btn_edit = surveyEditButton(data);
       bts = $('<div class="btn-group float-right survey"></div>').append(btn_edit).append(btn_delete);

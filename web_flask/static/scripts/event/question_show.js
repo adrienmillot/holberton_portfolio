@@ -10,7 +10,7 @@ $(document).ready(function () {
 			}
 		});
 
-		$.get('http://ss-api.2835holberton.tech/api/v1/questions/' + question_id, function (data) {
+		$.get('https://ss-api.2835holberton.tech/api/v1/questions/' + question_id, function (data) {
       btn_delete = questionDeleteButton(data);
       btn_edit = questionEditButton(data);
       bts = $('<div class="btn-group float-right question"></div>').append(btn_edit).append(btn_delete);
@@ -21,12 +21,12 @@ $(document).ready(function () {
       $labels = $('<div id="labels"></div>');
       $('body > .container-fluid').append($labels);
 
-      $.get('http://ss-api.2835holberton.tech/api/v1/categories/' + data.category_id, function (data) {
+      $.get('https://ss-api.2835holberton.tech/api/v1/categories/' + data.category_id, function (data) {
         $label = $('<span></span>').attr('class', 'badge badge-secondary mr-1').text(data.name)
         $labels.append($label)
       });
 
-      $.get('http://ss-api.2835holberton.tech/api/v1/surveys/' + data.survey_id, function (data) {
+      $.get('https://ss-api.2835holberton.tech/api/v1/surveys/' + data.survey_id, function (data) {
         $label = $('<span></span>').attr('class', 'badge badge-info').text(data.name)
         $labels.append($label)
       });
