@@ -151,6 +151,7 @@ def update_survey(survey_id):
     return make_response(jsonify(survey.to_dict()), 200)
 
 @app_views.route('/surveys/unanswered', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/unanswered_survey.yml')
 def unanswered_survey():
     """
         List all unanswered survey for a specified user.
