@@ -26,7 +26,8 @@ def before_request():
         'app_views.login',
         'flasgger.apidocs',
         'flasgger.static',
-        'flasgger.apispec_1'
+        'flasgger.apispec_1',
+        'app_views.status'
     ) or request.method == 'OPTIONS':
         return
 
