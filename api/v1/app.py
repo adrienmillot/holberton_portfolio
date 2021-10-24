@@ -20,8 +20,13 @@ cors = CORS(app, resources={r"/api/v1/*": {"origins": "*"}})
 def before_request():
     from flask import request
 
+    # return make_response(jsonify(request.endpoint), 200)
+
     if request.endpoint in (
         'app_views.login',
+        'flasgger.apidocs',
+        'flasgger.static',
+        'flasgger.apispec_1'
     ) or request.method == 'OPTIONS':
         return
 
