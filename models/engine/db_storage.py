@@ -8,6 +8,7 @@ from datetime import datetime
 from sqlalchemy.sql.elements import and_
 
 from sqlalchemy.sql.expression import null
+from models import question
 from models.base_model import Base
 from models.category import Category
 from models.profile import Profile
@@ -191,5 +192,14 @@ class DBStorage:
             Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
         query = self.__session.query(Question).with_entities(Survey).join(
             Survey.questions).filter(Question.id.notin_(subquery))
+
+        return query.all()
+
+    def all_question_proposals(self, question_id):
+        """
+            SQL query to retrieve all proposal of a specified question.
+        """
+
+        query = self.__session.query(Proposal).filter(Proposal.question_id == question_id)
 
         return query.all()
