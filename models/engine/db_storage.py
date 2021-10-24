@@ -167,3 +167,29 @@ class DBStorage:
         """
 
         self.__session.commit()
+
+    def random_survey_question(self, survey_id, user_id):
+        """
+            SQL query to retrieve all unanswered questions of
+            a surveys for a specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Question).join(Survey.questions).filter(
+            Question.id.notin_(subquery), Survey.id == survey_id)
+
+        return query.first()
+
+    def unanswered_survey(self, user_id):
+        """
+            SQL query to retrieve all unanswered surveys for a
+            specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Question).with_entities(Survey).join(
+            Survey.questions).filter(Question.id.notin_(subquery))
+
+        return query.all()
