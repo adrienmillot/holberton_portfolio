@@ -31,68 +31,54 @@
 	{{ render_partial('shared/_header.html') }}
 
 	<div class="container-fluid text-center text-md-left">
-		<h1>Dashboard</h1>
 
-		<div class="row mt-5" style="height: 9cm;">
-			<div class="col-sm-5">
-				<div class="card">
-					<div class="card-body" style="height: 8cm;">
-						<h5 class="card-title">Profile</h5>
-						<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-						<section class="infos_user"></section>
-					</div>
-				</div>
-			</div>
+		<h3>{{ survey_name }}</h3>
 
-
-			<div class="col-sm-7">
-				<div class="card overflow-auto">
-					<div class="card-body" style="height: 8cm;">
-						<h5>Survey's To answer</h5>
-						<table class="table table-hover">
-							<thead>
-								<tr>
-									<th scope="col">Click on a survey's name to answer it</th>
-								</tr>
-							</thead>
-
-							<tbody class="survey_to_do_list">
-							</tbody>
-
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
-
-
-		<div class="row badge-success mt-2">
-			<h2>Stats & Graph</h2>
-		</div>
-
-
-		<div class="row mt-5">
-			<div class="col-sm-6">
-				<div class="card">
+		<div class="row mt-5 mb-5">
+			<div class="col-sm">
+				<div class="card shadow-sm mt-5 bg-light rounded">
 					<div class="card-body">
-						<h5 class="card-title">Special title treatment</h5>
+						<h5 class="card-title">Question #1</h5>
 						<p class="card-text">With supporting text below as a natural lead-in to additional content.</p>
-						<a href="#" class="btn btn-primary">Go somewhere</a>
-					</div>
-				</div>
-			</div>
-			<div class="col-sm-6">
-				<div class="card overflow-auto">
-					<div class="card-body">
-						<img
-							src="https://support.content.office.net/fr-fr/media/c957b99e-083e-4443-afc6-c372ea43ed08.png">
 					</div>
 				</div>
 			</div>
 		</div>
 
+		<div class="container-fluid">
+			<div class="row mt-5">
+				<div class="col-sm-5">
+					<p class="proposal_1"><input class="checkbox_answer" type="checkbox" name="checkbox_1"
+							id="checkbox_1" />
+						With supporting text below as a natural lead-in to additional content.</p>
+				</div>
+
+				<div class="col-sm-5">
+					<p class="proposal_2"><input class="checkbox_answer" type="checkbox" name="checkbox_2"
+							id="checkbox_2" />
+						With supporting text below as a natural lead-in to additional content.</p>
+				</div>
+			</div>
+
+			<div class="row mt-5">
+				<div class="col-sm-5">
+					<p class="proposal_3"><input class="checkbox_answer" type="checkbox" name="checkbox_3"
+							id="checkbox_3" />
+						With supporting text below as a natural lead-in to additional content.</p>
+				</div>
+
+				<div class="col-sm-5">
+					<p class="proposal_4"><input class="checkbox_answer" type="checkbox" name="checkbox_4"
+							id="checkbox_4" />
+						With supporting text below as a natural lead-in to additional content.</p>
+				</div>
+			</div>
+		</div>
+		<div class="row mt-5 justify-content-center">
+			<input class="btn btn-warning btn-lg" type="button" value="Answer" name="btn_validate_answer"
+				id="btn_validate_answer">
+		</div>
 	</div>
-
 	{{ render_partial('shared/_footer.html') }}
 </body>
 

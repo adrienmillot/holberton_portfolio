@@ -7,12 +7,16 @@ from math import ceil
 import bcrypt
 from os import getenv
 from api.v1.views import app_views
+from api.v1.views.surveys import surveys_list
 from models.category import Category
+from models.proposal import Proposal
 from models.question import Question
+from models.user import User
 from models.survey import Survey
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
+from sqlalchemy.orm import session
 
 
 @app_views.route('/questions', methods=['GET'], strict_slashes=False)
@@ -187,5 +191,26 @@ def update_question(question_id):
         if key not in ignore:
             setattr(question, key, value)
     db_storage.save()
+
+    return make_response(jsonify(question.to_dict()), 200)
+
+
+@app_views.route('/surveys/<survey_id>/question', methods=['GET'], strict_slashes=False)
+def survey_question(survey_id):
+    """
+        Show unanswered question of a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    question = db_storage.random_survey_question(survey_id, user_id)
+
+    if not question:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Question entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
 
     return make_response(jsonify(question.to_dict()), 200)
