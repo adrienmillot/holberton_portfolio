@@ -11,4 +11,4 @@ from flasgger.utils import swag_from
 @swag_from('documentation/common/status.yml')
 def status():
     """ Status of API """
-    return jsonify({"status": "OK"})
+    return jsonify({"status": "OK"}, 200)
