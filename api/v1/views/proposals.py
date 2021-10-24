@@ -167,3 +167,31 @@ def update_proposal(proposal_id):
     db_storage.save()
 
     return make_response(jsonify(proposal.to_dict()), 200)
+
+@app_views.route('/questions/<question_id>/proposals', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/question_proposals.yml')
+def question_proposals(question_id):
+    """
+        List all proposals for a specified question.
+    """
+    proposals = db_storage.all_question_proposals(question_id)
+
+    if not proposals:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Proposal list not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    list_proposals = []
+
+    for survey in proposals:
+        list_proposals.append(survey.to_dict())
+
+    responseObject = {
+        'status': 'success',
+        'results': list_proposals
+    }
+
+    return make_response(jsonify(list_proposals), 200)

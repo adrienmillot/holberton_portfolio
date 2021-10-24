@@ -196,6 +196,7 @@ def update_question(question_id):
 
 
 @app_views.route('/surveys/<survey_id>/question', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/unanswered_question.yml')
 def survey_question(survey_id):
     """
         Show unanswered question of a survey for a specified user.
