@@ -6,6 +6,7 @@
 from api.v1.views import app_views
 from math import ceil
 from models.survey import Survey
+from models.user import User
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
@@ -148,3 +149,33 @@ def update_survey(survey_id):
     db_storage.save()
 
     return make_response(jsonify(survey.to_dict()), 200)
+
+@app_views.route('/surveys/unanswered', methods=['GET'], strict_slashes=False)
+def unanswered_survey():
+    """
+        List all unanswered survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    surveys = db_storage.unanswered_survey(user_id)
+
+    if not surveys:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey list not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    list_surveys = []
+
+    for survey in surveys:
+        list_surveys.append(survey.to_dict())
+
+    responseObject = {
+        'status': 'success',
+        'results': list_surveys
+    }
+
+    return make_response(jsonify(list_surveys), 200)
