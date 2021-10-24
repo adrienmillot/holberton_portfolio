@@ -4,6 +4,7 @@
 """
 
 from api.v1.views import app_views
+from math import ceil
 from models.proposal import Proposal
 from models.question import Question
 from models import db_storage
@@ -78,7 +79,7 @@ def delete_proposal(proposal_id):
 
         return make_response(jsonify(responseObject), 404)
 
-    db_storage.delete(proposal)
+    proposal.delete()
     db_storage.save()
 
     return make_response(jsonify({}), 200)
