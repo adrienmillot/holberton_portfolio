@@ -24,10 +24,10 @@ def before_request():
 
     if request.endpoint in (
         'app_views.login',
+        'app_views.status',
         'flasgger.apidocs',
         'flasgger.static',
         'flasgger.apispec_1',
-        'app_views.status'
     ) or request.method == 'OPTIONS':
         return
 
