@@ -4,7 +4,7 @@ const editProposal = function (label, proposal_id) {
 	const json_data = JSON.stringify(obj);
   
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/proposals/' + proposal_id,
+	  url: 'http://0.0.0.0:5002/api/v1/proposals/' + proposal_id,
 	  type: 'PUT',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  data: json_data,
@@ -22,7 +22,7 @@ const editProposal = function (label, proposal_id) {
   
   const setProposalLabel = function (proposal_id) {
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/proposals/' + proposal_id,
+	  url: 'http://0.0.0.0:5002/api/v1/proposals/' + proposal_id,
 	  type: 'GET',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  contentType: 'application/json',

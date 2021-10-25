@@ -4,7 +4,7 @@
 $(document).ready(function () {
 
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/status',
+		url: 'http://0.0.0.0:5002/api/v1/status',
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function () {

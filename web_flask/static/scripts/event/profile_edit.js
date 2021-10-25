@@ -4,7 +4,7 @@ const editProfile = function (first_name, last_name, gender , profile_id) {
 	const json_data = JSON.stringify(obj);
   
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id,
+	  url: 'http://0.0.0.0:5002/api/v1/profiles/' + profile_id,
 	  type: 'PUT',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  data: json_data,
@@ -22,7 +22,7 @@ const editProfile = function (first_name, last_name, gender , profile_id) {
   
   const setProfileFirstName = function (profile_id) {
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id,
+	  url: 'http://0.0.0.0:5002/api/v1/profiles/' + profile_id,
 	  type: 'GET',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  contentType: 'application/json',
@@ -35,7 +35,7 @@ const editProfile = function (first_name, last_name, gender , profile_id) {
 
   const setProfileLastName = function (profile_id) {
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id,
+	  url: 'http://0.0.0.0:5002/api/v1/profiles/' + profile_id,
 	  type: 'GET',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  contentType: 'application/json',
@@ -48,7 +48,7 @@ const editProfile = function (first_name, last_name, gender , profile_id) {
 
   const setProfileGender = function (profile_id) {
 	$.ajax({
-	  url: 'https://ss-api.2835holberton.tech/api/v1/profiles/' + profile_id,
+	  url: 'http://0.0.0.0:5002/api/v1/profiles/' + profile_id,
 	  type: 'GET',
 	  headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 	  contentType: 'application/json',

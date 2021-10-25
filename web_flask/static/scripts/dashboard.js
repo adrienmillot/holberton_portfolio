@@ -1,6 +1,6 @@
 const getProfile = function () {
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/profiles',
+		url: 'http://0.0.0.0:5002/api/v1/profiles',
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 
@@ -51,12 +51,11 @@ function UserProfile(element) {
 const getSurveysToDo = function () {
 
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/surveys',
+		url: 'http://0.0.0.0:5002/api/v1/surveys/unanswered',
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		success: function (response) {
-
-			SurveyToDOList(response.results);
+			SurveyToDOList(response);
 			$('.survey_to').click(function () {
 				survey_id = $(this).attr('data-id');
 				survey_name = $(this).attr('data-name');

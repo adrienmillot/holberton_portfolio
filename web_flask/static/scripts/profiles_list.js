@@ -5,7 +5,7 @@
  const getProfilesListPage = function () {
 
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/profiles',
+		url: 'http://0.0.0.0:5002/api/v1/profiles',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -144,7 +144,7 @@ function btnProfileDeleteEvent() {
 function deleteActionProfile(id) {
 
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/profiles/' + id,
+		url: 'http://0.0.0.0:5002/api/v1/profiles/' + id,
 		type: 'DELETE',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {

@@ -47,5 +47,5 @@ def survey_edit(survey_id):
 def answer_survey(survey_id, survey_name):
     """
 		return survey anwer page
-    """
+    """  
     return render_template('/answer.html', survey_id=survey_id, survey_name=survey_name)

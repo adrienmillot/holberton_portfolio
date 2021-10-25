@@ -3,7 +3,7 @@ const createProfile = function (first_name, last_name, gender) {
 	let obj = { first_name: first_name, last_name: last_name, gender: gender }
 	let json_data = JSON.stringify(obj)
 	$.ajax({
-		url: 'https://ss-api.2835holberton.tech/api/v1/profiles',
+		url: 'http://0.0.0.0:5002/api/v1/profiles',
 		type: 'POST',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: json_data,
