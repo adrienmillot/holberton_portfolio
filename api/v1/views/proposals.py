@@ -170,7 +170,7 @@ def update_proposal(proposal_id):
     return make_response(jsonify(proposal.to_dict()), 200)
 
 @app_views.route('/questions/<question_id>/proposals', methods=['GET'], strict_slashes=False)
-@swag_from('documentation/survey/question_proposals.yml')
+@swag_from('documentation/proposal/question_proposals.yml')
 def question_proposals(question_id):
     """
         List all proposals for a specified question.
