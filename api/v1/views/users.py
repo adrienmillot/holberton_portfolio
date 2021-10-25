@@ -81,7 +81,7 @@ def delete_user(user_id):
 
         return make_response(jsonify(responseObject), 404)
 
-    db_storage.delete(user)
+    user.delete()
     db_storage.save()
 
     return make_response(jsonify({}), 200)
