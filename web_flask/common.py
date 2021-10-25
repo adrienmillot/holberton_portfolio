@@ -33,6 +33,12 @@ def login():
     return render_template('login.html')
 
 
+@app.route('/about', strict_slashes=False)
+def about():
+    """return about page"""
+    return render_template('about.html')
+
+
 # @app.route('/sign_up', methods=['POST', 'GET'], strict_slashes=False)
 # def sign_up():
 #     """ return sign_up page """

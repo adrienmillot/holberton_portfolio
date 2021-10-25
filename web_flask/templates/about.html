@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>Survey Storm</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+    crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+    crossorigin="anonymous"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+
+  <link rel="stylesheet" type="text/css" href="../static/styles/footer.css">
+  <link rel="stylesheet" type="text/css" href="../static/styles/common.css">
+  <link rel="stylesheet" type="text/css" href="../static/styles/about.css">
+
+  <script type="text/javascript" src="../static/scripts/event/API_status.js"></script>
+  <script type="text/javascript" src="../static/scripts/event/log_out.js"></script>
+  <script type="text/javascript" src="../static/scripts/event/login_btn.js"></script>
+
+  <link rel="icon" href="/favicon.ico" />
+
+</head>
+
+<body>
+  {{ render_partial('shared/_header.html') }}
+
+  <div class="container pt-5">
+    <div class="row">
+      <h2>Where do we get our inspiration ?</h3>
+      <p></p>
+    </div>
+    <div class="row">
+      <h2>How is the development of Survey Storm organized ?</h3>
+      <p></p>
+    </div>
+    <div class="row">
+      <h2 class="col-12 pl-0">Team</h3>
+      <div class="col-4 text-center mt-5">
+        <img class="rounded-circle mb-3" src="https://avatars.githubusercontent.com/u/77839963?v=4" alt="Generic placeholder image" width="140" height="140">
+        <h3>Nathan LAPEYRE</h2>
+        <h4>PEBKAC Engineer</h4>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="" target="_blank"><img class="LinkedIn" src="static/images/294671_linkedin_icon.png" /></a></li>
+          <li class="list-inline-item"><a href="https://github.com/Sarolus" target="_blank"><img class="Github" src="static/images/298818_logo_github_icon.png" /></a></li>
+        </ul>
+      </div>
+      <div class="col-4 text-center mt-5">
+        <img class="rounded-circle mb-3" src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==" alt="Generic placeholder image" width="140" height="140">
+        <h3>Simon BRARD</h2>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="" target="_blank"><img class="LinkedIn" src="static/images/294671_linkedin_icon.png" /></a></li>
+          <li class="list-inline-item"><a href="https://github.com/SimonBR017" target="_blank"><img class="Github" src="static/images/298818_logo_github_icon.png" /></a></li>
+        </ul>
+      </div>
+      <div class="col-4 text-center mt-5">
+        <img class="rounded-circle mb-3" src="https://avatars.githubusercontent.com/u/12208362?v=4" alt="Generic placeholder image" width="140" height="140">
+        <h3>Adrien MILLOT</h2>
+        <ul class="list-inline">
+          <li class="list-inline-item"><a href="" target="_blank"><img class="LinkedIn" src="static/images/294671_linkedin_icon.png" /></a></li>
+          <li class="list-inline-item"><a href="https://github.com/adrienmillot" target="_blank"><img class="Github" src="static/images/298818_logo_github_icon.png" /></a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  {{ render_partial('shared/_footer.html') }}
+</body>
+
+</html>
