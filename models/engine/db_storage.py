@@ -70,8 +70,8 @@ class DBStorage:
                 if limit is not None:
                     query = query.limit(limit)
 
-                if page is not None:
-                    query = query.offset(page*limit)
+                if page is not None and page > 0:
+                    query = query.offset((page - 1) * limit)
 
                 objs = query.all()
                 for obj in objs:
@@ -180,7 +180,7 @@ class DBStorage:
         query = self.__session.query(Question).join(Survey.questions).filter(
             Question.id.notin_(subquery), Survey.id == survey_id)
 
-        return query.first()
+        return (query.count(), query.first())
 
     def unanswered_survey(self, user_id):
         """

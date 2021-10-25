@@ -214,4 +214,10 @@ def survey_question(survey_id):
 
         return make_response(jsonify(responseObject), 404)
 
-    return make_response(jsonify(question.to_dict()), 200)
+    responseObject = {
+        'status': 'success',
+        'result': question[1].to_dict(),
+        'count': question[0]
+    }
+
+    return make_response(jsonify(responseObject), 200)

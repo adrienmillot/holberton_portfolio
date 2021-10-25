@@ -176,7 +176,8 @@ def unanswered_survey():
 
     responseObject = {
         'status': 'success',
-        'results': list_surveys
+        'results': list_surveys,
+        'count': len(list_surveys)
     }
 
-    return make_response(jsonify(list_surveys), 200)
+    return make_response(jsonify(responseObject), 200)
