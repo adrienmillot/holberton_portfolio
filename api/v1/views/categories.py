@@ -19,11 +19,20 @@ def categories_list():
         or a specific category.
     """
 
-    data = request.get_json()
     count = db_storage.count(Category)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
+    if page is not None:
+        page = int(page)
+        deviation = page - page_count
+        page = abs(deviation) + 1
+
     all_categories = db_storage.all(Category, page=page, limit=limit).values()
     list_categories = []
 
