@@ -20,11 +20,20 @@ def proposals_list():
         or a specific proposal.
     """
 
-    data = request.get_json()
     count = db_storage.count(Proposal)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
+    if page is not None:
+        page = int(page)
+        deviation = page - page_count
+        page = abs(deviation) + 1
+
     all_proposals = db_storage.all(Proposal, page=page, limit=limit).values()
     list_proposals = []
 
@@ -168,6 +177,7 @@ def update_proposal(proposal_id):
     db_storage.save()
 
     return make_response(jsonify(proposal.to_dict()), 200)
+
 
 @app_views.route('/questions/<question_id>/proposals', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/proposal/question_proposals.yml')

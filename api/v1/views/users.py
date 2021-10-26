@@ -22,11 +22,20 @@ def users_list():
         or a specific user.
     """
 
-    data = request.get_json()
     count = db_storage.count(User)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
+    if page is not None:
+        page = int(page)
+        deviation = page - page_count
+        page = abs(deviation) + 1
+
     all_users = db_storage.all(User, page=page, limit=limit).values()
     list_users = []
 
@@ -194,7 +203,8 @@ def login():
 
             return make_response(jsonify(responseObject), 400)
 
-        user = db_storage.get_from_attributes(User, username=post_data.get('username'))
+        user = db_storage.get_from_attributes(
+            User, username=post_data.get('username'))
 
         if user is None:
             responseObject = {
@@ -224,6 +234,7 @@ def login():
     except Exception as exception:
         return make_response(jsonify(exception.args[0]), 500)
 
+
 @app_views.route('/me', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/user/me.yml')
 def me():
@@ -246,6 +257,7 @@ def me():
     }
 
     return make_response(jsonify(responseObject), 200)
+
 
 @app_views.route('/auth/verify_page', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/user/verify_page.yml')
