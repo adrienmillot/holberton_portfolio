@@ -25,7 +25,6 @@ const getQuestionsListPage = function (page) {
 			}
 		},
 		success: function (response) {
-			console.log(response.page_count, parseInt(page))
 			questionList(response.results);
 			buildPaginationBtns(response.page_count, parseInt(page))
 		}
@@ -37,8 +36,6 @@ const getQuestionsListPage = function (page) {
  * Generate next link
  */
 function buildPaginationBtns(page_count, page) {
-	console.log("page:", page)
-	console.log("page_count:", page_count)
 	if (page === 1 || page === undefined) {
 		var previousBtnDisable = 'disabled'
 	} else {
@@ -55,10 +52,8 @@ function buildPaginationBtns(page_count, page) {
 	for (i = 1; i <= page_count; i++) {
 		$('ul.pagination').append($(' <li class="page-item"></li>').append(NavigationBtn(i)))
 		var linkAction = $('a#' + i + '.page-link')
-		console.log(linkAction)
 		linkAction.click(function () {
 			new_page = $(this).attr('data-id')
-			console.log("redirect to same page, with page = ", new_page)
 			window.location = '/questions?page=' + new_page
 		})
 	}
@@ -288,7 +283,6 @@ $(document).ready(function () {
 	var url = window.location.pathname;
 	var url_splitted = url.split('/');
 	var page = $('#page_argument').val()
-	console.log(page)
 	if (url_splitted[1] == 'questions') {
 		getQuestionsListPage(page);
 	}
