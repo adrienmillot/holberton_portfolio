@@ -26,6 +26,7 @@
 
   <body>
     {{ render_partial('shared/_header.html') }}
+    <input id="page_argument" name="page" type="hidden" value="{{ page }}" />
     <div class='container-fluid pt-5'>
       <h1 class="mb-5">Questions<input class="btn btn-success btn-lg float-right" type="button" value="Create Question"
         onclick="window.location.href = '/questions/create';"></h1>
