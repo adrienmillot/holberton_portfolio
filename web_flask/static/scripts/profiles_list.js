@@ -2,12 +2,15 @@
  * get request to api to get all Profiles
  */
 
- const getProfilesListPage = function () {
+ const getProfilesListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/profiles',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -23,9 +26,57 @@
 		},
 		success: function (response) {
 			profileList(response.results);
+			buildPaginationBtnsProfile(response.page_count, parseInt(page))
+
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+ function buildPaginationBtnsProfile(page_count, page) {
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul#profile_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnProfile" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul#profile_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnProfile(i)))
+		var linkAction = $('a#' + i + '_profile.page-link')
+		linkAction.click(function () {
+			new_page = $(this).attr('data-id')
+			window.location = '/profiles?page=' + new_page
+		})
+	}
+	$('ul#profile_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnProfile">Next</a></li>')
+	$('a#prevBtnProfile.page-link').click(function () {
+		if (page !== 1) {
+			window.location = '/profiles?page=' + (page - 1)
+		}
+	});
+	$('a#nextBtnProfile.page-link').click(function () {
+		if (page !== page_count) {
+			window.location = '/profiles?page=' + (page + 1)
+		}
+	})
+	}
+
+
+function NavigationBtnProfile(i) {
+	return $('<a class="page-link" id="' + i + '_profile">' + i + '</a>').attr('data-id', i)
+}
+
+
 
 /**
  * Generate DOM for show button.
@@ -175,5 +226,6 @@ function MessageConfirmationDeleteProfile() {
 }
 
 $(document).ready(function () {
-  getProfilesListPage();
+	var page = $('#page_argument_profile').val()
+	getProfilesListPage(page);
 });

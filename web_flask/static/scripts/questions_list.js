@@ -26,7 +26,7 @@ const getQuestionsListPage = function (page) {
 		},
 		success: function (response) {
 			questionList(response.results);
-			buildPaginationBtns(response.page_count, parseInt(page))
+			buildPaginationBtnsQuestion(response.page_count, parseInt(page))
 		}
 	});
 }
@@ -35,7 +35,7 @@ const getQuestionsListPage = function (page) {
  * Generate i times pagination links
  * Generate next link
  */
-function buildPaginationBtns(page_count, page) {
+function buildPaginationBtnsQuestion(page_count, page) {
 	if (page === 1 || page === undefined) {
 		var previousBtnDisable = 'disabled'
 	} else {
@@ -47,23 +47,23 @@ function buildPaginationBtns(page_count, page) {
 		var nextBtnDisable = ''
 	}
 
-	$('ul.pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtn" tabindex="-1" aria-disabled="true">Previous</a></li>')
+	$('ul#question_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnQuestion" tabindex="-1" aria-disabled="true">Previous</a></li>')
 
 	for (i = 1; i <= page_count; i++) {
-		$('ul.pagination').append($(' <li class="page-item"></li>').append(NavigationBtn(i)))
-		var linkAction = $('a#' + i + '.page-link')
+		$('ul#question_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnQuestion(i)))
+		var linkAction = $('a#' + i + '_question.page-link')
 		linkAction.click(function () {
 			new_page = $(this).attr('data-id')
 			window.location = '/questions?page=' + new_page
 		})
 	}
-	$('ul.pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtn">Next</a></li>')
-	$('a#prevBtn.page-link').click(function () {
+	$('ul#question_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnQuestion">Next</a></li>')
+	$('a#prevBtnQuestion.page-link').click(function () {
 		if (page !== 1) {
 			window.location = '/questions?page=' + (page - 1)
 		}
 	});
-	$('a#nextBtn.page-link').click(function () {
+	$('a#nextBtnQuestion.page-link').click(function () {
 		if (page !== page_count) {
 			window.location = '/questions?page=' + (page + 1)
 		}
@@ -71,8 +71,8 @@ function buildPaginationBtns(page_count, page) {
 	}
 
 
-function NavigationBtn(i) {
-	return $('<a class="page-link" id="' + i + '">' + i + '</a>').attr('data-id', i)
+function NavigationBtnQuestion(i) {
+	return $('<a class="page-link" id="' + i + '_question">' + i + '</a>').attr('data-id', i)
 }
 
 
@@ -282,7 +282,7 @@ function MessageConfirmationQuestion() {
 $(document).ready(function () {
 	var url = window.location.pathname;
 	var url_splitted = url.split('/');
-	var page = $('#page_argument').val()
+	var page = $('#page_argument_question').val()
 	if (url_splitted[1] == 'questions') {
 		getQuestionsListPage(page);
 	}

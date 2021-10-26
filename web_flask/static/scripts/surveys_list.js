@@ -2,12 +2,15 @@
  * get request to api to get all surveys
  */
 
-const getSurveysListPage = function () {
+const getSurveysListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/surveys',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -23,9 +26,57 @@ const getSurveysListPage = function () {
 		},
 		success: function (response) {
 			surveyList(response.results);
+			buildPaginationBtnsSurvey(response.page_count, parseInt(page))
+
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+ function buildPaginationBtnsSurvey(page_count, page) {
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul#survey_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnSurvey" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul#survey_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnSurvey(i)))
+		var linkAction = $('a#' + i + '_survey.page-link')
+		linkAction.click(function () {
+			new_page = $(this).attr('data-id')
+			window.location = '/surveys?page=' + new_page
+		})
+	}
+	$('ul#survey_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnSurvey">Next</a></li>')
+	$('a#prevBtnSurvey.page-link').click(function () {
+		if (page !== 1) {
+			window.location = '/surveys?page=' + (page - 1)
+		}
+	});
+	$('a#nextBtnSurvey.page-link').click(function () {
+		if (page !== page_count) {
+			window.location = '/surveys?page=' + (page + 1)
+		}
+	})
+	}
+
+
+function NavigationBtnSurvey(i) {
+	return $('<a class="page-link" id="' + i + '_survey">' + i + '</a>').attr('data-id', i)
+}
+
+
 
 /**
  * Generate DOM for show button.
@@ -174,5 +225,6 @@ function MessageConfirmationDeleteSurvey() {
 }
 
 $(document).ready(function () {
-  getSurveysListPage();
+	var page = $('#page_argument_survey').val()
+	getSurveysListPage(page);
 });

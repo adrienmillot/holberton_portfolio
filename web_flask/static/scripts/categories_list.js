@@ -2,12 +2,15 @@
  * get request to api to get all categorys
  */
 
- const getCategoriesListPage = function () {
+ const getCategoriesListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -23,9 +26,55 @@
 		},
 		success: function (response) {
 			categoryListForCategory(response.results);
+			buildPaginationBtnsCategory(response.page_count, parseInt(page))
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+ function buildPaginationBtnsCategory(page_count, page) {
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul#category_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnCategory" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul#category_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnCategory(i)))
+		var linkAction = $('a#' + i + '_category.page-link')
+		linkAction.click(function () {
+			new_page = $(this).attr('data-id')
+			window.location = '/categories?page=' + new_page
+		})
+	}
+	$('ul#category_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnCategory">Next</a></li>')
+	$('a#prevBtnCategory.page-link').click(function () {
+		if (page !== 1) {
+			window.location = '/categories?page=' + (page - 1)
+		}
+	});
+	$('a#nextBtnCategory.page-link').click(function () {
+		if (page !== page_count) {
+			window.location = '/categories?page=' + (page + 1)
+		}
+	})
+	}
+
+
+function NavigationBtnCategory(i) {
+	return $('<a class="page-link" id="' + i + '_category">' + i + '</a>').attr('data-id', i)
+}
+
 
 /**
  * Generate DOM for show button.
@@ -180,5 +229,6 @@ function MessageConfirmationDeleteCategory() {
 
 
 $(document).ready(function () {
-	getCategoriesListPage();
+	var page = $('#page_argument_category').val()
+	getCategoriesListPage(page);
 });

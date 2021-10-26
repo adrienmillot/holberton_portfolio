@@ -4,7 +4,7 @@
 """
 
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from web_flask import app
 
 
@@ -13,8 +13,8 @@ def surveys_list():
     """
         return list of the surveys page
     """
-
-    return render_template('/surveys/surveys_list.html')
+    page = request.args.get('page', 1)
+    return render_template('/surveys/surveys_list.html', page=page)
 
 
 @app.route('/surveys/create', methods=['GET', 'POST'], strict_slashes=False)

@@ -2,12 +2,15 @@
  * get request to api to get all users
  */
 
- const getUsersListPage = function () {
+ const getUsersListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/users',
 		type:'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -23,9 +26,57 @@
 		},
 		success: function (response) {
 			userList(response.results);
+			buildPaginationBtnsUser(response.page_count, parseInt(page))
+
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+ function buildPaginationBtnsUser(page_count, page) {
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul#user_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnUser" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul#user_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnUser(i)))
+		var linkAction = $('a#' + i + '_user.page-link')
+		linkAction.click(function () {
+			new_page = $(this).attr('data-id')
+			window.location = '/users?page=' + new_page
+		})
+	}
+	$('ul#user_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnUser">Next</a></li>')
+	$('a#prevBtnUser.page-link').click(function () {
+		if (page !== 1) {
+			window.location = '/users?page=' + (page - 1)
+		}
+	});
+	$('a#nextBtnUser.page-link').click(function () {
+		if (page !== page_count) {
+			window.location = '/users?page=' + (page + 1)
+		}
+	})
+	}
+
+
+function NavigationBtnUser(i) {
+	return $('<a class="page-link" id="' + i + '_user">' + i + '</a>').attr('data-id', i)
+}
+
+
 
 /**
  * Generate DOM for show button.
@@ -178,5 +229,6 @@ function MessageConfirmationDeleteUser() {
 
 
 $(document).ready(function () {
-	getUsersListPage();
+	var page = $('#page_argument_user').val()
+	getUsersListPage(page);
 });

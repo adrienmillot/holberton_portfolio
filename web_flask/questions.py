@@ -13,9 +13,7 @@ def questions_list():
     """
         return list of the questions page
     """
-
     page = request.args.get('page', 1)
-
     return render_template('/questions/questions_list.html', page=page)
 
 
