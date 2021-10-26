@@ -4,7 +4,7 @@
 """
 
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from web_flask import app
 
 
@@ -16,6 +16,7 @@ def questions_list():
 
     return render_template('/questions/questions_list.html')
 
+
 @app.route('/questions/create', methods=['GET', 'POST'], strict_slashes=False)
 def question_create():
     """
@@ -23,6 +24,7 @@ def question_create():
     """
 
     return render_template('/questions/question_create.html')
+
 
 @app.route('/questions/<question_id>/show', methods=['GET'], strict_slashes=False)
 def question_show(question_id):
@@ -32,7 +34,8 @@ def question_show(question_id):
 
     return render_template('/questions/question_show.html')
 
-@app.route('/questions/<question_id>/edit', methods=['GET', 'POST'],strict_slashes=False)
+
+@app.route('/questions/<question_id>/edit', methods=['GET', 'POST'], strict_slashes=False)
 def question_edit(question_id):
     """
         return question edit page

@@ -27,7 +27,7 @@ const getQuestionAnswer = function (survey_id) {
 }
 
 const postProposal = function (proposal_id) {
-	console.log(proposal_id)
+
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/proposals/' + proposal_id + '/answers',
 		type: 'POST',

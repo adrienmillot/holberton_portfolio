@@ -2,12 +2,15 @@
  * get request to api to get all questions
  */
 
- const getQuestionsListPage = function () {
+const getQuestionsListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/questions',
-		type:'GET',
+		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -15,17 +18,59 @@
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
 			}
 		},
 		success: function (response) {
+			console.log(response.page_count, page)
 			questionList(response.results);
+			buildPaginationBtns(response.page_count, page)
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+function buildPaginationBtns(page_count, page) {
+
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul.pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" href="#" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul.pagination').append($(' <li class="page-item"></li>').append(NavigationBtn(i)))
+		var linkAction = $('a#' + i + '.page-link')
+		console.log(linkAction)
+		linkAction.click(function () {
+			next_page = $(this).attr('data-id')
+			console.log("redirect to same page, with page = ", next_page)
+			window.location = '/questions?page=' + next_page
+		})
+	}
+
+	$('ul.pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" href="#">Next</a></li>')
+	
+	
+}
+
+function NavigationBtn(i) {
+	return $('<a class="page-link">' + i + '</a>').attr('data-id', i)
+}
+
 
 /**
  * Generate DOM for show button.
@@ -95,7 +140,7 @@ function GetSurveyNameForQuestion(id) {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/surveys/' + id,
-		type:'GET',
+		type: 'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -105,16 +150,16 @@ function GetSurveyNameForQuestion(id) {
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
 			}
-		}	
+		}
 	})
-	.done( function (data) {
-		name = (data.name);
-	});
+		.done(function (data) {
+			name = (data.name);
+		});
 	return (name);
 }
 
@@ -122,7 +167,7 @@ function GetCategoryNameForQuestion(id) {
 	let name = ""
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
-		type:'GET',
+		type: 'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -132,16 +177,16 @@ function GetCategoryNameForQuestion(id) {
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
 			}
 		}
 	})
-	.done( function (data) {
-		name = (data.name);
-	});
+		.done(function (data) {
+			name = (data.name);
+		});
 	return (name);
 }
 
@@ -167,7 +212,7 @@ function btnQuestionShowEvent() {
 		question_id = $(this).attr('data-id');
 		window.location = '/questions/' + question_id + '/show'
 
-		
+
 	});
 
 }
@@ -190,10 +235,10 @@ function btnQuestionDeleteEvent() {
 	$('.question .btn.delete').click(function () {
 		question_id = $(this).attr('data-id');
 		delet = deleteActionQuestion(question_id);
-		if (delet = true){
+		if (delet = true) {
 			$(this).parent().parent().parent().remove()
-	}
-})
+		}
+	})
 };
 
 
@@ -213,7 +258,7 @@ function deleteActionQuestion(id) {
 					break;
 			}
 		},
-		success: function (data) {		
+		success: function (data) {
 			$(document).ready(function () {
 				$('section.alert_success_delete_question').empty();
 				$('section.alert_success_delete_question').append(MessageConfirmationQuestion())
@@ -234,7 +279,7 @@ $(document).ready(function () {
 	var url = window.location.pathname;
 	var url_splitted = url.split('/');
 
-  if (url_splitted[1] == 'questions') {
-	  getQuestionsListPage();
-  }
+	if (url_splitted[1] == 'questions') {
+		getQuestionsListPage();
+	}
 });
