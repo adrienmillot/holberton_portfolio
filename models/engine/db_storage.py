@@ -67,7 +67,7 @@ class DBStorage:
             if cls is None or cls is class_value or cls is class_name:
                 query = self.__session.query(class_value)
 
-                if limit is not None:
+                if limit is not None :
                     query = query.limit(limit)
 
                 if page is not None and page > 0:
