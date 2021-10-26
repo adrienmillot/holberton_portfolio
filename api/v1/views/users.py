@@ -238,10 +238,15 @@ def login():
 @app_views.route('/me', methods=['GET'], strict_slashes=False)
 @swag_from('documentation/user/me.yml')
 def me():
+    """
+        Return the specified user informations.
+    """
     headers = request.headers
     auth_token = headers['Authorization'].split(' ')[1]
     user_id = User.decode_auth_token(auth_token)
     user = db_storage.get(User, user_id)
+    profile = db_storage.get(Profile, user.profile_id)
+    user.profile = profile.to_dict()
 
     if user is None:
         responseObject = {
@@ -250,10 +255,18 @@ def me():
         }
 
         return make_response(jsonify(responseObject), 404)
+    
+    if profile is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Profile entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
 
     responseObject = {
         'status': 'success',
-        'user': user.to_dict()
+        'user': user.to_dict(),
     }
 
     return make_response(jsonify(responseObject), 200)
