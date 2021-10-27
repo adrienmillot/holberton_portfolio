@@ -6,6 +6,7 @@
 from math import ceil
 from api.v1.views import app_views
 from models.category import Category
+from models.user import User
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
@@ -157,3 +158,29 @@ def update_category(category_id):
     db_storage.save()
 
     return make_response(jsonify(category.to_dict()), 200)
+
+
+@app_views.route('/categories/<category_id>/score', methods=['GET'], strict_slashes=False)
+def category_user_score(category_id):
+    """
+        Show the score on a category for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    category = db_storage.get(Category, category_id)
+
+    max_score = db_storage.max_score(Category, category_id)
+    user_score = db_storage.user_score(Category, category_id, user_id)
+
+    stats = {'max_score': max_score, 'user_score': user_score}
+
+    category.stats = stats
+
+    responseObject = {
+        'status': 'succes',
+        'category': category.to_dict(),
+        'message': 'Your score on this category is {}/{}'.format(user_score, max_score),
+    }
+
+    return make_response(jsonify(responseObject), 200)
