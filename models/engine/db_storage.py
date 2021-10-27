@@ -16,7 +16,7 @@ from models.proposal import Proposal
 from models.question import Question
 from models.survey import Survey
 from models.user import User
-from sqlalchemy import create_engine
+from sqlalchemy import create_engine, func
 from sqlalchemy.orm import session, sessionmaker, scoped_session
 import os
 
@@ -67,7 +67,7 @@ class DBStorage:
             if cls is None or cls is class_value or cls is class_name:
                 query = self.__session.query(class_value)
 
-                if limit is not None :
+                if limit is not None:
                     query = query.limit(limit)
 
                 if page is not None and page > 0:
@@ -172,7 +172,7 @@ class DBStorage:
     def random_survey_question(self, survey_id, user_id):
         """
             SQL query to retrieve all unanswered questions of
-            a surveys for a specified user.
+            a survey for a specified user.
         """
 
         subquery = self.__session.query(Proposal).with_entities(
@@ -200,6 +200,40 @@ class DBStorage:
             SQL query to retrieve all proposal of a specified question.
         """
 
-        query = self.__session.query(Proposal).filter(Proposal.question_id == question_id)
+        query = self.__session.query(Proposal).filter(
+            Proposal.question_id == question_id)
+
+        return query.all()
+
+    def max_score(self, cls, id):
+        """
+            SQL query to retrieve the maximum score for a specified model.
+        """
+
+        query = self.__session.query(Question).join(
+            cls.questions).filter(cls.id == id)
+
+        return query.count()
+
+    def user_score(self, cls, id, user_id):
+        """
+            SQL query to retrieve all valid answers for
+            a specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(Question).join(cls.questions).filter(
+            Question.id.in_(subquery), cls.id == id)
+
+        return query.count()
+
+    def all_max_score(self, cls):
+        """
+            SQL query to retrieve all maximum score for a specified model.
+        """
+
+        query = self.__session.query(func.count(Question.id)).join(
+            cls.questions).group_by(Question.category_id)
 
         return query.all()
