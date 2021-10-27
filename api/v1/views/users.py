@@ -255,7 +255,7 @@ def me():
         }
 
         return make_response(jsonify(responseObject), 404)
-    
+
     if profile is None:
         responseObject = {
             'status': 'fail',
@@ -288,9 +288,9 @@ def has_right_to_display_page():
 
         return make_response(jsonify(responseObject), 404)
 
-    data = request.get_json()
+    data = request.args.get('entrypoint', None)
 
-    if 'entrypoint' not in data:
+    if data is not 'entrypoint':
         responseObject = {
             'status': 'fail',
             'message': 'Missing page entrypoint.'
@@ -298,7 +298,10 @@ def has_right_to_display_page():
 
         return make_response(jsonify(responseObject), 400)
 
-    if 'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data['entrypoint'] not in ('app_views.dashboard', 'app_views.profile_show', 'app_views.survey_answer'):
+    if (
+        'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data == 'entrypoint' not in (
+            '/', '/login', '/logout', '/answers')
+    ):
         responseObject = {
             'status': 'fail',
             'message': 'You have not right to display this page.'
