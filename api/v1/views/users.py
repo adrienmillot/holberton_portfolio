@@ -300,7 +300,7 @@ def has_right_to_display_page():
 
     if (
         'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data == 'entrypoint' not in (
-            '/', '/login', '/logout', '/answers')
+            '/', '/login', '/logout', '/answers', '/dashboard')
     ):
         responseObject = {
             'status': 'fail',
