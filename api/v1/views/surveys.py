@@ -191,3 +191,29 @@ def unanswered_survey():
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/surveys/<survey_id>/score', methods=['GET'], strict_slashes=False)
+def survey_user_score(survey_id):
+    """
+        Show the score on a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    survey = db_storage.get(Survey, survey_id)
+
+    max_score = db_storage.max_score(Survey, survey_id)
+    user_score = db_storage.user_score(Survey, survey_id, user_id)
+
+    stats = {'max_score': max_score, 'user_score': user_score}
+
+    survey.stats = stats
+
+    responseObject = {
+        'status': 'succes',
+        'survey': survey.to_dict(),
+        'message': 'Your score on this survey is {}/{}'.format(user_score, max_score)
+    }
+
+    return make_response(jsonify(responseObject), 200)
