@@ -194,6 +194,7 @@ def unanswered_survey():
 
 
 @app_views.route('/surveys/<survey_id>/score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/survey_user_score.yml')
 def survey_user_score(survey_id):
     """
         Show the score on a survey for a specified user.
