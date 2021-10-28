@@ -161,6 +161,7 @@ def update_category(category_id):
 
 
 @app_views.route('/categories/<category_id>/score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/category/category_user_score.yml')
 def category_user_score(category_id):
     """
         Show the score on a category for a specified user.
