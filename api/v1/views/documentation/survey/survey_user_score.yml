@@ -14,7 +14,7 @@
       schema:
         properties:
           count:
-            type: int
+            type: integer
           __class__:
             type: string
           created_at:

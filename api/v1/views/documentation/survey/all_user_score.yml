@@ -1,7 +1,7 @@
-  Retrieves the user score on a all categories on which he has contributed.
+  Retrieves the user score on a all surveys on which he has contributed.
   ---
   tags:
-    - Categories
+    - Surveys
   responses:
     404:
       description: User entity not found or No data avalaible, please contribute to a survey in order to see some.'
@@ -13,23 +13,23 @@
           properties:
             max_score:
               type: array
-              description: category's maximum score informations
+              description: survey's maximum score informations
               items:
                 properties:
                   name:
                     type: string
-                    description: category's name
+                    description: survey's name
                   count:
                     type: integer
-                    description: category's total questions number
+                    description: survey's total questions number
             user_score:
               type: array
-              description: category's user score informations
+              description: survey's user score informations
               items:
                 properties:
                   name:
                     type: string
-                    description: category's name
+                    description: survey's name
                   count:
                     type: integer
-                    description: category's user score
+                    description: survey's user score
