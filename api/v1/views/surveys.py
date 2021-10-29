@@ -223,7 +223,7 @@ def survey_user_score(survey_id):
 @swag_from('documentation/survey/all_user_score.yml')
 def all_survey_user_score():
     """
-        Show the score on a survey for a specified user.
+        Show the score on all survey for a specified user.
     """
     headers = request.headers
     auth_token = headers['Authorization'].split(' ')[1]

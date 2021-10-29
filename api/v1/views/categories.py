@@ -191,7 +191,7 @@ def category_user_score(category_id):
 @swag_from('documentation/category/all_user_score.yml')
 def all_category_user_score():
     """
-        Show the score on a category for a specified user.
+        Show the score on all category for a specified user.
     """
     headers = request.headers
     auth_token = headers['Authorization'].split(' ')[1]
