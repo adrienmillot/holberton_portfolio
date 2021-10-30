@@ -14,14 +14,14 @@ const getQuestionAnswer = function (survey_id) {
 					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
-				case 404:
+				default:
 					window.location = "/dashboard";
 					break;
 			}
 		},
 		success: function (response) {
-			$('P#question_to_answer').html(response.label)
-			getProposalByQuestion(response.id)
+			$('P#question_to_answer').html(response.result.label)
+			getProposalByQuestion(response.result.id)
 		}
 	})
 }
@@ -117,7 +117,7 @@ $(document).ready(function () {
 	const url_args = url.split('/');
 	if (url_args[1] == 'surveys' && url_args[4] == 'answer') {
 		const survey_id = url_args[2];
-		const survey_name = url_args[2];
+		const survey_name = url_args[3];
 		getQuestionAnswer(survey_id);
 
 	}

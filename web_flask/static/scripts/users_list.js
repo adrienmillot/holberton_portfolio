@@ -2,13 +2,13 @@
  * get request to api to get all users
  */
 
- const getUsersListPage = function (page) {
+const getUsersListPage = function (page) {
 	let limit = 10
 	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/users',
-		type:'GET',
+		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: obj,
 		error: function (data) {
@@ -18,7 +18,7 @@
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
@@ -26,8 +26,9 @@
 		},
 		success: function (response) {
 			userList(response.results);
-			buildPaginationBtnsUser(response.page_count, parseInt(page))
-
+			if (response.page_count > 1) {
+				buildPaginationBtnsUser(response.page_count, parseInt(page))
+			}
 		}
 	});
 }
@@ -36,7 +37,7 @@
  * Generate i times pagination links
  * Generate next link
  */
- function buildPaginationBtnsUser(page_count, page) {
+function buildPaginationBtnsUser(page_count, page) {
 	if (page === 1 || page === undefined) {
 		var previousBtnDisable = 'disabled'
 	} else {
@@ -69,7 +70,7 @@
 			window.location = '/users?page=' + (page + 1)
 		}
 	})
-	}
+}
 
 
 function NavigationBtnUser(i) {
@@ -134,11 +135,11 @@ function userActionsButton(user) {
 function userRow(user, count) {
 	var countTh = $('<th></th>').text('#' + count);
 	var nameTd = $('<td></td>').text(user.username);
-	var idTd = $('<td></td>').text(user.id);
+	var rolesTd = $('<td></td>').text(user.roles);
 	var emptyTd = $('<td></td>')
 	var btnActionTd = $('<td></td>').append(userActionsButton(user));
 
-	return $('<tr class="user"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+	return $('<tr class="user"></tr>').append(countTh).append(nameTd).append(rolesTd).append(emptyTd).append(btnActionTd);
 }
 
 /**
@@ -183,10 +184,10 @@ function btnUserDeleteEvent() {
 	$('.user .btn.delete').click(function () {
 		id = $(this).attr('data-id');
 		delet = deleteActionUser(id);
-		if (delet = true){
+		if (delet = true) {
 			$(this).parent().parent().parent().remove()
-	}
-})
+		}
+	})
 };
 
 
@@ -206,7 +207,7 @@ function deleteActionUser(id) {
 					break;
 			}
 		},
-		success: function (data) {		
+		success: function (data) {
 			$(document).ready(function () {
 				$('section.alert_success_delete_user').empty();
 				$('section.alert_success_delete_user').append(MessageConfirmationDeleteUser())

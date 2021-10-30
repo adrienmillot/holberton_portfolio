@@ -2,13 +2,13 @@
  * get request to api to get all categorys
  */
 
- const getCategoriesListPage = function (page) {
+const getCategoriesListPage = function (page) {
 	let limit = 10
 	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories',
-		type:'GET',
+		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		data: obj,
 		error: function (data) {
@@ -18,7 +18,7 @@
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
@@ -26,7 +26,9 @@
 		},
 		success: function (response) {
 			categoryListForCategory(response.results);
-			buildPaginationBtnsCategory(response.page_count, parseInt(page))
+			if (response.page_count > 1) {
+				buildPaginationBtnsCategory(response.page_count, parseInt(page))
+			}
 		}
 	});
 }
@@ -35,7 +37,7 @@
  * Generate i times pagination links
  * Generate next link
  */
- function buildPaginationBtnsCategory(page_count, page) {
+function buildPaginationBtnsCategory(page_count, page) {
 	if (page === 1 || page === undefined) {
 		var previousBtnDisable = 'disabled'
 	} else {
@@ -68,7 +70,7 @@
 			window.location = '/categories?page=' + (page + 1)
 		}
 	})
-	}
+}
 
 
 function NavigationBtnCategory(i) {
@@ -160,7 +162,7 @@ function btncategoryShowEvent() {
 		category_id = $(this).attr('data-id');
 		window.location = '/categories/' + category_id + '/show'
 
-		
+
 	});
 
 }
@@ -183,10 +185,10 @@ function btncategoryDeleteEvent() {
 	$('.category .btn.delete').click(function () {
 		id = $(this).attr('data-id');
 		delet = deleteActionCategory(id);
-		if (delet = true){
+		if (delet = true) {
 			$(this).parent().parent().parent().remove()
-	}
-})
+		}
+	})
 };
 
 
@@ -206,7 +208,7 @@ function deleteActionCategory(id) {
 					break;
 			}
 		},
-		success: function (data) {		
+		success: function (data) {
 			$(document).ready(function () {
 				$('section.alert_success_delete_category').empty();
 				$('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory())

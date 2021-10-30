@@ -26,8 +26,9 @@ const getProposalsListPage = function (page) {
 		},
 		success: function (response) {
 			proposalList(response.results);
-			buildPaginationBtnsProposal(response.page_count, parseInt(page))
-
+			if (response.page_count > 1) {
+				buildPaginationBtnsProposal(response.page_count, parseInt(page))
+			}
 		}
 	});
 }
@@ -36,7 +37,7 @@ const getProposalsListPage = function (page) {
  * Generate i times pagination links
  * Generate next link
  */
- function buildPaginationBtnsProposal(page_count, page) {
+function buildPaginationBtnsProposal(page_count, page) {
 	if (page === 1 || page === undefined) {
 		var previousBtnDisable = 'disabled'
 	} else {
@@ -69,7 +70,7 @@ const getProposalsListPage = function (page) {
 			window.location = '/proposals?page=' + (page + 1)
 		}
 	})
-	}
+}
 
 
 function NavigationBtnProposal(i) {

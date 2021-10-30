@@ -1,6 +1,6 @@
 const getProfile = function () {
 	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/profiles',
+		url: 'http://0.0.0.0:5002/api/v1/me',
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 
@@ -17,28 +17,25 @@ const getProfile = function () {
 			}
 		},
 		success: function (response) {
-			response.results.forEach(element => {
-				if (element.first_name === "admin") {
-					const htmlContent = UserProfile(element);
-					$(htmlContent).appendTo('.infos_user');
+			const htmlContent = UserProfile(response);
+			$(htmlContent).appendTo('.infos_user');
 				}
 
 
 			});
 
 		}
-	});
-}
 
-function UserProfile(element) {
+
+function UserProfile(response) {
 	return (`
 	  <article>
-	  <h3>Hello ${element.first_name} !</h3>	
+	  <h3>Hello ${response.user.profile.first_name} !</h3>	
 	  <div id='info'>
     <ul class="list-unstyled">
-	  <li>First name:${element.first_name}</li> 
-	  <li>Last name: ${element.last_name}</li>
-	  <li>Member since ${element.created_at}</li>
+	  <li>First name: ${response.user.profile.first_name}</li> 
+	  <li>Last name: ${response.user.profile.last_name}</li>
+	  <li>Member since ${response.user.profile.created_at}</li>
     </ul>
 	  </div>  
 	  </article>`)
@@ -55,12 +52,11 @@ const getSurveysToDo = function () {
 		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		success: function (response) {
-			SurveyToDOList(response);
+			SurveyToDOList(response.results);
 			$('.survey_to').click(function () {
 				survey_id = $(this).attr('data-id');
 				survey_name = $(this).attr('data-name');
 				window.location = '/surveys/' + survey_id + '/' + survey_name + '/answer'
-				console.log('select')
 			});
 		}
 	})

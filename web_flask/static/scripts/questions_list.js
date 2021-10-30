@@ -26,7 +26,9 @@ const getQuestionsListPage = function (page) {
 		},
 		success: function (response) {
 			questionList(response.results);
-			buildPaginationBtnsQuestion(response.page_count, parseInt(page))
+			if(response.page_count > 1){
+				buildPaginationBtnsQuestion(response.page_count, parseInt(page))
+			}
 		}
 	});
 }

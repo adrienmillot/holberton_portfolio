@@ -26,7 +26,9 @@
 		},
 		success: function (response) {
 			profileList(response.results);
-			buildPaginationBtnsProfile(response.page_count, parseInt(page))
+			if(response.page_count > 1){
+				buildPaginationBtnsProfile(response.page_count, parseInt(page))
+			}
 
 		}
 	});
