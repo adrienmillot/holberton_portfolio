@@ -39,6 +39,10 @@ $(document).ready( function () {
 		let first_name = $("#txt_profile_first_name").val().trim();
 		let last_name = $("#txt_profile_last_name").val().trim()
 		let gender = $("#select_gender_for_profile").val()
-		createProfile(first_name, last_name, gender);
+		let secure_fname = first_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		let secure_lname = last_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+
+		createProfile(secure_fname, secure_lname, gender);
 	});
 });
