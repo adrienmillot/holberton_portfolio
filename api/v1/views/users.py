@@ -290,7 +290,7 @@ def has_right_to_display_page():
 
     data = request.args.get('entrypoint', None)
 
-    if data is not 'entrypoint':
+    if data is None:
         responseObject = {
             'status': 'fail',
             'message': 'Missing page entrypoint.'
@@ -299,7 +299,7 @@ def has_right_to_display_page():
         return make_response(jsonify(responseObject), 400)
 
     if (
-        'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data == 'entrypoint' not in (
+        'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data not in (
             '/', '/login', '/logout', '/answers', '/dashboard')
     ):
         responseObject = {
