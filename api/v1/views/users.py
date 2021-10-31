@@ -290,7 +290,7 @@ def has_right_to_display_page():
 
     data = request.args.get('entrypoint', None)
 
-    if data is not 'entrypoint':
+    if data is None:
         responseObject = {
             'status': 'fail',
             'message': 'Missing page entrypoint.'
