@@ -230,3 +230,47 @@ def survey_question(survey_id):
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/surveys/<survey_id>/question_score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/survey_questions.yml')
+def survey_questions_score(survey_id):
+    """
+        Show the score on all questions of a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    questions_max_score = dict(db_storage.survey_questions_max_score(survey_id, user_id))
+    questions_user_score = dict(db_storage.survey_questions_user_score(survey_id, user_id))
+    survey = db_storage.get(Survey, survey_id)
+
+    if survey is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in questions_max_score.items():
+        if key not in questions_user_score:
+            questions_user_score.update({key: 0})
+
+    survey.max_score = questions_max_score
+    survey.user_score = questions_user_score
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    responseObject = {
+        'status': 'succes',
+        'survey': survey.to_dict()
+    }
+
+    return make_response(jsonify(responseObject), 200)
