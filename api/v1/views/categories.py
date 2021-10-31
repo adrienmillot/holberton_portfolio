@@ -185,3 +185,50 @@ def category_user_score(category_id):
     }
 
     return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/categories/score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/category/all_user_score.yml')
+def all_category_user_score():
+    """
+        Show the score on all category for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+
+    all_max_score = dict(db_storage.all_max_score(Category, user_id, limit))
+    all_user_score = dict(db_storage.all_user_score(Category, user_id, limit))
+
+    if all_max_score is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'No data avalaible, please contribute\
+                        to a survey in order to see some.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in all_max_score.items():
+        if key not in all_user_score:
+            all_user_score.update({key: 0})
+
+    responseObject = {
+        'status': 'succes',
+        'max_score': all_max_score,
+        'user_score': all_user_score
+    }
+
+    return make_response(jsonify(responseObject), 200)
