@@ -215,7 +215,9 @@ def survey_question(survey_id):
     user_id = User.decode_auth_token(auth_token)
     question = db_storage.random_survey_question(survey_id, user_id)
 
-    question_count = question[0]
+    remaining_questions = question[0]
+    total_questions = question[2]
+    questions_passed = total_questions - remaining_questions
     question = question[1]
 
     if not question:
@@ -229,7 +231,9 @@ def survey_question(survey_id):
     responseObject = {
         'status': 'success',
         'result': question.to_dict(),
-        'count': question_count
+        'remaining_questions': remaining_questions,
+        'total_questions': total_questions,
+        'questions_passed': questions_passed
     }
 
     return make_response(jsonify(responseObject), 200)
