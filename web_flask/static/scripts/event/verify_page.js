@@ -23,9 +23,6 @@ const verify_page = function (page) {
 					}
 					break;
 			}
-		},
-		success: function (response) {
-			console.log(response);	
 		}
 	});
 }
@@ -37,24 +34,6 @@ document.onreadystatechange = function(e)
 		const url_args = current_page.split('/');
 		let location = "/" +  url_args[3];
 
-		if (url_args[6] && url_args[6] == 'answer') {
-			location = '/answers';
-		}
-
-		console.log(location);
 		verify_page(location);
 	}
 };
-
-
-
-// $(document).ready(function () {
-// 	const current_page =  window.location.href;
-// 	const url_args = current_page.split('/');
-// 	const location = "/" +  url_args[3];
-// 	if (url_args[6] === 'answer') {
-// 		location
-// 	}
-// 	console.log(location);
-// 	verify_page(location);
-// });

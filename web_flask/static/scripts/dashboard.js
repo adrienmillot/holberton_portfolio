@@ -20,14 +20,7 @@ const getProfile = function () {
 			
 			const htmlContent = UserProfile(response);
 			$(htmlContent).appendTo('.infos_user');
-			
-			// if (response.user.roles.forEach(element => {
-			// 	if (element !== 'ROLE_ADMIN') {
-			// 		$('.navbar-nav').hide()
-			// 	}
 
-				
-			// }));
 		}
 		})}
 
