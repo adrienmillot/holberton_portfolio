@@ -20,6 +20,8 @@ const getQuestionAnswer = function (survey_id) {
 			}
 		},
 		success: function (response) {
+
+			$('H5#count').html("Question # " + response.count)
 			$('P#question_to_answer').html(response.result.label)
 			getProposalByQuestion(response.result.id)
 		}
