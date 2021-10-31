@@ -100,7 +100,7 @@ const buildDomProposal = function (label, i, id) {
 
 const proposalColLeft = function (label, i, id) {
 	var defInput = $('<input type="checkbox" />').attr('data-id', id)
-	var defProp = $('<p class="checkbox"></p>').append(defInput).append(label)
+	var defProp = $('<p class="checkbox"></p>').append(defInput).append(" " + label)
 	var defCol = $('<div class="col-sm-5"></div>').append(defProp)
 	// var closeDiv = $('</div>')
 
@@ -109,7 +109,7 @@ const proposalColLeft = function (label, i, id) {
 
 const proposalColRight = function (label, id) {
 	var defInput = $('<input type="checkbox" />').attr('data-id', id)
-	var defProp = $('<p class="checkbox" id="checkbox_1"></p>').append(defInput).append(label)
+	var defProp = $('<p class="checkbox" id="checkbox_1"></p>').append(defInput).append(" " + label)
 	return $('<div class="col sm-5"></div>').append(defProp)
 }
 
