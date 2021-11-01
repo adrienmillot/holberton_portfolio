@@ -286,7 +286,7 @@ class DBStorage:
 
         return query.all()
 
-    def survey_categories_max_score(self, survey_id, user_id):
+    def survey_categories_max_score(self, survey_id, user_id, limit):
         """
             SQL query to retrieve all categories of a survey and the max score.
         """
@@ -296,9 +296,12 @@ class DBStorage:
         query = self.__session.query(Category.name, func.count(Category.id)).join(Survey.questions).filter(
             Question.id.in_(subquery), Survey.id == survey_id).group_by(Category.name)
 
+        if limit is not None:
+            query = query.limit(limit)
+
         return query.all()
     
-    def survey_categories_user_score(self, survey_id, user_id):
+    def survey_categories_user_score(self, survey_id, user_id, limit):
         """
             SQL query to retrieve all categories of a survey and the score of the specified user.
         """
@@ -307,5 +310,8 @@ class DBStorage:
             Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
         query = self.__session.query(Category.name, func.count(Category.id)).join(Survey.questions).filter(
             Question.id.in_(subquery), Survey.id == survey_id).group_by(Category.name)
+
+        if limit is not None:
+            query = query.limit(limit)
 
         return query.all()
