@@ -4,7 +4,7 @@
     - Categories
   responses:
     404:
-      description: User entity not found or No data avalaible, please contribute to a survey in order to see some.'
+      description: User entity not found or No data avalaible, please contribute to a survey in order to see some.
     200:
       description: Success
       schema:
