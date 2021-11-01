@@ -66,7 +66,10 @@ const GraphQuestions = function (result) {
 	const config = {
 		type: 'bar',
 		data: data,
-		options: {}
+		options: {
+			responsive: true,
+			maintainAspectRatio: false
+		}
 	};
 
 	const ScoreSurveyQuestionsChart = new Chart(
