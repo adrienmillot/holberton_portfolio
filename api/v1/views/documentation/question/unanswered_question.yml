@@ -9,7 +9,7 @@ parameters:
     required: true
     description: The id of the survey where we need to retrieve unanswered questions.
 responses:
-  404:
+  204:
     description: Question entity not found.
   200:
     schema:
