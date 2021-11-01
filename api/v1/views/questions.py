@@ -278,7 +278,7 @@ def survey_questions_score(survey_id):
         return make_response(jsonify(responseObject), 404)
     
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'survey': survey.to_dict()
     }
 

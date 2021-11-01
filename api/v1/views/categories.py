@@ -180,7 +180,7 @@ def category_user_score(category_id):
     category.stats = stats
 
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'category': category.to_dict(),
         'message': 'Your score on this category is {}/{}'.format(user_score, max_score),
     }
@@ -227,7 +227,7 @@ def all_category_user_score():
             all_user_score.update({key: 0})
 
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'labels': list(all_max_score.keys()),
         'max_score': list(all_max_score.values()),
         'user_score': list(all_user_score.values())
@@ -274,7 +274,7 @@ def survey_categories_score(survey_id):
         return make_response(jsonify(responseObject), 404)
     
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'survey': survey.to_dict()
     }
 
