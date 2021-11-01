@@ -86,6 +86,8 @@ $(document).ready( function () {
 			is_valid = false
 			
 		}
-		createProposal(label, question_id, is_valid);
+		let secure_label = label.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		createProposal(secure_label, question_id, is_valid);
 	});
 });

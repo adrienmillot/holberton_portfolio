@@ -17,14 +17,14 @@ const getProfile = function () {
 			}
 		},
 		success: function (response) {
+			
 			const htmlContent = UserProfile(response);
 			$(htmlContent).appendTo('.infos_user');
-				}
-
-
-			});
 
 		}
+		})}
+
+
 
 
 function UserProfile(response) {

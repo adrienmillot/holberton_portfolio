@@ -73,7 +73,10 @@ const editProfile = function (first_name, last_name, gender , profile_id) {
 	  const first_name = $('#txt_profile_edit_first_name').val().trim();
 	  const last_name = $('#txt_profile_edit_last_name').val().trim();
 	  const gender = $('#select_gender_for_profile_update').val();
-	  editProfile(first_name, last_name, gender, profile_id);
+	  let secure_fname = first_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	  let secure_lname = last_name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+	  editProfile(secure_fname, secure_lname, gender, profile_id);
 	});
   }
   });

@@ -6,7 +6,7 @@ $(document).ready(function () {
 	
 	}
 	if ((!token) && (window.pathname != "/") && (window.pathname != "/login")) {
-    console.log(window.pathname)
+
 		window.pathname = "/"
 	}
 });

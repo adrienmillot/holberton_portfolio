@@ -119,6 +119,8 @@ $(document).ready( function () {
 		let label = $("#txt_question_label").val().trim();
 		let category_id = $("#select_category").val()
 		let survey_id = $("#select_survey").val()
-		createQuestion(label, category_id, survey_id);
+		let secure_label = label.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		createQuestion(secure_label, category_id, survey_id);
 	});
 });

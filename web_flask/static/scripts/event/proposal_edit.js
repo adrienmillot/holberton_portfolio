@@ -43,7 +43,9 @@ const editProposal = function (label, proposal_id) {
 	
 	$('#btn_edit_proposal').click(function () {
 	  const label = $('#txt_proposal_label').val().trim();
-	  editProposal(label, proposal_id);
+	  let secure_label = label.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+	  editProposal(secure_label, proposal_id);
 	});
   }
   });

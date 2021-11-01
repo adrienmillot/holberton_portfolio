@@ -38,6 +38,7 @@ function articleHtml(name) {
 $(() => {
 	$('#btn_create_survey').on('click', () => {
 		let name = $("#txt_survey_name").val().trim();
-		createSurvey(name);
+		let secure_name = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+		createSurvey(secure_name);
 	});
 });

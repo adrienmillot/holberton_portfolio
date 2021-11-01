@@ -47,7 +47,9 @@ const editUser = function (username, password, user_id) {
     $('#btn_edit_user').click(function () {
       const username = $('#txt_user_name').val().trim();
       const password = $('#txt_user_password').val().trim();
-      editUser(username, password, user_id);
+	  let secure_username = username.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      editUser(secure_username, password, user_id);
     });
   }
   });

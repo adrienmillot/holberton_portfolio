@@ -5,6 +5,7 @@
 
 
 from datetime import datetime
+from re import sub
 from sqlalchemy.sql.elements import and_
 
 from sqlalchemy.sql.expression import null
@@ -180,7 +181,10 @@ class DBStorage:
         query = self.__session.query(Question).join(Survey.questions).filter(
             Question.id.notin_(subquery), Survey.id == survey_id)
 
-        return (query.count(), query.first())
+        query_total = self.__session.query(Question).join(
+            Survey.questions).filter(Survey.id == survey_id)
+
+        return (query.count(), query.first(), query_total.count())
 
     def unanswered_survey(self, user_id):
         """
@@ -228,12 +232,80 @@ class DBStorage:
 
         return query.count()
 
-    def all_max_score(self, cls):
+    def all_max_score(self, cls, user_id, limit=None):
         """
             SQL query to retrieve all maximum score for a specified model.
         """
 
-        query = self.__session.query(func.count(Question.id)).join(
-            cls.questions).group_by(Question.category_id)
+        subquery = self.__session.query(Question).with_entities(
+            Question.category_id).join(User.answers, Question).filter(User.id == user_id).subquery()
+        query = self.__session.query(cls.name, func.count(Question.id)).join(
+            cls.questions).filter(Question.category_id.in_(subquery)).group_by(cls.name)
+
+        if limit is not None:
+            query = query.limit(limit)
+
+        return query.all()
+
+    def all_user_score(self, cls, user_id, limit=None):
+        """
+            SQL query to retrieve all user score for a specified model.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(cls.name, func.count(Question.id)).join(
+            cls.questions).filter(Question.id.in_(subquery)).group_by(cls.name)
+
+        if limit is not None:
+            query = query.limit(limit)
+
+        return query.all()
+
+    def survey_questions_max_score(self, survey_id, user_id):
+        """
+            SQL query to retrieve all questions of a survey and the max score.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Survey.questions).filter(
+            Question.id.in_(subquery), Survey.id == survey_id).group_by(Question.label)
+
+        return query.all()
+
+    def survey_questions_user_score(self, survey_id, user_id):
+        """
+            SQL query to retrieve all questions of a survey and the score of the specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Survey.questions).filter(
+            Question.id.in_(subquery), Survey.id == survey_id).group_by(Question.label)
+
+        return query.all()
+
+    def survey_categories_max_score(self, survey_id, user_id):
+        """
+            SQL query to retrieve all categories of a survey and the max score.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Category.name, func.count(Category.id)).join(Survey.questions).filter(
+            Question.id.in_(subquery), Survey.id == survey_id).group_by(Category.name)
+
+        return query.all()
+    
+    def survey_categories_user_score(self, survey_id, user_id):
+        """
+            SQL query to retrieve all categories of a survey and the score of the specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(Category.name, func.count(Category.id)).join(Survey.questions).filter(
+            Question.id.in_(subquery), Survey.id == survey_id).group_by(Category.name)
 
         return query.all()

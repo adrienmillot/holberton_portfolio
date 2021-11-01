@@ -80,6 +80,8 @@ $(document).ready( function () {
 		let username = $("#txt_user_username").val().trim();
 		let password = $("#txt_user_password").val().trim();
 		let profile_id = $("#select_profile").val()
-		createUser(username, password, profile_id);
+		let secure_username = username.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		createUser(secure_username, password, profile_id);
 	});
 });
