@@ -201,6 +201,14 @@ def survey_user_score(survey_id):
     user_id = User.decode_auth_token(auth_token)
     survey = db_storage.get(Survey, survey_id)
 
+    if survey is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
     max_score = db_storage.max_score(Survey, survey_id)
     user_score = db_storage.user_score(Survey, survey_id, user_id)
 
