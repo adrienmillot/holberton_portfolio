@@ -212,7 +212,7 @@ def survey_user_score(survey_id):
     survey.stats = stats
 
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'survey': survey.to_dict(),
         'message': 'Your score on this survey is {}/{}'.format(user_score, max_score)
     }
@@ -258,7 +258,7 @@ def all_survey_user_score():
             all_user_score.update({key: 0})
 
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'labels': list(all_max_score.keys()),
         'max_score': list(all_max_score.values()),
         'user_score': list(all_user_score.values())

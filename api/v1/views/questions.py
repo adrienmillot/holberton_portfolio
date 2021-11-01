@@ -214,6 +214,23 @@ def survey_question(survey_id):
     headers = request.headers
     auth_token = headers['Authorization'].split(' ')[1]
     user_id = User.decode_auth_token(auth_token)
+
+    if survey_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
     question = db_storage.random_survey_question(survey_id, user_id)
 
     remaining_questions = question[0]
@@ -221,13 +238,13 @@ def survey_question(survey_id):
     questions_passed = total_questions - remaining_questions
     question = question[1]
 
-    if not question:
+    if question is None:
         responseObject = {
-            'status': 'fail',
-            'message': 'Question entity not found.'
+            'status': 'success',
+            'message': 'No more questions to display at the moment'
         }
 
-        return make_response(jsonify(responseObject), 404)
+        return make_response(jsonify(responseObject), 204)
 
     responseObject = {
         'status': 'success',
@@ -278,7 +295,7 @@ def survey_questions_score(survey_id):
         return make_response(jsonify(responseObject), 404)
     
     responseObject = {
-        'status': 'succes',
+        'status': 'success',
         'survey': survey.to_dict()
     }
 
