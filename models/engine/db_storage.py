@@ -17,7 +17,7 @@ from models.proposal import Proposal
 from models.question import Question
 from models.survey import Survey
 from models.user import User
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, desc
 from sqlalchemy.orm import session, sessionmaker, scoped_session
 import os
 
@@ -179,7 +179,7 @@ class DBStorage:
         subquery = self.__session.query(Proposal).with_entities(
             Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
         query = self.__session.query(Question).join(Survey.questions).filter(
-            Question.id.notin_(subquery), Survey.id == survey_id)
+            Question.id.notin_(subquery), Survey.id == survey_id).order_by(Question.created_at)
 
         query_total = self.__session.query(Question).join(
             Survey.questions).filter(Survey.id == survey_id)
