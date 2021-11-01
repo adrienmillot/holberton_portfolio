@@ -245,8 +245,13 @@ def survey_categories_score(survey_id):
     headers = request.headers
     auth_token = headers['Authorization'].split(' ')[1]
     user_id = User.decode_auth_token(auth_token)
-    categories_max_score = dict(db_storage.survey_categories_max_score(survey_id, user_id))
-    categories_user_score = dict(db_storage.survey_categories_user_score(survey_id, user_id))
+
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+
+    categories_max_score = dict(db_storage.survey_categories_max_score(survey_id, user_id, limit))
+    categories_user_score = dict(db_storage.survey_categories_user_score(survey_id, user_id, limit))
     survey = db_storage.get(Survey, survey_id)
 
     if survey is None:
