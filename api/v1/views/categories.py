@@ -220,7 +220,7 @@ def all_category_user_score():
                         to a survey in order to see some.'
         }
 
-        return make_response(jsonify(responseObject), 404)
+        return make_response(jsonify(responseObject), 204)
 
     for key, value in all_max_score.items():
         if key not in all_user_score:

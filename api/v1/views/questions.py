@@ -224,10 +224,10 @@ def survey_question(survey_id):
     if not question:
         responseObject = {
             'status': 'fail',
-            'message': 'Question entity not found.'
+            'message': 'No more question.'
         }
 
-        return make_response(jsonify(responseObject), 404)
+        return make_response(jsonify(responseObject), 204)
 
     responseObject = {
         'status': 'success',
