@@ -286,6 +286,30 @@ class DBStorage:
 
         return query.all()
 
+    def category_questions_max_score(self, category_id, user_id):
+        """
+            SQL query to retrieve all questions of a category and the max score.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Category.questions).filter(
+            Question.id.in_(subquery), Category.id == category_id).group_by(Question.label)
+
+        return query.all()
+
+    def category_questions_user_score(self, category_id, user_id):
+        """
+            SQL query to retrieve all questions of a category and the score of the specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Category.questions).filter(
+            Question.id.in_(subquery), Category.id == category_id).group_by(Question.label)
+
+        return query.all()
+
     def survey_categories_max_score(self, survey_id, user_id, limit):
         """
             SQL query to retrieve all categories of a survey and the max score.
