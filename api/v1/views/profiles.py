@@ -28,15 +28,12 @@ def profiles_list() -> json:
     limit = request.args.get('limit', None)
     if limit is not None:
         limit = int(limit)
+    if page is not None:
+        page = int(page)
     if page is None and limit is not None:
         page = 1
 
     page_count = int(ceil(count / limit)) if limit else 1
-    if page is not None:
-        page = int(page)
-        deviation = page - page_count
-        page = abs(deviation) + 1
-
     all_profiles = db_storage.all(Profile, page=page, limit=limit).values()
     list_profiles = []
 

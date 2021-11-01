@@ -66,7 +66,7 @@ class DBStorage:
         new_dict = {}
         for class_name, class_value in self.classes.items():
             if cls is None or cls is class_value or cls is class_name:
-                query = self.__session.query(class_value)
+                query = self.__session.query(class_value).order_by(cls.created_at)
 
                 if limit is not None:
                     query = query.limit(limit)
@@ -130,7 +130,7 @@ class DBStorage:
         if id is None:
             return None
 
-        query = self.__session.query(cls).filter_by(deleted_at=None, id=id)
+        query = self.__session.query(cls).filter_by(deleted_at=None, id=id).order_by(cls.created_at)
 
         if query.count() == 0:
             return None
@@ -141,7 +141,7 @@ class DBStorage:
         """
         """
 
-        query = self.__session.query(cls).filter_by(**kwargs)
+        query = self.__session.query(cls).filter_by(**kwargs).order_by(cls.created_at)
 
         return query.first()
 
