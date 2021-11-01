@@ -17,7 +17,7 @@ from models.proposal import Proposal
 from models.question import Question
 from models.survey import Survey
 from models.user import User
-from sqlalchemy import create_engine, func
+from sqlalchemy import create_engine, func, desc
 from sqlalchemy.orm import session, sessionmaker, scoped_session
 import os
 
