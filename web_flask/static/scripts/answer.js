@@ -14,16 +14,18 @@ const getQuestionAnswer = function (survey_id) {
 					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
-				default:
-					window.location = "/dashboard";
-					break;
 			}
 		},
-		success: function (response) {
-			console.log(response)
-			$('H5#count').html("Question # " + response.total_questions)
-			$('P#question_to_answer').html(response.result.label)
-			getProposalByQuestion(response.result.id)
+		success: function (response, textStatus, jqXHR) {
+
+			if (jqXHR.status == 204) {
+				window.location = "/dashboard";
+			} else {
+				$('H5#count').html("Question # " + (response.questions_passed + 1) + "/" + response.total_questions)
+				$('P#question_to_answer').html(response.result.label)
+				getProposalByQuestion(response.result.id)
+			}
+
 		}
 	})
 }
@@ -71,13 +73,14 @@ const getProposalByQuestion = function (question_id) {
 		},
 		success: function (response) {
 			proposalListByQuestion(response);
-			$('#btn_validate_answer').click(function(){
+			$('#btn_validate_answer').click(function () {
 				$('input:checked').each(function (key, element) {
 					proposal_id = $(this).attr('data-id');
 					postProposal(proposal_id)
+				})
 			})
-		})
-	}});
+		}
+	});
 }
 
 const proposalListByQuestion = function (proposals) {
