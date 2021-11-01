@@ -195,7 +195,7 @@ class DBStorage:
         subquery = self.__session.query(Proposal).with_entities(
             Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
         query = self.__session.query(Question).with_entities(Survey).join(
-            Survey.questions).filter(Question.id.notin_(subquery))
+            Survey.questions).filter(Question.id.notin_(subquery)).order_by(Survey.created_at)
 
         return query.all()
 
@@ -205,7 +205,7 @@ class DBStorage:
         """
 
         query = self.__session.query(Proposal).filter(
-            Proposal.question_id == question_id)
+            Proposal.question_id == question_id).order_by(Proposal.created_at)
 
         return query.all()
 
