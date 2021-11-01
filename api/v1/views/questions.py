@@ -8,6 +8,7 @@ import bcrypt
 from os import getenv
 from api.v1.views import app_views
 from api.v1.views.surveys import surveys_list
+import json
 from models.category import Category
 from models.proposal import Proposal
 from models.question import Question
@@ -215,6 +216,11 @@ def survey_question(survey_id):
     user_id = User.decode_auth_token(auth_token)
     question = db_storage.random_survey_question(survey_id, user_id)
 
+    remaining_questions = question[0]
+    total_questions = question[2]
+    questions_passed = total_questions - remaining_questions
+    question = question[1]
+
     if not question:
         responseObject = {
             'status': 'fail',
@@ -225,8 +231,10 @@ def survey_question(survey_id):
 
     responseObject = {
         'status': 'success',
-        'result': question[1].to_dict(),
-        'count': question[0]
+        'result': question.to_dict(),
+        'remaining_questions': remaining_questions,
+        'total_questions': total_questions,
+        'questions_passed': questions_passed
     }
 
     return make_response(jsonify(responseObject), 200)
@@ -257,8 +265,9 @@ def survey_questions_score(survey_id):
         if key not in questions_user_score:
             questions_user_score.update({key: 0})
 
-    survey.max_score = questions_max_score
-    survey.user_score = questions_user_score
+    survey.labels = list(questions_max_score.keys())
+    survey.max_scores = list(questions_max_score.values())
+    survey.user_scores = list(questions_user_score.values())
 
     if user_id is None:
         responseObject = {

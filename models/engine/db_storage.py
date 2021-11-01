@@ -181,7 +181,10 @@ class DBStorage:
         query = self.__session.query(Question).join(Survey.questions).filter(
             Question.id.notin_(subquery), Survey.id == survey_id)
 
-        return (query.count(), query.first())
+        query_total = self.__session.query(Question).join(
+            Survey.questions).filter(Survey.id == survey_id)
+
+        return (query.count(), query.first(), query_total.count())
 
     def unanswered_survey(self, user_id):
         """
