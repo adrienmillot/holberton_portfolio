@@ -237,13 +237,8 @@ def survey_question(survey_id):
 
     if question is None:
         responseObject = {
-<<<<<<< HEAD
             'status': 'success',
             'message': 'No more questions to display at the moment'
-=======
-            'status': 'fail',
-            'message': 'No more question.'
->>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a
         }
 
         return make_response(jsonify(responseObject), 204)
@@ -329,9 +324,9 @@ def category_questions_score(category_id):
         if key not in questions_user_score:
             questions_user_score.update({key: 0})
 
-    category_id.labels = list(questions_max_score.keys())
-    category_id.max_scores = list(questions_max_score.values())
-    category_id.user_scores = list(questions_user_score.values())
+    category.labels = list(questions_max_score.keys())
+    category.max_scores = list(questions_max_score.values())
+    category.user_scores = list(questions_user_score.values())
 
     if user_id is None:
         responseObject = {

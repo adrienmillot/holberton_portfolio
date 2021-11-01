@@ -3,11 +3,11 @@ const GraphCategoryQuestions = function (result) {
 	let labels = []
 	let categoryQuestionsData = []
 
-	result.survey.labels.forEach(element => {
+	result.category.labels.forEach(element => {
 		labels.push(element)
 	});
 
-	result.survey.user_scores.forEach(element => {
+	result.category.user_scores.forEach(element => {
 		categoryQuestionsData.push(parseFloat(element))
 	});
 
@@ -96,6 +96,6 @@ window.onload = function () {
 
 		ResultCategory(category_id);
 
-		// ResultCategoryQuestions(category_id);
+		ResultCategoryQuestions(category_id);
 	}
 }

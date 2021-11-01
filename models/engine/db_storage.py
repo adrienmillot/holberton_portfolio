@@ -286,8 +286,6 @@ class DBStorage:
 
         return query.all()
 
-<<<<<<< HEAD
-=======
     def category_questions_max_score(self, category_id, user_id):
         """
             SQL query to retrieve all questions of a category and the max score.
@@ -312,7 +310,6 @@ class DBStorage:
 
         return query.all()
 
->>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a
     def survey_categories_max_score(self, survey_id, user_id, limit):
         """
             SQL query to retrieve all categories of a survey and the max score.
@@ -341,8 +338,4 @@ class DBStorage:
         if limit is not None:
             query = query.limit(limit)
 
-<<<<<<< HEAD
         return query.all()
-=======
-        return query.all()
->>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a
