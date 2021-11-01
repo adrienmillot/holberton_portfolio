@@ -169,6 +169,14 @@ def category_user_score(category_id):
     user_id = User.decode_auth_token(auth_token)
     category = db_storage.get(Category, category_id)
 
+    if category is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Category entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
     max_score = db_storage.max_score(Category, category_id)
     user_score = db_storage.user_score(Category, category_id, user_id)
 
