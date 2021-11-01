@@ -25,15 +25,12 @@ def surveys_list():
     limit = request.args.get('limit', None)
     if limit is not None:
         limit = int(limit)
+    if page is not None:
+        page = int(page)
     if page is None and limit is not None:
         page = 1
 
     page_count = int(ceil(count / limit)) if limit else 1
-    if page is not None:
-        page = int(page)
-        deviation = page - page_count
-        page = abs(deviation) + 1
-
     all_surveys = db_storage.all(Survey, page=page, limit=limit).values()
     list_surveys = []
 
@@ -203,6 +200,14 @@ def survey_user_score(survey_id):
     auth_token = headers['Authorization'].split(' ')[1]
     user_id = User.decode_auth_token(auth_token)
     survey = db_storage.get(Survey, survey_id)
+
+    if survey is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
 
     max_score = db_storage.max_score(Survey, survey_id)
     user_score = db_storage.user_score(Survey, survey_id, user_id)

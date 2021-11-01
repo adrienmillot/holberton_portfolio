@@ -66,7 +66,7 @@ class DBStorage:
         new_dict = {}
         for class_name, class_value in self.classes.items():
             if cls is None or cls is class_value or cls is class_name:
-                query = self.__session.query(class_value)
+                query = self.__session.query(class_value).order_by(cls.created_at)
 
                 if limit is not None:
                     query = query.limit(limit)
@@ -130,7 +130,7 @@ class DBStorage:
         if id is None:
             return None
 
-        query = self.__session.query(cls).filter_by(deleted_at=None, id=id)
+        query = self.__session.query(cls).filter_by(deleted_at=None, id=id).order_by(cls.created_at)
 
         if query.count() == 0:
             return None
@@ -141,7 +141,7 @@ class DBStorage:
         """
         """
 
-        query = self.__session.query(cls).filter_by(**kwargs)
+        query = self.__session.query(cls).filter_by(**kwargs).order_by(cls.created_at)
 
         return query.first()
 
@@ -179,7 +179,7 @@ class DBStorage:
         subquery = self.__session.query(Proposal).with_entities(
             Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
         query = self.__session.query(Question).join(Survey.questions).filter(
-            Question.id.notin_(subquery), Survey.id == survey_id)
+            Question.id.notin_(subquery), Survey.id == survey_id).order_by(Question.created_at)
 
         query_total = self.__session.query(Question).join(
             Survey.questions).filter(Survey.id == survey_id)
@@ -195,7 +195,7 @@ class DBStorage:
         subquery = self.__session.query(Proposal).with_entities(
             Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
         query = self.__session.query(Question).with_entities(Survey).join(
-            Survey.questions).filter(Question.id.notin_(subquery))
+            Survey.questions).filter(Question.id.notin_(subquery)).order_by(Survey.created_at)
 
         return query.all()
 
@@ -205,7 +205,7 @@ class DBStorage:
         """
 
         query = self.__session.query(Proposal).filter(
-            Proposal.question_id == question_id)
+            Proposal.question_id == question_id).order_by(Proposal.created_at)
 
         return query.all()
 
@@ -286,6 +286,33 @@ class DBStorage:
 
         return query.all()
 
+<<<<<<< HEAD
+=======
+    def category_questions_max_score(self, category_id, user_id):
+        """
+            SQL query to retrieve all questions of a category and the max score.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Category.questions).filter(
+            Question.id.in_(subquery), Category.id == category_id).group_by(Question.label)
+
+        return query.all()
+
+    def category_questions_user_score(self, category_id, user_id):
+        """
+            SQL query to retrieve all questions of a category and the score of the specified user.
+        """
+
+        subquery = self.__session.query(Proposal).with_entities(
+            Proposal.question_id).join(User.answers).filter(User.id == user_id, Proposal.is_valid == True).subquery()
+        query = self.__session.query(Question.label, func.count(Question.id)).join(Category.questions).filter(
+            Question.id.in_(subquery), Category.id == category_id).group_by(Question.label)
+
+        return query.all()
+
+>>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a
     def survey_categories_max_score(self, survey_id, user_id, limit):
         """
             SQL query to retrieve all categories of a survey and the max score.
@@ -314,4 +341,8 @@ class DBStorage:
         if limit is not None:
             query = query.limit(limit)
 
+<<<<<<< HEAD
         return query.all()
+=======
+        return query.all()
+>>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a

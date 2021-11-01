@@ -5,12 +5,10 @@ const GraphUserCategories = function (result) {
 	
     result.labels.forEach(element => {
             labels.push(element)
-            console.log(labels)
     });
 
     result.user_score.forEach(element => {
             categoriesData.push(parseFloat(element))
-            console.log(categoriesData)
     });
 
     const data = {
@@ -49,12 +47,10 @@ const GraphUserSurveys = function (result) {
 	
     result.labels.forEach(element => {
             labels.push(element)
-            console.log(labels)
     });
 
     result.user_score.forEach(element => {
             surveysData.push(parseFloat(element))
-            console.log(surveysData)
     });
 
     const data = {
@@ -96,7 +92,6 @@ const ResultCategoryUSer = function () {
 			}
 		},
 		success: function (response) {
-			console.log(response)
 			GraphUserCategories(response);
 		}
 	});
@@ -118,7 +113,6 @@ const ResultSurveyUSer = function () {
 			}
 		},
 		success: function (response) {
-			console.log(response)
 			GraphUserSurveys(response);
 		}
 	});

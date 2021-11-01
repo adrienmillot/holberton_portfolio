@@ -33,15 +33,12 @@ def questions_list():
     limit = request.args.get('limit', None)
     if limit is not None:
         limit = int(limit)
+    if page is not None:
+        page = int(page)
     if page is None and limit is not None:
         page = 1
 
     page_count = int(ceil(count / limit)) if limit else 1
-    if page is not None:
-        page = int(page)
-        deviation = page - page_count
-        page = abs(deviation) + 1
-
     all_questions = db_storage.all(Question, page=page, limit=limit).values()
     list_questions = []
 
@@ -240,8 +237,13 @@ def survey_question(survey_id):
 
     if question is None:
         responseObject = {
+<<<<<<< HEAD
             'status': 'success',
             'message': 'No more questions to display at the moment'
+=======
+            'status': 'fail',
+            'message': 'No more question.'
+>>>>>>> 33d1ee7790b7ff48ead1e3fb320227bd4c20216a
         }
 
         return make_response(jsonify(responseObject), 204)
@@ -297,6 +299,51 @@ def survey_questions_score(survey_id):
     responseObject = {
         'status': 'success',
         'survey': survey.to_dict()
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/categories/<category_id>/question_score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/category_questions.yml')
+def category_questions_score(category_id):
+    """
+        Show the score on all questions of a category for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    questions_max_score = dict(db_storage.category_questions_max_score(category_id, user_id))
+    questions_user_score = dict(db_storage.category_questions_user_score(category_id, user_id))
+    category = db_storage.get(Category, category_id)
+
+    if category_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Category entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in questions_max_score.items():
+        if key not in questions_user_score:
+            questions_user_score.update({key: 0})
+
+    category_id.labels = list(questions_max_score.keys())
+    category_id.max_scores = list(questions_max_score.values())
+    category_id.user_scores = list(questions_user_score.values())
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    responseObject = {
+        'status': 'success',
+        'category': category.to_dict()
     }
 
     return make_response(jsonify(responseObject), 200)

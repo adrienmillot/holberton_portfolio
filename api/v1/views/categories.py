@@ -26,15 +26,12 @@ def categories_list():
     limit = request.args.get('limit', None)
     if limit is not None:
         limit = int(limit)
+    if page is not None:
+        page = int(page)
     if page is None and limit is not None:
         page = 1
 
     page_count = int(ceil(count / limit)) if limit else 1
-    if page is not None:
-        page = int(page)
-        deviation = page - page_count
-        page = abs(deviation) + 1
-
     all_categories = db_storage.all(Category, page=page, limit=limit).values()
     list_categories = []
 
@@ -172,6 +169,14 @@ def category_user_score(category_id):
     user_id = User.decode_auth_token(auth_token)
     category = db_storage.get(Category, category_id)
 
+    if category is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Category entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
     max_score = db_storage.max_score(Category, category_id)
     user_score = db_storage.user_score(Category, category_id, user_id)
 
@@ -220,7 +225,7 @@ def all_category_user_score():
                         to a survey in order to see some.'
         }
 
-        return make_response(jsonify(responseObject), 404)
+        return make_response(jsonify(responseObject), 204)
 
     for key, value in all_max_score.items():
         if key not in all_user_score:
