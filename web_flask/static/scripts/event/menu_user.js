@@ -1,34 +1,31 @@
 const getMe = function () {
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/me',
-		type: 'GET',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/me',
+    type: 'GET',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
 
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
 
+      switch (statusCode) {
+        case 498:
+          localStorage.removeItem('token');
+          window.location = '/';
+          break;
+      }
+    },
+    success: function (response) {
+      if (response.user.roles[0] === 'ROLE_ADMIN') {
+        $('.navbar-nav').append(GenerateMenu());
+      }
+    }
+  }
+  );
+};
 
-			switch (statusCode) {
-				case 498:
-					localStorage.removeItem('token')
-					window.location = "/"
-					break;
-			}
-		},
-		success: function (response) {
-			if (response.user.roles[0] === 'ROLE_ADMIN') {
-				$('.navbar-nav').append(GenerateMenu())
-
-				}
-			}
-		}
-	)
-}
-
-
-function GenerateMenu() {
-	return(`<li class="nav-item dropdown active">
+function GenerateMenu () {
+  return (`<li class="nav-item dropdown active">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
 		data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 		Profiles
@@ -94,12 +91,11 @@ function GenerateMenu() {
 		<a class="dropdown-item" href="/proposals/create">Create Proposal</a>
 	</div>
 </li>
-`)
+`);
 }
 
 $(document).ready(function () {
-	if (localStorage.getItem('token')){
-		getMe();
-	}
-	
+  if (localStorage.getItem('token')) {
+    getMe();
+  }
 });

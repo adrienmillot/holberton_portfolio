@@ -42,7 +42,7 @@ $(document).ready(function () {
 
     $('#btn_edit_question').click(function () {
       const label = $('#txt_question_label').val().trim();
-	  let secure_label = label.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+	  const secure_label = label.replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
       editQuestion(secure_label, question_id);
     });

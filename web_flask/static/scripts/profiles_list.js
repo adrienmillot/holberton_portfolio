@@ -2,88 +2,84 @@
  * get request to api to get all Profiles
  */
 
- const getProfilesListPage = function (page) {
-	let limit = 10
-	let obj = { limit: limit, page: page }
+const getProfilesListPage = function (page) {
+  const limit = 10;
+  const obj = { limit: limit, page: page };
 
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/profiles',
-		type:'GET',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		data: obj,
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/profiles',
+    type: 'GET',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    data: obj,
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
 
-			switch (statusCode) {
-				case 498:
-					// Remove auth_token
-					localStorage.removeItem('token');	
-					// Redirect to homepage
-					window.location = "/";
-					break;
-			}
-		},
-		success: function (response) {
-			profileList(response.results);
-			if(response.page_count > 1){
-				buildPaginationBtnsProfile(response.page_count, parseInt(page))
-			}
-
-		}
-	});
-}
-/** 
+      switch (statusCode) {
+        case 498:
+          // Remove auth_token
+          localStorage.removeItem('token');
+          // Redirect to homepage
+          window.location = '/';
+          break;
+      }
+    },
+    success: function (response) {
+      profileList(response.results);
+      if (response.page_count > 1) {
+        buildPaginationBtnsProfile(response.page_count, parseInt(page));
+      }
+    }
+  });
+};
+/**
  * Generate precedent link
  * Generate i times pagination links
  * Generate next link
  */
- function buildPaginationBtnsProfile(page_count, page) {
-	if (page === 1 || page === undefined) {
-		var previousBtnDisable = 'disabled'
-	} else {
-		var previousBtnDisable = ''
-	}
-	if (page === page_count) {
-		var nextBtnDisable = 'disabled'
-	} else {
-		var nextBtnDisable = ''
-	}
+function buildPaginationBtnsProfile (page_count, page) {
+  if (page === 1 || page === undefined) {
+    var previousBtnDisable = 'disabled';
+  } else {
+    var previousBtnDisable = '';
+  }
+  if (page === page_count) {
+    var nextBtnDisable = 'disabled';
+  } else {
+    var nextBtnDisable = '';
+  }
 
-	$('ul#profile_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnProfile" tabindex="-1" aria-disabled="true">Previous</a></li>')
+  $('ul#profile_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnProfile" tabindex="-1" aria-disabled="true">Previous</a></li>');
 
-	for (i = 1; i <= page_count; i++) {
-		$('ul#profile_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnProfile(i)))
-		var linkAction = $('a#' + i + '_profile.page-link')
-		linkAction.click(function () {
-			new_page = $(this).attr('data-id')
-			window.location = '/profiles?page=' + new_page
-		})
-	}
-	$('ul#profile_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnProfile">Next</a></li>')
-	$('a#prevBtnProfile.page-link').click(function () {
-		if (page !== 1) {
-			window.location = '/profiles?page=' + (page - 1)
-		}
-	});
-	$('a#nextBtnProfile.page-link').click(function () {
-		if (page !== page_count) {
-			window.location = '/profiles?page=' + (page + 1)
-		}
-	})
-	}
-
-
-function NavigationBtnProfile(i) {
-	return $('<a class="page-link" id="' + i + '_profile">' + i + '</a>').attr('data-id', i)
+  for (i = 1; i <= page_count; i++) {
+    $('ul#profile_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnProfile(i)));
+    const linkAction = $('a#' + i + '_profile.page-link');
+    linkAction.click(function () {
+      new_page = $(this).attr('data-id');
+      window.location = '/profiles?page=' + new_page;
+    });
+  }
+  $('ul#profile_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnProfile">Next</a></li>');
+  $('a#prevBtnProfile.page-link').click(function () {
+    if (page !== 1) {
+      window.location = '/profiles?page=' + (page - 1);
+    }
+  });
+  $('a#nextBtnProfile.page-link').click(function () {
+    if (page !== page_count) {
+      window.location = '/profiles?page=' + (page + 1);
+    }
+  });
 }
 
-
+function NavigationBtnProfile (i) {
+  return $('<a class="page-link" id="' + i + '_profile">' + i + '</a>').attr('data-id', i);
+}
 
 /**
  * Generate DOM for show button.
  */
-function profileShowButton(profile) {
+function profileShowButton (profile) {
   return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', profile.id).html(`
 	<svg xmlns="http://www.w3.org/2000/svg"
 		width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
@@ -96,7 +92,7 @@ function profileShowButton(profile) {
 /**
  * Generate DOM for edit button.
  */
-function profileEditButton(profile) {
+function profileEditButton (profile) {
   return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', profile.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
 	viewBox="0 0 16 16">
@@ -107,11 +103,10 @@ function profileEditButton(profile) {
 </svg>`);
 }
 
-
 /**
  * Generate DOM for delete button.
  */
-function profileDeleteButton(profile) {
+function profileDeleteButton (profile) {
   return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', profile.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 	<path
@@ -122,10 +117,10 @@ function profileDeleteButton(profile) {
 /**
  * Generate DOM for action buttons.
  */
-function profileActionsButton(profile) {
-  var showProfileButton = profileShowButton(profile);
-  var editProfileButton = profileEditButton(profile);
-  var deleteProfileButton = profileDeleteButton(profile);
+function profileActionsButton (profile) {
+  const showProfileButton = profileShowButton(profile);
+  const editProfileButton = profileEditButton(profile);
+  const deleteProfileButton = profileDeleteButton(profile);
 
   return $('<div class="btn-group" role="group"></div>').append(showProfileButton).append(editProfileButton).append(deleteProfileButton);
 }
@@ -133,20 +128,20 @@ function profileActionsButton(profile) {
 /**
  * Generate DOM for profile row.
  */
-function profileRow(profile, count) {
-  var countTh = $('<th></th>').text('#' + count);
-  var nameTd = $('<td></td>').text(profile.first_name);
-  var idTd = $('<td></td>').text(profile.last_name);
-  var genderTd = $('<td></td>').text(profile.gender)
-  var btnActionTd = $('<td></td>').append(profileActionsButton(profile));
+function profileRow (profile, count) {
+  const countTh = $('<th></th>').text('#' + count);
+  const nameTd = $('<td></td>').text(profile.first_name);
+  const idTd = $('<td></td>').text(profile.last_name);
+  const genderTd = $('<td></td>').text(profile.gender);
+  const btnActionTd = $('<td></td>').append(profileActionsButton(profile));
 
   return $('<tr class="profile"></tr>').append(countTh).append(nameTd).append(idTd).append(genderTd).append(btnActionTd);
 }
 
 /**
- * 
+ *
  */
-function profileList(profiles) {
+function profileList (profiles) {
   $.each(profiles, function (key, profile) {
     $('tbody.profiles_list').append(profileRow(profile, key));
   });
@@ -156,78 +151,72 @@ function profileList(profiles) {
   btnProfileDeleteEvent();
 }
 
-function btnProfileShowEvent() {
+function btnProfileShowEvent () {
   /**
    * Click on show button
    */
   $('.profile .btn.show').click(function () {
     profile_id = $(this).attr('data-id');
-    window.location = '/profiles/' + profile_id +  '/show'
-
-
+    window.location = '/profiles/' + profile_id + '/show';
   });
-
 }
 
-function btnProfileEditEvent() {
+function btnProfileEditEvent () {
   /**
    * Click on edit button
    */
   $('.profile .btn.edit').click(function () {
     profile_id = $(this).attr('data-id');
-    window.location = '/profiles/' + profile_id + '/edit'
+    window.location = '/profiles/' + profile_id + '/edit';
   });
-
 }
 
-function btnProfileDeleteEvent() {
-	/**
+function btnProfileDeleteEvent () {
+  /**
 	 * Click on delete button
 	 */
-	$('.profile .btn.delete').click(function () {
-		profile_id = $(this).attr('data-id');
-		delet = deleteActionProfile(profile_id);
-		if (delet = true){
-			$(this).parent().parent().parent().remove()
-	}
-})
-};
-
-
-function deleteActionProfile(id) {
-
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/profiles/' + id,
-		type: 'DELETE',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
-
-			switch (statusCode) {
-				case !200:
-					console.error(dataResponse.message);
-					break;
-			}
-		},
-		success: function (data) {		
-			$(document).ready(function () {
-				$('section.alert_success_delete_profile').empty();
-				$('section.alert_success_delete_profile').append(MessageConfirmationDeleteProfile())
-				return (true)
-			})
-		}
-	})
+  $('.profile .btn.delete').click(function () {
+    profile_id = $(this).attr('data-id');
+    delet = deleteActionProfile(profile_id);
+    if (delet = true) {
+      $(this).parent().parent().parent().remove();
+    }
+  });
 }
 
-function MessageConfirmationDeleteProfile() {
+function deleteActionProfile (id) {
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/profiles/' + id,
+    type: 'DELETE',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
+
+      switch (statusCode) {
+        case !200:
+          console.error(dataResponse.message);
+          break;
+      }
+    },
+    success: function (data) {
+      $(document).ready(function () {
+        $('section.alert_success_delete_profile').empty();
+        $('section.alert_success_delete_profile').append(MessageConfirmationDeleteProfile());
+        return (true);
+      });
+    }
+  });
+}
+
+function MessageConfirmationDeleteProfile () {
   return (`
 	<div class="alert alert-success" role="alert">
 	  Your profile, have been succefuly deleted
-	</div>`)
+	</div>`);
 }
 
 $(document).ready(function () {
-	var page = $('#page_argument_profile').val()
-	getProfilesListPage(page);
+  const page = $('#page_argument_profile').val();
+  getProfilesListPage(page);
 });
