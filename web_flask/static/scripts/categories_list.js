@@ -3,86 +3,84 @@
  */
 
 const getCategoriesListPage = function (page) {
-	let limit = 10
-	let obj = { limit: limit, page: page }
+  const limit = 10;
+  const obj = { limit: limit, page: page };
 
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/categories',
-		type: 'GET',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		data: obj,
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/categories',
+    type: 'GET',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    data: obj,
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
 
-			switch (statusCode) {
-				case 498:
-					// Remove auth_token
-					localStorage.removeItem('token');
-					// Redirect to homepage
-					window.location = "/";
-					break;
-			}
-		},
-		success: function (response) {
-			categoryListForCategory(response.results);
-			if (response.page_count > 1) {
-				buildPaginationBtnsCategory(response.page_count, parseInt(page))
-			}
-		}
-	});
-}
-/** 
+      switch (statusCode) {
+        case 498:
+          // Remove auth_token
+          localStorage.removeItem('token');
+          // Redirect to homepage
+          window.location = '/';
+          break;
+      }
+    },
+    success: function (response) {
+      categoryListForCategory(response.results);
+      if (response.page_count > 1) {
+        buildPaginationBtnsCategory(response.page_count, parseInt(page));
+      }
+    }
+  });
+};
+/**
  * Generate precedent link
  * Generate i times pagination links
  * Generate next link
  */
-function buildPaginationBtnsCategory(page_count, page) {
-	if (page === 1 || page === undefined) {
-		var previousBtnDisable = 'disabled'
-	} else {
-		var previousBtnDisable = ''
-	}
-	if (page === page_count) {
-		var nextBtnDisable = 'disabled'
-	} else {
-		var nextBtnDisable = ''
-	}
+function buildPaginationBtnsCategory (page_count, page) {
+  if (page === 1 || page === undefined) {
+    var previousBtnDisable = 'disabled';
+  } else {
+    var previousBtnDisable = '';
+  }
+  if (page === page_count) {
+    var nextBtnDisable = 'disabled';
+  } else {
+    var nextBtnDisable = '';
+  }
 
-	$('ul#category_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnCategory" tabindex="-1" aria-disabled="true">Previous</a></li>')
+  $('ul#category_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnCategory" tabindex="-1" aria-disabled="true">Previous</a></li>');
 
-	for (i = 1; i <= page_count; i++) {
-		$('ul#category_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnCategory(i)))
-		var linkAction = $('a#' + i + '_category.page-link')
-		linkAction.click(function () {
-			new_page = $(this).attr('data-id')
-			window.location = '/categories?page=' + new_page
-		})
-	}
-	$('ul#category_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnCategory">Next</a></li>')
-	$('a#prevBtnCategory.page-link').click(function () {
-		if (page !== 1) {
-			window.location = '/categories?page=' + (page - 1)
-		}
-	});
-	$('a#nextBtnCategory.page-link').click(function () {
-		if (page !== page_count) {
-			window.location = '/categories?page=' + (page + 1)
-		}
-	})
+  for (i = 1; i <= page_count; i++) {
+    $('ul#category_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnCategory(i)));
+    const linkAction = $('a#' + i + '_category.page-link');
+    linkAction.click(function () {
+      new_page = $(this).attr('data-id');
+      window.location = '/categories?page=' + new_page;
+    });
+  }
+  $('ul#category_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnCategory">Next</a></li>');
+  $('a#prevBtnCategory.page-link').click(function () {
+    if (page !== 1) {
+      window.location = '/categories?page=' + (page - 1);
+    }
+  });
+  $('a#nextBtnCategory.page-link').click(function () {
+    if (page !== page_count) {
+      window.location = '/categories?page=' + (page + 1);
+    }
+  });
 }
 
-
-function NavigationBtnCategory(i) {
-	return $('<a class="page-link" id="' + i + '_category">' + i + '</a>').attr('data-id', i)
+function NavigationBtnCategory (i) {
+  return $('<a class="page-link" id="' + i + '_category">' + i + '</a>').attr('data-id', i);
 }
-
 
 /**
  * Generate DOM for show button.
  */
-function categoryShowButton(category) {
-	return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`
+function categoryShowButton (category) {
+  return $('<button class="btn show btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`
 	<svg xmlns="http://www.w3.org/2000/svg"
 		width="16" height="16" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
 		<path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0z" />
@@ -94,8 +92,8 @@ function categoryShowButton(category) {
 /**
  * Generate DOM for edit button.
  */
-function categoryEditButton(category) {
-	return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryEditButton (category) {
+  return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
 	viewBox="0 0 16 16">
 	<path
@@ -105,12 +103,11 @@ function categoryEditButton(category) {
 </svg>`);
 }
 
-
 /**
  * Generate DOM for delete button.
  */
-function categoryDeleteButton(category) {
-	return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryDeleteButton (category) {
+  return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 	<path
 		d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
@@ -120,117 +117,106 @@ function categoryDeleteButton(category) {
 /**
  * Generate DOM for action buttons.
  */
-function categoryActionsButton(category) {
-	var showcategoryButton = categoryShowButton(category);
-	var editcategoryButton = categoryEditButton(category);
-	var deletecategoryButton = categoryDeleteButton(category);
+function categoryActionsButton (category) {
+  const showcategoryButton = categoryShowButton(category);
+  const editcategoryButton = categoryEditButton(category);
+  const deletecategoryButton = categoryDeleteButton(category);
 
-	return $('<div class="btn-group" role="group"></div>').append(showcategoryButton).append(editcategoryButton).append(deletecategoryButton);
+  return $('<div class="btn-group" role="group"></div>').append(showcategoryButton).append(editcategoryButton).append(deletecategoryButton);
 }
 
 /**
  * Generate DOM for category row.
  */
-function categoryRow(category, count) {
-	var countTh = $('<th></th>').text('#' + count);
-	var nameTd = $('<td></td>').text(category.name);
-	var idTd = $('<td></td>').text(category.id);
-	var emptyTd = $('<td></td>')
-	var btnActionTd = $('<td></td>').append(categoryActionsButton(category));
+function categoryRow (category, count) {
+  const countTh = $('<th></th>').text('#' + count);
+  const nameTd = $('<td></td>').text(category.name);
+  const idTd = $('<td></td>').text(category.id);
+  const emptyTd = $('<td></td>');
+  const btnActionTd = $('<td></td>').append(categoryActionsButton(category));
 
-	return $('<tr class="category"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="category"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
 }
 
 /**
- * 
+ *
  */
-function categoryListForCategory(categorys) {
-	$.each(categorys, function (key, category) {
-		$('tbody.categories_list').append(categoryRow(category, key));
-	});
+function categoryListForCategory (categorys) {
+  $.each(categorys, function (key, category) {
+    $('tbody.categories_list').append(categoryRow(category, key));
+  });
 
-	btncategoryShowEvent();
-	btncategoryEditEvent();
-	btncategoryDeleteEvent();
+  btncategoryShowEvent();
+  btncategoryEditEvent();
+  btncategoryDeleteEvent();
 }
 
-function btncategoryShowEvent() {
-	/**
+function btncategoryShowEvent () {
+  /**
 	 * Click on show button
 	 */
-	$('.category .btn.show').click(function () {
-		category_id = $(this).attr('data-id');
-		window.location = '/categories/' + category_id + '/show'
-
-
-	});
-
+  $('.category .btn.show').click(function () {
+    category_id = $(this).attr('data-id');
+    window.location = '/categories/' + category_id + '/show';
+  });
 }
 
-function btncategoryEditEvent() {
-	/**
+function btncategoryEditEvent () {
+  /**
 	 * Click on edit button
 	 */
-	$('.category .btn.edit').click(function () {
-		category_id = $(this).attr('data-id');
-		window.location = '/categories/' + category_id + '/edit'
-	});
-
+  $('.category .btn.edit').click(function () {
+    category_id = $(this).attr('data-id');
+    window.location = '/categories/' + category_id + '/edit';
+  });
 }
 
-function btncategoryDeleteEvent() {
-	/**
+function btncategoryDeleteEvent () {
+  /**
 	 * Click on delete button
 	 */
-	$('.category .btn.delete').click(function () {
-		id = $(this).attr('data-id');
-		delet = deleteActionCategory(id);
-		if (delet = true) {
-			$(this).parent().parent().parent().remove()
-		}
-	})
-};
-
-
-function deleteActionCategory(id) {
-
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
-		type: 'DELETE',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
-
-			switch (statusCode) {
-				case !200:
-					console.error(dataResponse.message);
-					break;
-			}
-		},
-		success: function (data) {
-			$(document).ready(function () {
-				$('section.alert_success_delete_category').empty();
-				$('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory())
-				return (true)
-			})
-		}
-	})
+  $('.category .btn.delete').click(function () {
+    id = $(this).attr('data-id');
+    delet = deleteActionCategory(id);
+    if (delet = true) {
+      $(this).parent().parent().parent().remove();
+    }
+  });
 }
 
+function deleteActionCategory (id) {
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
+    type: 'DELETE',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
 
+      switch (statusCode) {
+        case !200:
+          console.error(dataResponse.message);
+          break;
+      }
+    },
+    success: function (data) {
+      $(document).ready(function () {
+        $('section.alert_success_delete_category').empty();
+        $('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory());
+        return (true);
+      });
+    }
+  });
+}
 
-
-
-function MessageConfirmationDeleteCategory() {
-	return (`
+function MessageConfirmationDeleteCategory () {
+  return (`
 	<div class="alert alert-success" role="alert">
 	  Your category, have been succefuly deleted
-	</div>`)
+	</div>`);
 }
 
-
 $(document).ready(function () {
-	var page = $('#page_argument_category').val()
-	getCategoriesListPage(page);
+  const page = $('#page_argument_category').val();
+  getCategoriesListPage(page);
 });

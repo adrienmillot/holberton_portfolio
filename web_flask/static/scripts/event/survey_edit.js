@@ -40,15 +40,15 @@ $(document).ready(function () {
   const url = window.location.pathname;
   const url_args = url.split('/');
   if (url_args[1] == 'surveys' && url_args[3] == 'edit') {
-		const survey_id = url_args[2];
+    const survey_id = url_args[2];
 
-		setSurveyName(survey_id);
-  
-  $('#btn_edit_survey').click(function () {
-    const name = $('#txt_survey_name').val().trim();
-	let secure_name = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    setSurveyName(survey_id);
 
-    editSurvey(secure_name, survey_id);
-  });
-}
+    $('#btn_edit_survey').click(function () {
+      const name = $('#txt_survey_name').val().trim();
+      const secure_name = name.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+      editSurvey(secure_name, survey_id);
+    });
+  }
 });

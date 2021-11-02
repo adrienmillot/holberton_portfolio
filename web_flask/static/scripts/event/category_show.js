@@ -1,32 +1,32 @@
 $(document).ready(function () {
-	var url = window.location.pathname;
-	var url_splitted = url.split('/')
+  const url = window.location.pathname;
+  const url_splitted = url.split('/');
 
-	if (url_splitted[1] == 'categories' && url_splitted[3] == 'show') {
-		var category_id = url_splitted[2];
+  if (url_splitted[1] == 'categories' && url_splitted[3] == 'show') {
+    const category_id = url_splitted[2];
 
-		$.ajaxSetup({
-			headers: {
-				'Authorization': `Bearer ${localStorage.getItem('token')}`
-			}
-		});
+    $.ajaxSetup({
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('token')}`
+      }
+    });
 
-		$.get('http://0.0.0.0:5002/api/v1/categories/' + category_id, function (data) {
-			btn_delete = categoryDeleteButton(data);
-			btn_edit = categoryEditButton(data);
-			bts = $('<div class="btn-group float-right category"></div>').append(btn_edit).append(btn_delete);
-			$('body > .container-fluid > h1').text(data.name).append(bts);
-			btncategoryEditEvent();
-			btncategoryDeleteEvent();
-		});
-	}
+    $.get('http://0.0.0.0:5002/api/v1/categories/' + category_id, function (data) {
+      btn_delete = categoryDeleteButton(data);
+      btn_edit = categoryEditButton(data);
+      bts = $('<div class="btn-group float-right category"></div>').append(btn_edit).append(btn_delete);
+      $('body > .container-fluid > h1').text(data.name).append(bts);
+      btncategoryEditEvent();
+      btncategoryDeleteEvent();
+    });
+  }
 });
 
 /**
  * Generate DOM for edit button.
  */
-function categoryEditButton(category) {
-	return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryEditButton (category) {
+  return $('<button class="btn edit btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-pencil-square"
 	viewBox="0 0 16 16">
 	<path
@@ -36,78 +36,68 @@ function categoryEditButton(category) {
 </svg>`);
 }
 
-
 /**
  * Generate DOM for delete button.
  */
-function categoryDeleteButton(category) {
-	return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
+function categoryDeleteButton (category) {
+  return $('<button class="btn delete btn-secondary btn-sm"></button>').attr('data-id', category.id).html(`<svg xmlns="http://www.w3.org/2000/svg"
 	width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
 	<path
 		d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z" />
 </svg>`);
 }
 
-
-function btncategoryEditEvent() {
-	/**
+function btncategoryEditEvent () {
+  /**
 	 * Click on edit button
 	 */
-	$('.category .btn.edit').click(function () {
-		category_id = $(this).attr('data-id');
-		window.location = '/categories/' + category_id + '/edit'
-	});
-
+  $('.category .btn.edit').click(function () {
+    category_id = $(this).attr('data-id');
+    window.location = '/categories/' + category_id + '/edit';
+  });
 }
 
-function btncategoryDeleteEvent() {
-	/**
+function btncategoryDeleteEvent () {
+  /**
 	 * Click on delete button
 	 */
-	$('.category .btn.delete').click(function () {
-		id = $(this).attr('data-id');
-		delet = deleteActionCategory(id);
-		if (delet = true) {
-			$(this).parent().parent().parent().remove()
-		}
-	})
-};
-
-
-
-function deleteActionCategory(id) {
-
-	$.ajax({
-		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
-		type: 'DELETE',
-		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
-		error: function (data) {
-			dataResponse = data.responseJSON
-			statusCode = data.status
-
-			switch (statusCode) {
-				case !200:
-					console.error(dataResponse.message);
-					break;
-			}
-		},
-		success: function (data) {
-			$(document).ready(function () {
-				$('section.alert_success_delete_category').empty();
-				$('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory())
-				return (true)
-			})
-		}
-	})
+  $('.category .btn.delete').click(function () {
+    id = $(this).attr('data-id');
+    delet = deleteActionCategory(id);
+    if (delet = true) {
+      $(this).parent().parent().parent().remove();
+    }
+  });
 }
 
+function deleteActionCategory (id) {
+  $.ajax({
+    url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
+    type: 'DELETE',
+    headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    error: function (data) {
+      dataResponse = data.responseJSON;
+      statusCode = data.status;
 
+      switch (statusCode) {
+        case !200:
+          console.error(dataResponse.message);
+          break;
+      }
+    },
+    success: function (data) {
+      $(document).ready(function () {
+        $('section.alert_success_delete_category').empty();
+        $('section.alert_success_delete_category').append(MessageConfirmationDeleteCategory());
+        return (true);
+      });
+    }
+  });
+}
 
-
-
-function MessageConfirmationDeleteCategory() {
-	return (`
+function MessageConfirmationDeleteCategory () {
+  return (`
 	<div class="alert alert-success" role="alert">
 	  Your category, have been succefuly deleted
-	</div>`)
+	</div>`);
 }
