@@ -4,7 +4,7 @@
 """
 
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from web_flask import app
 
 
@@ -13,8 +13,8 @@ def users_list():
     """
         return list of the users page
     """
-
-    return render_template('/users/users_list.html')
+    page = request.args.get('page', 1)
+    return render_template('/users/users_list.html', page=page)
 
 @app.route('/users/create', methods=['GET', 'POST'], strict_slashes=False)
 def user_create():

@@ -22,10 +22,16 @@ def users_list():
         or a specific user.
     """
 
-    data = request.get_json()
     count = db_storage.count(User)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is not None:
+        page = int(page)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
     all_users = db_storage.all(User, page=page, limit=limit).values()
     list_users = []
@@ -44,7 +50,7 @@ def users_list():
 
 
 @app_views.route('/users/<user_id>', methods=['GET'], strict_slashes=False)
-@swag_from('documentation/user/get_user.yml', methods=['GET'])
+@swag_from('documentation/user/get_user.yml')
 def get_user(user_id):
     """
         Retrieves an user.
@@ -65,7 +71,7 @@ def get_user(user_id):
 
 @app_views.route('/users/<user_id>', methods=['DELETE'],
                  strict_slashes=False)
-@swag_from('documentation/user/delete_user.yml', methods=['DELETE'])
+@swag_from('documentation/user/delete_user.yml')
 def delete_user(user_id):
     """
         Deletes a user Object.
@@ -81,14 +87,14 @@ def delete_user(user_id):
 
         return make_response(jsonify(responseObject), 404)
 
-    db_storage.delete(user)
+    user.delete()
     db_storage.save()
 
     return make_response(jsonify({}), 200)
 
 
 @app_views.route('/users', methods=['POST'], strict_slashes=False)
-@swag_from('documentation/user/post_user.yml', methods=['POST'])
+@swag_from('documentation/user/post_user.yml')
 def create_user():
     """
         Creates a user.
@@ -145,7 +151,7 @@ def create_user():
 
 
 @app_views.route('/users/<user_id>', methods=['PUT'], strict_slashes=False)
-@swag_from('documentation/user/put_user.yml', methods=['PUT'])
+@swag_from('documentation/user/put_user.yml')
 def update_user(user_id):
     """
         Updates a user.
@@ -181,7 +187,7 @@ def update_user(user_id):
 
 
 @app_views.route('/auth/login', methods=['POST'], strict_slashes=False)
-@swag_from('documentation/user/login.yml', methods=['POST'])
+@swag_from('documentation/user/login.yml')
 def login():
     try:
         post_data = request.get_json()
@@ -194,7 +200,8 @@ def login():
 
             return make_response(jsonify(responseObject), 400)
 
-        user = db_storage.get_from_attributes(User, username=post_data.get('username'))
+        user = db_storage.get_from_attributes(
+            User, username=post_data.get('username'))
 
         if user is None:
             responseObject = {
@@ -223,3 +230,85 @@ def login():
             return make_response(jsonify(responseObject), 200)
     except Exception as exception:
         return make_response(jsonify(exception.args[0]), 500)
+
+
+@app_views.route('/me', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/me.yml')
+def me():
+    """
+        Return the specified user informations.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    user = db_storage.get(User, user_id)
+    profile = db_storage.get(Profile, user.profile_id)
+    user.profile = profile.to_dict()
+
+    if user is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if profile is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Profile entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    responseObject = {
+        'status': 'success',
+        'user': user.to_dict(),
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/auth/verify_page', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/user/verify_page.yml')
+def has_right_to_display_page():
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    user = db_storage.get(User, user_id)
+
+    if user is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    data = request.args.get('entrypoint', None)
+
+    if data is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Missing page entrypoint.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    if (
+        'ROLE_ADMIN' not in user.roles and 'ROLE_USER' in user.roles and data not in (
+            '/', '/login', '/logout', '/answers', '/dashboard')
+    ):
+        responseObject = {
+            'status': 'fail',
+            'message': 'You have not right to display this page.'
+        }
+
+        return make_response(jsonify(responseObject), 400)
+
+    responseObject = {
+        'status': 'success',
+        'message': 'You are authorized to display this page.'
+    }
+
+    return make_response(jsonify(responseObject), 200)

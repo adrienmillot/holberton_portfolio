@@ -38,6 +38,8 @@ function MessageAlertCategoryCreate(name) {
 $(() => {
 	$('#btn_create_category').on('click', () => {
 		let name = $("#txt_category_name").val().trim();
-		createCategory(name);
+		let secure_name = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		createCategory(secure_name);
 	});
 });

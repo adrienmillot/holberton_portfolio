@@ -46,7 +46,9 @@ $(document).ready(function () {
   
   $('#btn_edit_survey').click(function () {
     const name = $('#txt_survey_name').val().trim();
-    editSurvey(name, survey_id);
+	let secure_name = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+    editSurvey(secure_name, survey_id);
   });
 }
 });

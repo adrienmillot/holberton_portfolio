@@ -7,12 +7,17 @@ from math import ceil
 import bcrypt
 from os import getenv
 from api.v1.views import app_views
+from api.v1.views.surveys import surveys_list
+import json
 from models.category import Category
+from models.proposal import Proposal
 from models.question import Question
+from models.user import User
 from models.survey import Survey
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
+from sqlalchemy.orm import session
 
 
 @app_views.route('/questions', methods=['GET'], strict_slashes=False)
@@ -23,10 +28,16 @@ def questions_list():
         or a specific question.
     """
 
-    data = request.get_json()
     count = db_storage.count(Question)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is not None:
+        page = int(page)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
     all_questions = db_storage.all(Question, page=page, limit=limit).values()
     list_questions = []
@@ -82,7 +93,7 @@ def delete_question(question_id):
 
         return make_response(jsonify(responseObject), 404)
 
-    db_storage.delete(question)
+    question.delete()
     db_storage.save()
 
     return make_response(jsonify({}), 200)
@@ -189,3 +200,145 @@ def update_question(question_id):
     db_storage.save()
 
     return make_response(jsonify(question.to_dict()), 200)
+
+
+@app_views.route('/surveys/<survey_id>/question', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/unanswered_question.yml')
+def survey_question(survey_id):
+    """
+        Show unanswered question of a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+
+    if survey_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    question = db_storage.random_survey_question(survey_id, user_id)
+
+    remaining_questions = question[0]
+    total_questions = question[2]
+    questions_passed = total_questions - remaining_questions
+    question = question[1]
+
+    if question is None:
+        responseObject = {
+            'status': 'success',
+            'message': 'No more questions to display at the moment'
+        }
+
+        return make_response(jsonify(responseObject), 204)
+
+    responseObject = {
+        'status': 'success',
+        'result': question.to_dict(),
+        'remaining_questions': remaining_questions,
+        'total_questions': total_questions,
+        'questions_passed': questions_passed
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/surveys/<survey_id>/question_score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/survey_questions.yml')
+def survey_questions_score(survey_id):
+    """
+        Show the score on all questions of a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    questions_max_score = dict(db_storage.survey_questions_max_score(survey_id, user_id))
+    questions_user_score = dict(db_storage.survey_questions_user_score(survey_id, user_id))
+    survey = db_storage.get(Survey, survey_id)
+
+    if survey is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in questions_max_score.items():
+        if key not in questions_user_score:
+            questions_user_score.update({key: 0})
+
+    survey.labels = list(questions_max_score.keys())
+    survey.max_scores = list(questions_max_score.values())
+    survey.user_scores = list(questions_user_score.values())
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    responseObject = {
+        'status': 'success',
+        'survey': survey.to_dict()
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/categories/<category_id>/question_score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/question/category_questions.yml')
+def category_questions_score(category_id):
+    """
+        Show the score on all questions of a category for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    questions_max_score = dict(db_storage.category_questions_max_score(category_id, user_id))
+    questions_user_score = dict(db_storage.category_questions_user_score(category_id, user_id))
+    category = db_storage.get(Category, category_id)
+
+    if category_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Category entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in questions_max_score.items():
+        if key not in questions_user_score:
+            questions_user_score.update({key: 0})
+
+    category.labels = list(questions_max_score.keys())
+    category.max_scores = list(questions_max_score.values())
+    category.user_scores = list(questions_user_score.values())
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    responseObject = {
+        'status': 'success',
+        'category': category.to_dict()
+    }
+
+    return make_response(jsonify(responseObject), 200)

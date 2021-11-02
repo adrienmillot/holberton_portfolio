@@ -29,18 +29,3 @@ responses:
         username:
            type: string
            description: user's username
-        password:
-           type: string
-           description: user's password
-        first_name:
-           type: string
-           description: user's first name
-        last_name:
-           type: string
-           description: user's last name
-        born_at:
-           type: datetime
-           description: user's born date
-        gender:
-           type: string
-           description: user's gender

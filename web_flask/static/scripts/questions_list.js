@@ -2,12 +2,15 @@
  * get request to api to get all questions
  */
 
- const getQuestionsListPage = function () {
+const getQuestionsListPage = function (page) {
+	let limit = 10
+	let obj = { limit: limit, page: page }
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/questions',
-		type:'GET',
+		type: 'GET',
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
+		data: obj,
 		error: function (data) {
 			dataResponse = data.responseJSON
 			statusCode = data.status
@@ -15,7 +18,7 @@
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
@@ -23,9 +26,57 @@
 		},
 		success: function (response) {
 			questionList(response.results);
+			if(response.page_count > 1){
+				buildPaginationBtnsQuestion(response.page_count, parseInt(page))
+			}
 		}
 	});
 }
+/** 
+ * Generate precedent link
+ * Generate i times pagination links
+ * Generate next link
+ */
+function buildPaginationBtnsQuestion(page_count, page) {
+	if (page === 1 || page === undefined) {
+		var previousBtnDisable = 'disabled'
+	} else {
+		var previousBtnDisable = ''
+	}
+	if (page === page_count) {
+		var nextBtnDisable = 'disabled'
+	} else {
+		var nextBtnDisable = ''
+	}
+
+	$('ul#question_pagination').append('<li class="page-item ' + previousBtnDisable + '"><a class="page-link" id="prevBtnQuestion" tabindex="-1" aria-disabled="true">Previous</a></li>')
+
+	for (i = 1; i <= page_count; i++) {
+		$('ul#question_pagination').append($(' <li class="page-item"></li>').append(NavigationBtnQuestion(i)))
+		var linkAction = $('a#' + i + '_question.page-link')
+		linkAction.click(function () {
+			new_page = $(this).attr('data-id')
+			window.location = '/questions?page=' + new_page
+		})
+	}
+	$('ul#question_pagination').append('<li class="page-item ' + nextBtnDisable + '"><a class="page-link" id="nextBtnQuestion">Next</a></li>')
+	$('a#prevBtnQuestion.page-link').click(function () {
+		if (page !== 1) {
+			window.location = '/questions?page=' + (page - 1)
+		}
+	});
+	$('a#nextBtnQuestion.page-link').click(function () {
+		if (page !== page_count) {
+			window.location = '/questions?page=' + (page + 1)
+		}
+	})
+	}
+
+
+function NavigationBtnQuestion(i) {
+	return $('<a class="page-link" id="' + i + '_question">' + i + '</a>').attr('data-id', i)
+}
+
 
 /**
  * Generate DOM for show button.
@@ -95,7 +146,7 @@ function GetSurveyNameForQuestion(id) {
 
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/surveys/' + id,
-		type:'GET',
+		type: 'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -105,16 +156,16 @@ function GetSurveyNameForQuestion(id) {
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
 			}
-		}	
+		}
 	})
-	.done( function (data) {
-		name = (data.name);
-	});
+		.done(function (data) {
+			name = (data.name);
+		});
 	return (name);
 }
 
@@ -122,7 +173,7 @@ function GetCategoryNameForQuestion(id) {
 	let name = ""
 	$.ajax({
 		url: 'http://0.0.0.0:5002/api/v1/categories/' + id,
-		type:'GET',
+		type: 'GET',
 		async: false,
 		headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` },
 		error: function (data) {
@@ -132,16 +183,16 @@ function GetCategoryNameForQuestion(id) {
 			switch (statusCode) {
 				case 498:
 					// Remove auth_token
-					localStorage.removeItem('token');	
+					localStorage.removeItem('token');
 					// Redirect to homepage
 					window.location = "/";
 					break;
 			}
 		}
 	})
-	.done( function (data) {
-		name = (data.name);
-	});
+		.done(function (data) {
+			name = (data.name);
+		});
 	return (name);
 }
 
@@ -167,7 +218,7 @@ function btnQuestionShowEvent() {
 		question_id = $(this).attr('data-id');
 		window.location = '/questions/' + question_id + '/show'
 
-		
+
 	});
 
 }
@@ -190,10 +241,10 @@ function btnQuestionDeleteEvent() {
 	$('.question .btn.delete').click(function () {
 		question_id = $(this).attr('data-id');
 		delet = deleteActionQuestion(question_id);
-		if (delet = true){
+		if (delet = true) {
 			$(this).parent().parent().parent().remove()
-	}
-})
+		}
+	})
 };
 
 
@@ -213,8 +264,9 @@ function deleteActionQuestion(id) {
 					break;
 			}
 		},
-		success: function (data) {		
+		success: function (data) {
 			$(document).ready(function () {
+				$('section.alert_success_delete_question').empty();
 				$('section.alert_success_delete_question').append(MessageConfirmationQuestion())
 				return (true)
 			})
@@ -232,8 +284,9 @@ function MessageConfirmationQuestion() {
 $(document).ready(function () {
 	var url = window.location.pathname;
 	var url_splitted = url.split('/');
+	var page = $('#page_argument_question').val()
+	if (url_splitted[1] == 'questions') {
+		getQuestionsListPage(page);
+	}
 
-  if (url_splitted[1] == 'questions') {
-	  getQuestionsListPage();
-  }
 });

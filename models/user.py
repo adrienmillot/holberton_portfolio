@@ -10,7 +10,7 @@ import bcrypt
 import jwt
 from models.base_model import BaseModel, Base
 from os import getenv
-from sqlalchemy import Column, String, DateTime
+from sqlalchemy import Column, String, DateTime, JSON
 from sqlalchemy.orm import relationship
 from sqlalchemy.sql.schema import ForeignKey, Table
 
@@ -51,9 +51,11 @@ class User(BaseModel, Base):
                                secondary=answer,
                                backref="users",
                                viewonly=False)
+        roles = Column(JSON, default=['ROLE_USER'])
     else:
         password = ''
         username = ''
+        role = {}
 
     def __init__(self, *args, **kwargs):
         """

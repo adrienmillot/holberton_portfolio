@@ -1,0 +1,31 @@
+  Retrieves the user score on a specified survey
+  ---
+  tags:
+    - Surveys
+  parameters:
+  - name: survey_id
+    in: path
+    type: string
+    required: true
+    description: The id of the survey to retrieve
+  responses:
+    200:
+      description: Request executed successfully
+      schema:
+        properties:
+          count:
+            type: integer
+          __class__:
+            type: string
+          created_at:
+            type: string
+            description: time of creation of the instance
+          updated_at:
+            type: string
+            description: time of last update of the instance
+          id:
+            type: string
+            description: The uuid of the instance
+          name:
+            type: string
+            description: survey's name

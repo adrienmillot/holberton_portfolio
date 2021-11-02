@@ -42,7 +42,9 @@ const editCategory = function (name, category_id) {
     
     $('#btn_edit_category').click(function () {
       const name = $('#txt_category_name').val().trim();
-      editCategory(name, category_id);
+	  let secure_name = name.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+      editCategory(secure_name, category_id);
     });
   }
   });

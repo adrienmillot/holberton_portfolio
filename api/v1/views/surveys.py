@@ -6,6 +6,7 @@
 from api.v1.views import app_views
 from math import ceil
 from models.survey import Survey
+from models.user import User
 from models import db_storage
 from flask import abort, jsonify, make_response, request
 from flasgger.utils import swag_from
@@ -19,10 +20,16 @@ def surveys_list():
         or a specific survey.
     """
 
-    data = request.get_json()
     count = db_storage.count(Survey)
-    page = data['page'] if data and 'page' in data.keys() else None
-    limit = data['limit'] if data and 'limit' in data.keys() else None
+    page = request.args.get('page', None)
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+    if page is not None:
+        page = int(page)
+    if page is None and limit is not None:
+        page = 1
+
     page_count = int(ceil(count / limit)) if limit else 1
     all_surveys = db_storage.all(Survey, page=page, limit=limit).values()
     list_surveys = []
@@ -148,3 +155,118 @@ def update_survey(survey_id):
     db_storage.save()
 
     return make_response(jsonify(survey.to_dict()), 200)
+
+
+@app_views.route('/surveys/unanswered', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/unanswered_survey.yml')
+def unanswered_survey():
+    """
+        List all unanswered survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    surveys = db_storage.unanswered_survey(user_id)
+
+    if not surveys:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey list not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    list_surveys = []
+
+    for survey in surveys:
+        list_surveys.append(survey.to_dict())
+
+    responseObject = {
+        'status': 'success',
+        'results': list_surveys,
+        'count': len(list_surveys)
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+
+@app_views.route('/surveys/<survey_id>/score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/survey_user_score.yml')
+def survey_user_score(survey_id):
+    """
+        Show the score on a survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+    survey = db_storage.get(Survey, survey_id)
+
+    if survey is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'Survey entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    max_score = db_storage.max_score(Survey, survey_id)
+    user_score = db_storage.user_score(Survey, survey_id, user_id)
+
+    stats = {'max_score': max_score, 'user_score': user_score}
+
+    survey.stats = stats
+
+    responseObject = {
+        'status': 'success',
+        'survey': survey.to_dict(),
+        'message': 'Your score on this survey is {}/{}'.format(user_score, max_score)
+    }
+
+    return make_response(jsonify(responseObject), 200)
+
+@app_views.route('/surveys/score', methods=['GET'], strict_slashes=False)
+@swag_from('documentation/survey/all_user_score.yml')
+def all_survey_user_score():
+    """
+        Show the score on all survey for a specified user.
+    """
+    headers = request.headers
+    auth_token = headers['Authorization'].split(' ')[1]
+    user_id = User.decode_auth_token(auth_token)
+
+    if user_id is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'User entity not found.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+    
+    limit = request.args.get('limit', None)
+    if limit is not None:
+        limit = int(limit)
+
+    all_max_score = dict(db_storage.all_max_score(Survey, user_id, limit))
+    all_user_score = dict(db_storage.all_user_score(Survey, user_id, limit))
+
+    if all_max_score is None:
+        responseObject = {
+            'status': 'fail',
+            'message': 'No data avalaible, please contribute\
+                        to a survey in order to see some.'
+        }
+
+        return make_response(jsonify(responseObject), 404)
+
+    for key, value in all_max_score.items():
+        if key not in all_user_score:
+            all_user_score.update({key: 0})
+
+    responseObject = {
+        'status': 'success',
+        'labels': list(all_max_score.keys()),
+        'max_score': list(all_max_score.values()),
+        'user_score': list(all_user_score.values())
+    }
+
+    return make_response(jsonify(responseObject), 200)

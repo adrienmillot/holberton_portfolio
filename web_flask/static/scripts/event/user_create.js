@@ -60,6 +60,7 @@ const createUser = function (username, password, profile_id) {
 		},
 		success: function (response) {
 			let username = response.username
+			$('section.alert_success_create_user').empty();
 			$('section.alert_success_create_user').append(MessageUserSucessCreate(username))
 		}
 	}
@@ -69,7 +70,7 @@ const createUser = function (username, password, profile_id) {
 function MessageUserSucessCreate(username) {
 	return (`
 <div class="alert alert-success" role="alert">
-  You're user ${username}, have been succefuly created
+  You're user <strong>${username}</strong>, have been succefuly created
 </div>`)
 }
 
@@ -79,6 +80,8 @@ $(document).ready( function () {
 		let username = $("#txt_user_username").val().trim();
 		let password = $("#txt_user_password").val().trim();
 		let profile_id = $("#select_profile").val()
-		createUser(username, password, profile_id);
+		let secure_username = username.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+		createUser(secure_username, password, profile_id);
 	});
 });
