@@ -1,7 +1,6 @@
 body > .container-fluid > div {
-	background-image: url("../images/survey_checkbox.png");
-	background-repeat: no-repeat;
-	background-position: bottom 20% right 20%;
+	background-image: url('https://www.shell.com/energy-and-innovation/the-energy-future/scenarios/shell-scenario-sky/_jcr_content/pagePromo/image.img.960.jpeg/1548184031017/clear-blue-sky.jpeg');
+	color: white;
 }
 
 #carousel {
