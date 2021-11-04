@@ -131,10 +131,10 @@ function surveyActionsButton (survey) {
 function surveyRow (survey, count) {
   const countTh = $('<th></th>').text('#' + count);
   const nameTd = $('<td></td>').text(survey.name);
-  const idTd = $('<td></td>').text(survey.id);
+//   const idTd = $('<td></td>').text(survey.id);
   const btnActionTd = $('<td></td>').append(surveyActionsButton(survey));
 
-  return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(idTd).append(btnActionTd);
+  return $('<tr class="survey"></tr>').append(countTh).append(nameTd).append(btnActionTd);
 }
 
 /**

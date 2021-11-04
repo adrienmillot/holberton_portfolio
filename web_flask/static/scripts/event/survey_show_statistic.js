@@ -76,7 +76,7 @@ const GraphQuestions = function (result) {
 };
 
 const ResultCategories = function (survey_id) {
-  const limit = 8;
+  const limit = 6;
   const obj = { limit: limit };
   $.ajax({
     url: 'http://0.0.0.0:5002/api/v1/surveys/' + survey_id + '/categories_score',

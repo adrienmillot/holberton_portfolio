@@ -53,7 +53,7 @@ const GraphUserSurveys = function (result) {
   const data = {
     labels: labels,
     datasets: [{
-      label: 'My First dataset',
+      label: 'User Surveys dataset',
       backgroundColor: 'rgba(255, 193, 7)',
       borderColor: 'rgb(255, 193, 7)',
       data: surveysData

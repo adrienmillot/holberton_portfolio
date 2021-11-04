@@ -23,6 +23,8 @@ const getProfile = function () {
 };
 
 function UserProfile (response) {
+	member_since_response = response.user.profile.created_at.split('T')
+	member_since = member_since_response[0]
   return (`
 	  <article>
 	  <h3>Hello ${response.user.profile.first_name} !</h3>	
@@ -30,7 +32,7 @@ function UserProfile (response) {
     <ul class="list-unstyled">
 	  <li>First name: ${response.user.profile.first_name}</li> 
 	  <li>Last name: ${response.user.profile.last_name}</li>
-	  <li>Member since ${response.user.profile.created_at}</li>
+	  <li>Member since: ${member_since}</li>
     </ul>
 	  </div>  
 	  </article>`);

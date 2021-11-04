@@ -131,11 +131,11 @@ function categoryActionsButton (category) {
 function categoryRow (category, count) {
   const countTh = $('<th></th>').text('#' + count);
   const nameTd = $('<td></td>').text(category.name);
-  const idTd = $('<td></td>').text(category.id);
+//   const idTd = $('<td></td>').text(category.id);
   const emptyTd = $('<td></td>');
   const btnActionTd = $('<td></td>').append(categoryActionsButton(category));
 
-  return $('<tr class="category"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="category"></tr>').append(countTh).append(nameTd).append(emptyTd).append(btnActionTd);
 }
 
 /**

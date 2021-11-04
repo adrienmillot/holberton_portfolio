@@ -2,3 +2,6 @@ html, body { height: 100%; }
 body > .container-fluid, body > .container {
 	min-height: 69%;
 }
+.survey_to {
+	cursor: pointer;
+}

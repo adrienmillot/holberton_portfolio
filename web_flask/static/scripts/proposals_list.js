@@ -131,11 +131,11 @@ function proposalActionsButton (proposal) {
 function proposalRow (proposal, count) {
   const countTh = $('<th></th>').text('#' + count);
   const nameTd = $('<td></td>').text(proposal.label);
-  const idTd = $('<td></td>').text(proposal.id);
+//   const idTd = $('<td></td>').text(proposal.id);
   const emptyTd = $('<td></td>');
   const btnActionTd = $('<td></td>').append(proposalActionsButton(proposal));
 
-  return $('<tr class="proposal"></tr>').append(countTh).append(nameTd).append(idTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="proposal"></tr>').append(countTh).append(nameTd).append(emptyTd).append(btnActionTd);
 }
 
 /**

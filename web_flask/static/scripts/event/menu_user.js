@@ -39,23 +39,22 @@ function GenerateMenu () {
 <li class="nav-item dropdown active">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
 		data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+		Users
+	</a>
+	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+		<a class="dropdown-item" href="/users">List Users</a>
+		<a class="dropdown-item" href="/users/create">Create User</a>
+	</div>
+</li>
+
+<li class="nav-item dropdown active">
+	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+		data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
 		Surveys
 	</a>
 	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
 		<a class="dropdown-item" href="/surveys">List Surveys</a>
 		<a class="dropdown-item" href="/surveys/create">Create Survey</a>
-	</div>
-</li>
-
-
-<li class="nav-item dropdown active">
-	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
-		data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		Questions
-	</a>
-	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-		<a class="dropdown-item" href="/questions">List Questions</a>
-		<a class="dropdown-item" href="/questions/create">Create Question</a>
 	</div>
 </li>
 
@@ -73,11 +72,11 @@ function GenerateMenu () {
 <li class="nav-item dropdown active">
 	<a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
 		data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-		Users
+		Questions
 	</a>
 	<div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-		<a class="dropdown-item" href="/users">List Users</a>
-		<a class="dropdown-item" href="/users/create">Create User</a>
+		<a class="dropdown-item" href="/questions">List Questions</a>
+		<a class="dropdown-item" href="/questions/create">Create Question</a>
 	</div>
 </li>
 
