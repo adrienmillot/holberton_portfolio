@@ -132,10 +132,10 @@ function userRow (user, count) {
   const countTh = $('<th></th>').text('#' + count);
   const nameTd = $('<td></td>').text(user.username);
   const rolesTd = $('<td></td>').text(user.roles);
-  const emptyTd = $('<td></td>');
+//   const emptyTd = $('<td></td>');
   const btnActionTd = $('<td></td>').append(userActionsButton(user));
 
-  return $('<tr class="user"></tr>').append(countTh).append(nameTd).append(rolesTd).append(emptyTd).append(btnActionTd);
+  return $('<tr class="user"></tr>').append(countTh).append(nameTd).append(rolesTd).append(btnActionTd);
 }
 
 /**
