@@ -1,0 +1,14 @@
+###### Requirements without Version Specifiers ######
+flask
+flask-cors
+setuptools
+flasgger
+mysqlclient
+bcrypt
+jinja_partials
+Flask-Assets
+requests
+
+###### Requirements with Version Specifiers ######
+SQLAlchemy == 1.2.5
+pyjwt==1.4.2

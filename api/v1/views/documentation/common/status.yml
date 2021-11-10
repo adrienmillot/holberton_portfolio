@@ -1,0 +1,7 @@
+Get status of the API.
+---
+tags:
+  - Common
+responses:
+  200:
+    description: request executed successfully

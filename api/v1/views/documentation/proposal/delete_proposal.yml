@@ -1,0 +1,15 @@
+    Deletes a proposal 
+    ---
+    tags:
+      - Proposals
+    parameters:
+      - name: proposal_id
+        in: path
+        type: string
+        required: false
+        description: The unique id of the proposal
+    responses:
+      404:
+        description: proposal not found!
+      200:
+        description: request executed successfully

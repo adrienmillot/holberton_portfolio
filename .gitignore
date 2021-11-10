@@ -1,0 +1,6 @@
+web_flask/static/.webassets-cache
+web_flask/static/gen
+.editorconfig
+.gitignore
+__pycache__
+.vscode

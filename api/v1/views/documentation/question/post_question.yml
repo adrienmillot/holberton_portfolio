@@ -1,0 +1,25 @@
+    Posts a new question
+    ---
+    tags:
+      - Questions
+    parameters:
+      - name: data
+        in: body
+        required: true
+        requires:
+          - label
+          - category_id
+          - survey_id
+        properties:
+          label:
+            type: string
+          category_id:
+            type: string
+          survey_id:
+            type: string
+
+    responses:
+      400:
+        description: Missing label or not a JSON
+      201:
+        description: successfully created question

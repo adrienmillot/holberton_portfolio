@@ -1,0 +1,15 @@
+    Deletes a survey 
+    ---
+    tags:
+      - Surveys
+    parameters:
+      - name: survey_id
+        in: path
+        type: string
+        required: false
+        description: The unique id of the survey
+    responses:
+      404:
+        description: survey not found!
+      200:
+        description: request executed successfully

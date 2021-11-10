@@ -1,0 +1,23 @@
+Posts a new profile
+---
+tags:
+  - Profiles
+
+parameters:
+  - name: data
+    in: body
+    properties:
+      last_name:
+        type: string
+      first_name:
+        type: string
+      gender:
+        type: string
+      born_at:
+        type: string
+
+responses:
+  400:
+    description: Missing profilename/password or not a JSON
+  201:
+    description: successfully created profile

@@ -1,0 +1,28 @@
+body > .container-fluid > div {
+	background-image: url('https://www.shell.com/energy-and-innovation/the-energy-future/scenarios/shell-scenario-sky/_jcr_content/pagePromo/image.img.960.jpeg/1548184031017/clear-blue-sky.jpeg');
+	color: white;
+}
+
+#carousel {
+	height: 69%;
+}
+
+section {
+	min-height: 300px;
+}
+
+section h2 {
+	margin-top: 120px;
+	text-transform: uppercase;
+	font-size: 1.7em;
+}
+
+section p {
+	color: rgba(0,0,0,0.5);
+	font-size: 1.3em;
+}
+
+section img {
+	max-width: 100%;
+	max-height: 300px;
+}

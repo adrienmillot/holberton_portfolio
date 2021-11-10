@@ -1,0 +1,19 @@
+    Posts a new proposal
+    ---
+    tags:
+      - Proposals
+    parameters:
+      - name: data
+        in: body
+        required: true
+        properties:
+          label:
+            type: string
+          question_id:
+            type: string
+
+    responses:
+      400:
+        description: Missing label or not a JSON
+      201:
+        description: successfully created proposal

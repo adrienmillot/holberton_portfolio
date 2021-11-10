@@ -1,0 +1,111 @@
+version: "3.7"
+
+services:
+  ss_mysql:
+    container_name: ss_mysql
+    environment:
+        MYSQL_ROOT_PASSWORD: root
+    image: mysql:5.7
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_mysql.rule=Host(`mysql.localhost`)"
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.2
+    ports:
+      - 3306:3306
+    volumes:
+      - "./:/home"
+      - "./database_scripts/setup_mysql_dev.sql:/docker-entrypoint-initdb.d/setup_mysql_dev.sql"
+      - "./database_scripts/setup_mysql_test.sql:/docker-entrypoint-initdb.d/setup_mysql_test.sql"
+      - "./database_scripts/setup_mysql_gateway.sql:/docker-entrypoint-initdb.d/setup_mysql_gateway.sql"
+
+  ss_api_test:
+    container_name: ss_api_test
+    command: "python3 -m api.v1.app"
+    depends_on:
+      - ss_mysql
+    entrypoint: ./.requirements.sh
+    env_file: .api_test_env
+    image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_api_test.rule=Host(`api_test.localhost`)"
+    links:
+      - ss_mysql
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.3
+    ports:
+      - 5001:5001
+    volumes:
+      - .:/code
+    working_dir: /code
+
+  ss_api_dev:
+    container_name: ss_api_dev
+    command: "python3 -m api.v1.app"
+    depends_on:
+      - ss_mysql
+    entrypoint: ./.requirements.sh
+    env_file: .api_dev_env
+    image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_api_dev.rule=Host(`api_dev.localhost`)"
+    links:
+      - ss_mysql
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.4
+    ports:
+      - 5002:5002
+    volumes:
+      - .:/code
+    working_dir: /code
+
+  ss_web_dev:
+    container_name: ss_web_dev
+    command: "python3 -m web_flask.app"
+    entrypoint: ./.requirements.sh
+    image: python:3.8
+    labels:
+      # Explicitly tell Traefik to expose this container
+      - "traefik.enable=true"
+      # The domain the service will respond to
+      - "traefik.http.routers.ss_web_dev.rule=Host(`survey_storm.localhost`)"
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.6
+    ports:
+      - 5000:5000
+    volumes:
+      - .:/code
+    working_dir: /code
+
+  ss_traefik:
+    command:
+      - "--api.insecure=true"
+      - "--providers.docker"
+    container_name: ss_traefik
+    image: traefik
+    networks:
+      ss_network:
+        ipv4_address: 172.20.0.5
+    ports:
+      - 80:80
+      - 8080:8080
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+
+networks:
+  ss_network:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16
