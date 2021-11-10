@@ -7,17 +7,19 @@
 
 SurveyStorm provide an API that manages survey creation, edition and statistics, and allows users to answers an enabled survey.
 
+You access to it >><<
+
 ## Team
 
-### [Nathan LAPEYRE](https://github.com/Sarolus) (API Development)
+### Nathan LAPEYRE [![](https://img.shields.io/badge/github-informational?style=flat&logo=github&logoColor=white)](https://github.com/Sarolus) [![](https://img.shields.io/badge/linkedin-informational?style=flat&logo=linkedin&logoColor=white)](https://fr.linkedin.com/in/nathan-lapeyre-376500206) (API Development)
 
 > He likes back & worships tests.
 
-### [Simon BRARD](https://github.com/SimonBr017) (Web back & front development)
+### Simon BRARD [![](https://img.shields.io/badge/github-informational?style=flat&logo=github&logoColor=white)](https://github.com/SimonBr017) [![](https://img.shields.io/badge/linkedin-informational?style=flat&logo=linkedin&logoColor=white)](https://fr.linkedin.com/in/simon-b-2a9820205) (Web back & front development)
 
 > He only swears by HTML/CSS.
 
-### [Adrien MILLOT](https://github.com/adrienmillot) (Mobile back & front development)
+### Adrien MILLOT [![](https://img.shields.io/badge/github-informational?style=flat&logo=github&logoColor=white)](https://github.com/adrienmillot) [![](https://img.shields.io/badge/linkedin-informational?style=flat&logo=linkedin&logoColor=white)](https://fr.linkedin.com/in/adrienmillot) (Management & Mobile back & front development)
 
 > If you're not mobile you're stuck.
 
@@ -61,5 +63,32 @@ SurveyStorm provide an API that manages survey creation, edition and statistics,
 
 ### [5. Screenshots](docs/analysis/making_progress/screenshots.md)
 
+## Installation
+
+### Requirements
+
+You need to have previously installed [docker](https://www.docker.com/) and [docker-compose](https://docs.docker.com/compose/) on your environment 
+
+To install it type in your console:
+
+```bash
+docker-compose up -d
+```
+After that, you will have two environments:
+- 1 for the development or the production
+- 1 for the tests
+
+You could access to the web site to type [http://survey_storm.localhost](http://survey_storm.localhost)
+
+You could access to the development api from  [http://api_dev.localhost](http://api_dev.localhost)
+
+You could access to the test api from [http://api_test.localhost](http://api_test.localhost)
+
+You could see all this service from traefik container accessible in typing [http://localhost:8080](http://localhost:8080)
+
+## Usage
+
+[![Demo](docs/images/pre-load.png)](docs/video/demo_survey_storm.mp4)
+
 ---
-###### 2021 - SurveyStorm
+###### 2021 - SurveyStorm - [Article](https://cactussius-primus.medium.com/survey-storm-5a0a2c9e3c86)
