@@ -88,7 +88,7 @@ You could see all this service from traefik container accessible in typing [http
 
 ## Usage
 
-[![Demo](docs/images/pre-load.png)](docs/video/demo_survey_storm.mp4)
+[![Demo](docs/images/pre-load.png)](https://raw.githubusercontent.com/adrienmillot/holberton_portfolio/develop/docs/video/demo_survey_storm.mp4)
 
 ---
 ###### 2021 - SurveyStorm - [Article](https://cactussius-primus.medium.com/survey-storm-5a0a2c9e3c86)
