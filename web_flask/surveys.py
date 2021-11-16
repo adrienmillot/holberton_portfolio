@@ -49,3 +49,10 @@ def answer_survey(survey_id, survey_name):
 		return survey anwer page
     """  
     return render_template('/answer.html', survey_id=survey_id, survey_name=survey_name)
+
+@app.route('/surveys/fullcreate', methods=['GET', 'POST'], strict_slashes=False)
+def survey_create_complete():
+    """
+		returne a full survey creation page
+    """
+    return render_template('surveys/survey_create_full.html')
