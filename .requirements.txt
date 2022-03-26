@@ -10,5 +10,5 @@ Flask-Assets
 requests
 
 ###### Requirements with Version Specifiers ######
-SQLAlchemy == 1.2.5
+SQLAlchemy >= 1.2.5
 pyjwt==1.4.2
